@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wemakoshi — Grow a Life</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#faf7f2;--card:#fff;--text:#2d2a26;--soft:#6b6560;
+  --accent:#e07850;--accent-l:#f4a882;--accent-glow:rgba(224,120,80,.15);
+  --green:#5ca06e;--blue:#5088b0;--purple:#8868a8;--red:#c45050;--yellow:#d4a030;
+  --border:#e8e2da;--shadow:rgba(45,42,38,.08);--r:14px;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;}
+
+/* ===== SETUP ===== */
+#setup-screen{flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:22px;background:linear-gradient(135deg,#faf7f2,#f0ebe3);}
+.logo{font-family:'Caveat',cursive;font-size:58px;font-weight:700;color:var(--accent);}
+.subtitle{font-size:16px;color:var(--soft);margin-top:-16px;font-weight:600;}
+.setup-card{background:var(--card);border-radius:var(--r);padding:26px 28px;max-width:560px;width:100%;box-shadow:0 4px 24px var(--shadow);border:1px solid var(--border);}
+.setup-card h2{font-size:17px;margin-bottom:14px;color:var(--accent);}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-weight:700;font-size:12px;margin-bottom:6px;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;}
+.form-group input{width:100%;padding:10px 14px;border:2px solid var(--border);border-radius:9px;font-family:inherit;font-size:14px;transition:border-color .2s;}
+.form-group input:focus{outline:none;border-color:var(--accent);}
+.age-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.age-opt{padding:10px 4px;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s;text-align:center;}
+.age-opt:hover,.age-opt.sel{border-color:var(--accent);background:var(--accent-glow);}
+.age-opt .n{font-size:22px;font-weight:800;color:var(--accent);display:block;}
+.age-opt .l{font-size:10px;color:var(--soft);font-weight:600;}
+.bg-opts{display:flex;flex-direction:column;gap:6px;}
+.bg-opt{padding:9px 12px;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:12px;}
+.bg-opt:hover,.bg-opt.sel{border-color:var(--accent);background:var(--accent-glow);}
+
+/* Animal selection */
+.animal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.animal-opt{border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;text-align:center;padding:8px 4px 4px;background:var(--card);position:relative;overflow:hidden;}
+.animal-opt:hover{border-color:var(--accent-l);transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow);}
+.animal-opt.sel{border-color:var(--accent);background:var(--accent-glow);transform:translateY(-2px);box-shadow:0 4px 12px rgba(224,120,80,.2);}
+.animal-opt .a-svg{width:54px;height:64px;margin:0 auto;display:block;}
+.animal-opt .a-name{font-size:11px;font-weight:700;color:var(--soft);margin-top:3px;}
+.animal-opt.sel .a-name{color:var(--accent);}
+.animal-opt .a-sel-badge{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:700;}
+.animal-opt.sel .a-sel-badge{display:flex;}
+
+.btn-primary{display:flex;align-items:center;justify-content:center;width:100%;padding:12px;border:none;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(224,120,80,.3);transition:all .2s;margin-top:4px;}
+.btn-primary:hover{background:#d06840;transform:translateY(-1px);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* ===== GAME LAYOUT ===== */
+#game-screen{flex-direction:column;height:100vh;}
+.game-header{display:flex;align-items:center;justify-content:space-between;padding:10px 22px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);z-index:20;}
+.game-title{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--accent);}
+.header-center{display:flex;gap:14px;font-size:13px;font-weight:600;color:var(--soft);}
+.header-right{display:flex;gap:8px;}
+.hbtn{padding:7px 13px;border:1.5px solid var(--border);border-radius:20px;background:transparent;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.hbtn:hover{border-color:var(--accent);color:var(--accent);}
+.hbtn.dash{background:var(--accent-glow);border-color:var(--accent);color:var(--accent);}
+.game-body{display:grid;grid-template-columns:240px 1fr 260px;flex:1;overflow:hidden;}
+
+/* ===== LEFT PANEL ===== */
+.panel-left{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
+.char-scene{position:relative;height:210px;overflow:hidden;flex-shrink:0;}
+.scene-bg{position:absolute;inset:0;transition:background 1.2s ease;}
+.scene-bg.bedroom{background:linear-gradient(180deg,#c5d8f0 0%,#dde8f5 54%,#b8cce0 55%,#8aab8a 100%);}
+.scene-bg.kitchen{background:linear-gradient(180deg,#fef5e0 0%,#fdebc8 54%,#e8cca0 55%,#c4a878 100%);}
+.scene-bg.bathroom{background:linear-gradient(180deg,#e0f0f8 0%,#c8e4f4 54%,#a8c8e0 55%,#8ab0c8 100%);}
+.scene-bg.study{background:linear-gradient(180deg,#f5e8d8 0%,#ecdbc8 54%,#c8a870 55%,#a08850 100%);}
+.scene-bg.outside{background:linear-gradient(180deg,#87ceeb 0%,#a8dff0 54%,#5a9e5a 55%,#3d7a3d 100%);}
+.scene-bg.living{background:linear-gradient(180deg,#f0e8d8 0%,#e8dcc8 54%,#c8b890 55%,#a09060 100%);}
+.scene-prop{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);font-size:26px;pointer-events:none;transition:opacity .5s;}
+
+/* SVG character wrapper */
+.char-svg-wrap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:110px;height:160px;}
+.char-svg-wrap svg{width:100%;height:100%;overflow:visible;}
+
+/* Activity state animations on the SVG wrapper */
+.state-idle{animation:svgFloat 3.2s ease-in-out infinite;}
+@keyframes svgFloat{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(-5px);}}
+.state-happy{animation:svgBounce .85s ease-in-out infinite;}
+@keyframes svgBounce{0%,100%{transform:translateX(-50%) translateY(0);}40%{transform:translateX(-50%) translateY(-9px);}}
+.state-sad{animation:svgSway 3.5s ease-in-out infinite;}
+@keyframes svgSway{0%,100%{transform:translateX(-50%) rotate(0deg);}50%{transform:translateX(-50%) rotate(-3deg);}}
+.state-sleeping{animation:svgSleep 4s ease-in-out infinite;}
+@keyframes svgSleep{0%,100%{transform:translateX(-50%) rotate(0deg);}50%{transform:translateX(-50%) rotate(-6deg);}}
+
+/* ZZZ floaters */
+.zzz-wrap{position:absolute;top:8px;right:8px;pointer-events:none;display:none;}
+.zzz-item{position:absolute;font-size:12px;font-weight:800;color:#8868a8;animation:zzzFly 2.4s ease-in-out infinite;opacity:0;}
+.zzz-item:nth-child(1){animation-delay:0s;}
+.zzz-item:nth-child(2){font-size:15px;animation-delay:.8s;}
+.zzz-item:nth-child(3){font-size:18px;animation-delay:1.6s;}
+@keyframes zzzFly{0%{opacity:0;transform:translate(0,0) scale(.5);}40%{opacity:1;}100%{opacity:0;transform:translate(16px,-28px) scale(1.1);}}
+
+.activity-badge{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.92);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;white-space:nowrap;border:1px solid var(--border);box-shadow:0 2px 6px var(--shadow);}
+
+/* Needs */
+.needs-section{padding:10px 13px;flex:1;}
+.needs-section h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:8px;}
+.need-row{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.need-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.need-track{flex:1;height:8px;background:#eee;border-radius:4px;overflow:hidden;}
+.need-fill{height:100%;border-radius:4px;transition:width .8s ease;}
+.need-fill.high{background:var(--green);}
+.need-fill.mid{background:var(--yellow);}
+.need-fill.low{background:var(--red);}
+.need-val{font-size:10px;font-weight:700;color:var(--soft);width:22px;text-align:right;}
+.alerts-section{padding:0 13px 10px;}
+.alert-chip{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:9px;background:rgba(224,120,80,.1);border:1.5px solid var(--accent-l);margin-bottom:5px;cursor:pointer;transition:all .2s;font-size:11px;font-weight:600;}
+.alert-chip:hover{background:rgba(224,120,80,.2);transform:translateX(2px);}
+.alert-chip .a-icon{font-size:14px;}
+.alert-chip .a-text{flex:1;}
+.alert-chip .a-cta{font-size:10px;color:var(--accent);font-weight:700;}
+.alert-chip.critical{background:rgba(196,80,80,.1);border-color:#c45050;}
+.alert-chip.critical .a-cta{color:var(--red);}
+
+/* ===== CENTER PANEL ===== */
+.panel-center{display:flex;flex-direction:column;overflow:hidden;}
+.chat-scroll{flex:1;overflow-y:auto;padding:18px 24px;display:flex;flex-direction:column;gap:11px;}
+.chat-entry{animation:fadeUp .35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+.narrator{background:linear-gradient(135deg,#f5f0e8,#efe8dd);border-radius:14px;padding:13px 17px;font-size:14px;line-height:1.7;border-left:3px solid var(--yellow);}
+.char-bubble{background:var(--card);border-radius:14px 14px 14px 3px;padding:12px 15px;font-size:14px;line-height:1.6;border:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);max-width:82%;}
+.char-bubble .spk{font-weight:800;font-size:11px;color:var(--accent);margin-bottom:3px;}
+.char-thought{background:linear-gradient(135deg,#f0eaf5,#e8e0f0);border-radius:14px;padding:10px 15px;font-size:13px;line-height:1.5;font-style:italic;color:var(--purple);max-width:75%;margin-left:auto;border-left:3px solid var(--purple);opacity:.88;}
+.player-bubble{background:linear-gradient(135deg,var(--accent),#d06840);color:#fff;border-radius:14px 14px 3px 14px;padding:12px 15px;font-size:14px;line-height:1.6;max-width:82%;margin-left:auto;box-shadow:0 4px 12px rgba(224,120,80,.2);}
+.player-bubble .spk{font-weight:800;font-size:11px;opacity:.8;margin-bottom:3px;}
+.sys-msg{text-align:center;font-size:12px;color:var(--soft);padding:5px;font-weight:600;}
+.sys-msg em{color:var(--accent);font-style:normal;}
+.eval-card{background:var(--card);border-radius:14px;padding:15px 18px;border:2px solid var(--border);box-shadow:0 4px 16px var(--shadow);max-width:92%;margin:0 auto;}
+.eval-card h4{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--soft);margin-bottom:8px;}
+.eval-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.eval-score{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;color:#fff;flex-shrink:0;}
+.eval-score.great{background:var(--green);}
+.eval-score.good{background:var(--blue);}
+.eval-score.okay{background:var(--yellow);}
+.eval-score.poor{background:var(--red);}
+.eval-grade{font-weight:800;font-size:14px;}
+.eval-roles{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.eval-role{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;display:flex;align-items:center;gap:3px;}
+.eval-role.strong{background:rgba(92,160,110,.15);color:var(--green);}
+.eval-role.moderate{background:rgba(80,136,176,.15);color:var(--blue);}
+.eval-role.light{background:rgba(212,160,48,.15);color:var(--yellow);}
+.eval-changes{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+.eval-chg{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+.eval-chg.pos{color:var(--green);background:rgba(92,160,110,.1);}
+.eval-chg.neg{color:var(--red);background:rgba(196,80,80,.1);}
+.eval-fb{font-size:12px;line-height:1.5;color:var(--soft);font-style:italic;}
+.chat-input-area{border-top:1px solid var(--border);background:var(--card);padding:12px 24px 16px;}
+.chat-row{display:flex;gap:8px;align-items:flex-end;}
+.chat-ta{flex:1;padding:10px 14px;border:2px solid var(--border);border-radius:13px;font-family:inherit;font-size:14px;line-height:1.5;resize:none;min-height:42px;max-height:110px;transition:border-color .2s;}
+.chat-ta:focus{outline:none;border-color:var(--accent);}
+.chat-ta::placeholder{color:#bbb;}
+.send-btn{width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.send-btn:hover{background:#d06840;transform:scale(1.05);}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.chat-hint{font-size:11px;color:#bbb;margin-top:4px;text-align:center;}
+.next-day-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:11px;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:all .2s;margin-top:3px;}
+.next-day-btn:hover{border-color:var(--accent);background:var(--accent-glow);}
+.typing-dots{display:flex;gap:4px;padding:10px 15px;max-width:65px;background:var(--card);border-radius:14px 14px 14px 3px;border:1px solid var(--border);}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent-l);animation:tdBounce 1.4s infinite;}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes tdBounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-5px);}}
+
+/* ===== RIGHT PANEL ===== */
+.panel-right{background:var(--card);border-left:1px solid var(--border);padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:13px;}
+.panel-right h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:5px;}
+.stat-bar{display:flex;align-items:center;gap:5px;margin-bottom:4px;}
+.stat-bar .sn{font-size:10px;font-weight:600;width:70px;color:var(--soft);}
+.stat-bar .bt{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;}
+.stat-bar .bf{height:100%;border-radius:3px;transition:width .6s;}
+.stat-bar .sv{font-size:10px;font-weight:700;width:20px;text-align:right;color:var(--soft);}
+.role-row{display:flex;align-items:center;gap:7px;padding:4px 0;}
+.role-ic{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--accent-glow);}
+.role-info{flex:1;}
+.role-info .rn{font-size:10px;font-weight:700;}
+.role-info .rb{height:4px;background:#eee;border-radius:2px;margin-top:2px;overflow:hidden;}
+.role-info .rf{height:100%;border-radius:2px;background:var(--accent);transition:width .6s;}
+.role-info .rl{font-size:9px;color:var(--soft);font-weight:600;margin-top:1px;}
+.mem-entry{font-size:10px;line-height:1.4;padding:4px 0;border-bottom:1px solid var(--border);color:var(--soft);}
+.mem-entry:last-child{border-bottom:none;}
+.mem-entry .ma{font-weight:700;color:var(--accent);}
+.trait-chip{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--accent-glow);color:var(--accent);display:inline-block;margin:1px;}
+
+/* ===== DASHBOARD ===== */
+#dashboard{position:fixed;inset:0;background:rgba(45,42,38,.6);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
+#dashboard.open{display:flex;}
+.dash-modal{background:var(--bg);border-radius:18px;width:100%;max-width:840px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.dash-header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;background:var(--card);border-bottom:1px solid var(--border);}
+.dash-header h2{font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:var(--accent);}
+.dash-close{width:34px;height:34px;border-radius:50%;border:none;background:var(--border);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.dash-close:hover{background:var(--accent);color:#fff;}
+.dash-tabs{display:flex;padding:0 22px;border-bottom:1px solid var(--border);background:var(--card);}
+.dash-tab{padding:11px 16px;font-size:12px;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;color:var(--soft);}
+.dash-tab.active{border-color:var(--accent);color:var(--accent);}
+.dash-body{padding:22px;}
+.dash-pane{display:none;}
+.dash-pane.active{display:block;}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.dash-card{background:var(--card);border-radius:13px;padding:16px;border:1px solid var(--border);}
+.dash-card h4{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--soft);margin-bottom:12px;}
+.dash-stat-row{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.dash-stat-row .dsn{font-size:12px;font-weight:600;flex:1;}
+.dash-stat-row .dsb{width:110px;height:9px;background:#eee;border-radius:5px;overflow:hidden;}
+.dash-stat-row .dbf{height:100%;border-radius:5px;transition:width .6s;}
+.dash-stat-row .dsv{font-size:11px;font-weight:700;width:28px;text-align:right;}
+.profile-box{background:linear-gradient(135deg,var(--accent-glow),rgba(224,120,80,.03));border:1.5px solid var(--accent-l);border-radius:13px;padding:16px;margin-top:16px;}
+.profile-box h4{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:9px;}
+.profile-box p{font-size:13px;line-height:1.7;}
+.profile-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.profile-tag{font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;background:var(--card);border:1.5px solid var(--border);}
+.profile-tag.strength{border-color:var(--green);color:var(--green);}
+.profile-tag.grow{border-color:var(--yellow);color:var(--yellow);}
+.journal-entry{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.journal-entry:last-child{border-bottom:none;}
+.je-day{font-size:10px;font-weight:700;color:var(--accent);width:46px;flex-shrink:0;padding-top:2px;}
+.je-content{flex:1;}
+.je-title{font-size:12px;font-weight:700;margin-bottom:2px;}
+.je-note{font-size:11px;color:var(--soft);line-height:1.4;}
+.je-score{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;margin-top:3px;display:inline-block;}
+.je-score.great{background:rgba(92,160,110,.15);color:var(--green);}
+.je-score.good{background:rgba(80,136,176,.15);color:var(--blue);}
+.je-score.okay{background:rgba(212,160,48,.15);color:var(--yellow);}
+.je-score.poor{background:rgba(196,80,80,.15);color:var(--red);}
+.wellbeing-number{font-size:46px;font-weight:800;color:var(--accent);text-align:center;line-height:1;}
+.wellbeing-label{font-size:12px;color:var(--soft);text-align:center;margin-top:4px;font-weight:600;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+@media(max-width:960px){.game-body{grid-template-columns:1fr;}.panel-left,.panel-right{display:none;}}
+
+/* ===== WALLET HUD ===== */
+.wallet-hud{display:flex;align-items:center;gap:7px;}
+.coin-disp,.gem-disp{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:700;padding:5px 9px;border-radius:20px;border:1.5px solid var(--border);}
+.coin-disp{color:#b87c00;background:rgba(212,160,48,.1);}
+.gem-disp{color:#8868a8;background:rgba(136,104,168,.1);}
+.coin-earn{position:fixed;font-size:13px;font-weight:800;color:#b87c00;pointer-events:none;z-index:999;animation:coinPop 1.4s ease-out forwards;}
+@keyframes coinPop{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-44px);}}
+
+/* ===== SHOP MODAL ===== */
+#shop-modal{position:fixed;inset:0;background:rgba(45,42,38,.65);z-index:120;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
+#shop-modal.open{display:flex;}
+.shop-inner{background:var(--bg);border-radius:18px;width:100%;max-width:880px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);}
+.shop-header{display:flex;align-items:center;gap:12px;padding:16px 22px;background:var(--card);border-bottom:1px solid var(--border);}
+.shop-header h2{font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:var(--accent);flex:1;}
+.shop-wallet-display{display:flex;align-items:center;gap:9px;}
+.sw-coins{font-size:13px;font-weight:800;color:#b87c00;display:flex;align-items:center;gap:3px;}
+.sw-gems{font-size:13px;font-weight:800;color:#8868a8;display:flex;align-items:center;gap:3px;}
+.get-gems-btn{padding:6px 12px;border:1.5px solid #8868a8;border-radius:20px;background:rgba(136,104,168,.08);font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;color:#8868a8;transition:all .2s;}
+.get-gems-btn:hover{background:rgba(136,104,168,.2);}
+.shop-close{width:34px;height:34px;border-radius:50%;border:none;background:var(--border);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.shop-close:hover{background:var(--accent);color:#fff;}
+.shop-tabs{display:flex;padding:0 22px;border-bottom:1px solid var(--border);background:var(--card);}
+.shop-tab{padding:11px 18px;font-size:12px;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;color:var(--soft);}
+.shop-tab.active{border-color:var(--accent);color:var(--accent);}
+.shop-body{padding:22px;min-height:320px;}
+.shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:700px){.shop-grid{grid-template-columns:repeat(2,1fr);}}
+.shop-item{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 10px 12px;text-align:center;position:relative;transition:all .2s;}
+.shop-item:hover{border-color:var(--accent-l);transform:translateY(-2px);box-shadow:0 6px 18px var(--shadow);}
+.shop-item.owned{border-color:var(--green);}
+.shop-item.equipped{border-color:var(--accent);background:var(--accent-glow);}
+.shop-item.premium-locked{border-color:#8868a8;}
+.si-preview{height:82px;display:flex;align-items:center;justify-content:center;margin-bottom:7px;}
+.si-name{font-size:12px;font-weight:700;margin-bottom:2px;}
+.si-desc{font-size:10px;color:var(--soft);margin-bottom:7px;}
+.si-price{font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:5px;}
+.si-price.coin{color:#b87c00;}.si-price.gem{color:#8868a8;}.si-price.free{color:var(--green);}
+.si-badge{position:absolute;top:6px;right:6px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.si-badge.owned{background:rgba(92,160,110,.15);color:var(--green);}
+.si-badge.equipped{background:var(--accent-glow);color:var(--accent);}
+.si-badge.premium{background:rgba(136,104,168,.15);color:#8868a8;}
+.si-buy-btn{width:100%;padding:6px;border:none;border-radius:8px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;}
+.si-buy-btn.buy-coin{background:rgba(212,160,48,.14);color:#b87c00;border:1.5px solid rgba(212,160,48,.4);}
+.si-buy-btn.buy-coin:hover{background:rgba(212,160,48,.28);}
+.si-buy-btn.buy-gem{background:rgba(136,104,168,.11);color:#8868a8;border:1.5px solid rgba(136,104,168,.35);}
+.si-buy-btn.buy-gem:hover{background:rgba(136,104,168,.24);}
+.si-buy-btn.equip-btn{background:var(--accent-glow);color:var(--accent);border:1.5px solid var(--accent-l);}
+.si-buy-btn.equip-btn:hover{background:rgba(224,120,80,.24);}
+.si-buy-btn.equipped-btn{background:rgba(92,160,110,.12);color:var(--green);border:1.5px solid var(--green);cursor:default;}
+
+/* ===== GEM STORE ===== */
+#gem-store-modal{position:fixed;inset:0;background:rgba(45,42,38,.78);z-index:130;display:none;align-items:center;justify-content:center;padding:20px;}
+#gem-store-modal.open{display:flex;}
+.gem-store-inner{background:var(--bg);border-radius:18px;width:100%;max-width:440px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.gem-store-header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;background:linear-gradient(135deg,#6838b8,#8858d8);color:white;}
+.gem-store-header h2{font-family:'Caveat',cursive;font-size:26px;font-weight:700;}
+.gem-store-close{width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.2);cursor:pointer;color:white;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.gem-packages{display:flex;flex-direction:column;gap:10px;padding:20px;}
+.gem-pkg{display:flex;align-items:center;gap:13px;padding:14px 16px;background:var(--card);border-radius:13px;border:2px solid var(--border);cursor:pointer;transition:all .2s;}
+.gem-pkg:hover{border-color:#8868a8;transform:translateX(3px);}
+.gem-pkg.popular{border-color:#8868a8;background:rgba(136,104,168,.05);}
+.gp-gems{font-size:20px;font-weight:800;color:#8868a8;min-width:66px;}
+.gp-info{flex:1;}
+.gp-name{font-size:13px;font-weight:700;}
+.gp-bonus{font-size:10px;color:var(--soft);margin-top:1px;}
+.gp-price{font-size:14px;font-weight:800;color:var(--accent);}
+.gp-popular{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(136,104,168,.15);color:#8868a8;display:inline-block;margin-top:3px;}
+.gem-note{font-size:11px;color:var(--soft);text-align:center;padding:0 20px 16px;line-height:1.6;}
+
+/* ===== PREMIUM INSIGHTS ===== */
+.premium-lock-box{text-align:center;padding:40px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.premium-lock-icon{font-size:52px;}
+.premium-lock-title{font-size:20px;font-weight:800;color:var(--text);}
+.premium-lock-desc{font-size:13px;color:var(--soft);max-width:380px;line-height:1.7;}
+.premium-unlock-btn{padding:12px 28px;border:none;border-radius:12px;background:linear-gradient(135deg,#6838b8,#8858d8);color:white;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(104,56,184,.3);transition:all .2s;}
+.premium-unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(104,56,184,.4);}
+.premium-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:linear-gradient(135deg,#6838b8,#8858d8);color:white;letter-spacing:.5px;text-transform:uppercase;}
+.archetype-card{background:linear-gradient(135deg,var(--card),#faf7f2);border:2px solid var(--border);border-radius:16px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden;}
+.archetype-card::before{content:'';position:absolute;top:0;right:0;width:120px;height:120px;border-radius:50%;opacity:.06;transform:translate(30px,-30px);}
+.archetype-emoji{font-size:40px;margin-bottom:10px;display:block;}
+.archetype-title{font-size:22px;font-weight:800;margin-bottom:4px;}
+.archetype-subtitle{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;opacity:.7;}
+.archetype-desc{font-size:13px;line-height:1.7;color:var(--soft);margin-bottom:14px;}
+.archetype-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.archetype-tag{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;}
+.archetype-tag.strength{background:rgba(92,160,110,.12);color:var(--green);border:1.5px solid rgba(92,160,110,.3);}
+.archetype-tag.grow{background:rgba(212,160,48,.12);color:#b87c00;border:1.5px solid rgba(212,160,48,.3);}
+.profile-card-btn{display:flex;align-items:center;gap:8px;padding:11px 20px;border:2px solid;border-radius:12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;}
+.profile-card-btn:hover{transform:translateY(-1px);}
+.insight-section{background:var(--card);border-radius:13px;padding:16px;border:1px solid var(--border);margin-bottom:14px;}
+.insight-section h4{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.impact-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.impact-row .ir-label{font-size:12px;font-weight:600;flex:1;}
+.impact-row .ir-delta{font-size:12px;font-weight:800;min-width:36px;text-align:right;}
+.impact-row .ir-delta.pos{color:var(--green);}
+.impact-row .ir-delta.neg{color:var(--red);}
+.impact-row .ir-delta.neu{color:var(--soft);}
+/* Weekly report card in chat */
+.weekly-card{background:linear-gradient(135deg,#fffdf5,#fdf5e0);border:2px solid rgba(212,160,48,.35);border-radius:16px;padding:18px 20px;margin:4px 0;}
+.weekly-card .wk-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(212,160,48,.2);}
+.weekly-card .wk-emoji{font-size:28px;}
+.weekly-card .wk-title{font-size:14px;font-weight:800;}
+.weekly-card .wk-sub{font-size:11px;color:var(--soft);margin-top:1px;}
+.weekly-card .wk-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.weekly-card .wk-stat{background:rgba(255,255,255,.7);border-radius:9px;padding:10px 12px;}
+.weekly-card .wk-stat-val{font-size:22px;font-weight:800;color:var(--accent);}
+.weekly-card .wk-stat-lbl{font-size:10px;color:var(--soft);font-weight:600;margin-top:1px;}
+.weekly-card .wk-growth{margin-bottom:12px;}
+.weekly-card .wk-growth-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;}
+.weekly-card .wk-growth-row .wgr-name{flex:1;font-weight:600;}
+.weekly-card .wk-growth-row .wgr-bar{width:80px;height:5px;background:#eee;border-radius:3px;overflow:hidden;}
+.weekly-card .wk-growth-row .wgr-fill{height:100%;border-radius:3px;background:var(--green);}
+.weekly-card .wk-insight{background:rgba(255,255,255,.85);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--text);font-style:italic;border-left:3px solid #d4a030;}
+.premium-upsell{margin-top:10px;font-size:11px;color:var(--soft);text-align:center;}
+.premium-upsell a{color:#8868a8;font-weight:700;cursor:pointer;text-decoration:none;}
+/* Profile card modal */
+#profile-card-modal{position:fixed;inset:0;background:rgba(45,42,38,.75);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;}
+#profile-card-modal.open{display:flex;}
+.profile-card-wrap{background:var(--bg);border-radius:18px;padding:24px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;gap:16px;}
+.profile-card-wrap h3{font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:var(--accent);align-self:flex-start;}
+.profile-card-actions{display:flex;gap:10px;width:100%;}
+.profile-card-actions button{flex:1;padding:10px;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+#pc-close-btn{background:var(--border);border:none;color:var(--text);}
+#pc-download-btn{background:linear-gradient(135deg,#6838b8,#8858d8);border:none;color:white;}
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div id="setup-screen" class="screen active">
+  <div class="logo">Wemakoshi</div>
+  <div class="subtitle">Grow a life. Learn to care.</div>
+  <div class="setup-card">
+    <h2>Create Your Character</h2>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" id="char-name" placeholder="Give them a name..." maxlength="20">
+    </div>
+    <div class="form-group">
+      <label>Choose Their Animal</label>
+      <div class="animal-grid" id="animal-grid"></div>
+    </div>
+    <div class="form-group">
+      <label>Starting Age</label>
+      <div class="age-opts">
+        <div class="age-opt" data-age="5" onclick="selAge(this)"><span class="n">5</span><span class="l">Child</span></div>
+        <div class="age-opt" data-age="13" onclick="selAge(this)"><span class="n">13</span><span class="l">Teen</span></div>
+        <div class="age-opt" data-age="18" onclick="selAge(this)"><span class="n">18</span><span class="l">Young Adult</span></div>
+        <div class="age-opt" data-age="30" onclick="selAge(this)"><span class="n">30</span><span class="l">Adult</span></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Background</label>
+      <div class="bg-opts" id="bg-opts"></div>
+    </div>
+    <button class="btn-primary" id="start-btn" disabled onclick="startGame()">Begin Their Story ✨</button>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game-screen" class="screen">
+  <div class="game-header">
+    <div class="game-title">Wemakoshi</div>
+    <div class="header-center">
+      <span id="hdr-day">Day 1</span><span>|</span>
+      <span id="hdr-age">Age 5</span><span>|</span>
+      <span id="hdr-stage">Childhood</span>
+    </div>
+    <div class="header-right">
+      <div class="wallet-hud">
+        <span class="coin-disp">🪙 <span id="hdr-coins">150</span></span>
+        <span class="gem-disp">💎 <span id="hdr-gems">0</span></span>
+      </div>
+      <button class="hbtn" onclick="openShop()">🛍️ Shop</button>
+      <button class="hbtn dash" onclick="openDash()">📊 Dashboard</button>
+      <button class="hbtn" onclick="nextDay()" id="skip-btn" style="display:none">⏭ Next Day</button>
+    </div>
+  </div>
+  <div class="game-body">
+
+    <!-- LEFT -->
+    <div class="panel-left">
+      <div class="char-scene" id="char-scene">
+        <div class="scene-bg bedroom" id="scene-bg"></div>
+        <div class="scene-prop" id="scene-prop">🌱</div>
+        <div class="char-svg-wrap state-idle" id="char-svg-wrap"><!-- SVG injected here --></div>
+        <div class="zzz-wrap" id="zzz-wrap">
+          <span class="zzz-item">z</span><span class="zzz-item">Z</span><span class="zzz-item">Z</span>
+        </div>
+        <div class="activity-badge" id="activity-badge">😌 Relaxing</div>
+      </div>
+      <div class="needs-section"><h3>Daily Needs</h3><div id="needs-list"></div></div>
+      <div class="alerts-section" id="alerts-section"></div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="panel-center">
+      <div class="chat-scroll" id="chat-scroll"></div>
+      <div class="chat-input-area" id="chat-input-area">
+        <div class="chat-row">
+          <textarea class="chat-ta" id="chat-ta" placeholder="Respond to your character..." rows="1"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMsg()">&#x27A4;</button>
+        </div>
+        <div class="chat-hint">Respond naturally — your words shape how they grow</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="panel-right">
+      <div><h3>Emotional State</h3><div id="emo-stats"></div></div>
+      <div><h3>Life Skills</h3><div id="skill-stats"></div></div>
+      <div><h3>Caregiver Skills</h3><div id="role-list"></div></div>
+      <div style="background:linear-gradient(135deg,#f8f4ee,#f0ebe3);border-radius:10px;padding:10px;">
+        <h3 style="margin-bottom:6px;">Memory Journal</h3>
+        <div id="mem-list"><div class="mem-entry" style="font-style:italic">No memories yet...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE CARD MODAL -->
+<div id="profile-card-modal">
+  <div class="profile-card-wrap">
+    <h3>✨ Your Caregiver Profile</h3>
+    <div id="profile-card-svg-wrap" style="width:100%;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.15);"></div>
+    <div class="profile-card-actions">
+      <button id="pc-close-btn" onclick="closeProfileCard()">Close</button>
+      <button id="pc-download-btn" onclick="downloadProfileCard()">⬇ Download Card</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP -->
+<div id="shop-modal">
+  <div class="shop-inner">
+    <div class="shop-header">
+      <h2>🛍️ Shop</h2>
+      <div class="shop-wallet-display">
+        <div class="sw-coins">🪙 <span id="shop-coins">0</span></div>
+        <div class="sw-gems">💎 <span id="shop-gems">0</span></div>
+        <button class="get-gems-btn" onclick="openGemStore()">+ Get Gems</button>
+      </div>
+      <button class="shop-close" onclick="closeShop()">✕</button>
+    </div>
+    <div class="shop-tabs">
+      <div class="shop-tab active" onclick="shopTab('animals')">🐾 Animals</div>
+      <div class="shop-tab" onclick="shopTab('outfits')">👗 Outfits</div>
+      <div class="shop-tab" onclick="shopTab('accessories')">🎩 Accessories</div>
+      <div class="shop-tab" onclick="shopTab('packs')">📖 Story Packs</div>
+    </div>
+    <div class="shop-body" id="shop-body"></div>
+  </div>
+</div>
+
+<!-- GEM STORE -->
+<div id="gem-store-modal">
+  <div class="gem-store-inner">
+    <div class="gem-store-header">
+      <h2>💎 Get Gems</h2>
+      <button class="gem-store-close" onclick="closeGemStore()">✕</button>
+    </div>
+    <div class="gem-packages">
+      <div class="gem-pkg" onclick="buyGems(50,'$0.99')">
+        <div class="gp-gems">💎 50</div>
+        <div class="gp-info"><div class="gp-name">Starter Pack</div><div class="gp-bonus">Perfect to try a premium animal</div></div>
+        <div class="gp-price">$0.99</div>
+      </div>
+      <div class="gem-pkg popular" onclick="buyGems(200,'$2.99')">
+        <div class="gp-gems">💎 200</div>
+        <div class="gp-info"><div class="gp-name">Value Pack</div><div class="gp-bonus">Unlock multiple items &amp; outfits</div><div><span class="gp-popular">⭐ Most popular</span></div></div>
+        <div class="gp-price">$2.99</div>
+      </div>
+      <div class="gem-pkg" onclick="buyGems(500,'$5.99')">
+        <div class="gp-gems">💎 500</div>
+        <div class="gp-info"><div class="gp-name">Mega Pack</div><div class="gp-bonus">Unlock everything you want</div></div>
+        <div class="gp-price">$5.99</div>
+      </div>
+    </div>
+    <div class="gem-note">💡 This is a prototype — gems are simulated. In production, purchases will be processed securely through app stores.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-modal">
+    <div class="dash-header">
+      <h2>📊 Dashboard</h2>
+      <button class="dash-close" onclick="closeDash()">✕</button>
+    </div>
+    <div class="dash-tabs">
+      <div class="dash-tab active" onclick="switchTab('growth')">🌱 Character Growth</div>
+      <div class="dash-tab" onclick="switchTab('player')">🎯 Your Performance</div>
+      <div class="dash-tab" onclick="switchTab('journal')">📖 Life Journal</div>
+      <div class="dash-tab" onclick="switchTab('premium')">✨ Premium Insights</div>
+    </div>
+    <div class="dash-body">
+      <div class="dash-pane active" id="tab-growth">
+        <div class="dash-grid">
+          <div class="dash-card"><h4>Life Skills</h4><canvas id="canvas-skills" height="180"></canvas></div>
+          <div class="dash-card"><h4>Emotional Wellbeing</h4><canvas id="canvas-emotions" height="180"></canvas></div>
+        </div>
+        <div class="dash-grid">
+          <div class="dash-card"><h4>Needs Satisfaction</h4><div id="needs-satisfaction"></div></div>
+          <div class="dash-card">
+            <h4>Overall Wellbeing</h4>
+            <div style="padding:14px 0;"><div class="wellbeing-number" id="wellbeing-num">—</div><div class="wellbeing-label" id="wellbeing-lbl">...</div></div>
+            <h4 style="margin-top:12px;">Personality</h4><div id="personality-dash"></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-pane" id="tab-player">
+        <div class="dash-grid">
+          <div class="dash-card"><h4>Score History</h4><canvas id="canvas-scores" height="180"></canvas></div>
+          <div class="dash-card"><h4>Role Usage</h4><div id="role-usage"></div></div>
+        </div>
+        <div class="profile-box"><h4>Your Caregiving Profile</h4><p id="profile-text">Play more to unlock your profile.</p><div class="profile-tags" id="profile-tags"></div></div>
+      </div>
+      <div class="dash-pane" id="tab-journal">
+        <div class="dash-card"><h4>Life Timeline</h4><div id="journal-list"><div style="color:var(--soft);font-size:13px;font-style:italic">No events yet...</div></div></div>
+      </div>
+      <div class="dash-pane" id="tab-premium">
+        <div id="premium-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+//  WEMAKOSHI v0.4 — Animal SVG Characters + Needs + Dashboard
+// ================================================================
+
+// ---- ANIMAL DEFINITIONS ----
+const ANIMALS = {
+  pig:    {name:'Pig',    emoji:'🐷', skin:'#ffb5c0',skinLt:'#ffd5e0',skinDk:'#e88898',ov:'#4a7eb5',ovLt:'#6a9ed5',ovDk:'#3a6da0',desc:'Curious & cheerful'},
+  cat:    {name:'Cat',    emoji:'🐱', skin:'#f0c870',skinLt:'#fce090',skinDk:'#d4a050',ov:'#8868a8',ovLt:'#a888c8',ovDk:'#6648a8',desc:'Independent & clever'},
+  dog:    {name:'Dog',    emoji:'🐶', skin:'#d4a060',skinLt:'#e8c080',skinDk:'#b87840',muzzle:'#e8c898',ov:'#5a6ab5',ovLt:'#7a8ad5',ovDk:'#4a5a9a',desc:'Loyal & energetic'},
+  rabbit: {name:'Rabbit', emoji:'🐰', skin:'#f8f0e8',skinLt:'#fff8f2',skinDk:'#e0c8b8',earIn:'#f0b8b8',ov:'#4a9070',ovLt:'#6ab090',ovDk:'#3a7058',desc:'Gentle & timid'},
+  bear:   {name:'Bear',   emoji:'🐻', skin:'#c08030',skinLt:'#d89848',skinDk:'#a06820',muzzle:'#d8b070',ov:'#7a5030',ovLt:'#9a7050',ovDk:'#5a3010',desc:'Warm & protective'},
+  cow:    {name:'Cow',    emoji:'🐮', skin:'#f8f4e8',skinLt:'#fffcf0',skinDk:'#d8c898',muzzle:'#f0d8b0',spot:'#302820',horn:'#c8a030',ov:'#3858a0',ovLt:'#5878c0',ovDk:'#283888',desc:'Gentle & steady'},
+  duck:   {name:'Duck',   emoji:'🦆', skin:'#f0d840',skinLt:'#ffe850',skinDk:'#c8b020',beak:'#e08010',beakDk:'#b05800',ov:'#3a7a3a',ovLt:'#5aaa5a',ovDk:'#286028',desc:'Playful & social'},
+  sheep:  {name:'Sheep',  emoji:'🐑', skin:'#404040',skinLt:'#606060',skinDk:'#202020',wool:'#f4f0ec',woolSh:'#e0dcd8',ov:'#7850a8',ovLt:'#9870c8',ovDk:'#583888',desc:'Fluffy & calm'},
+  // === PREMIUM ===
+  fox:     {name:'Fox',      emoji:'🦊', skin:'#e07830',skinLt:'#f09848',skinDk:'#c05818',muzzle:'#f8e8d0',ov:'#7a3868',ovLt:'#9a58a0',ovDk:'#5a2850', premium:true,gemCost:15,desc:'Clever & mischievous'},
+  panda:   {name:'Panda',    emoji:'🐼', skin:'#f2f2f2',skinLt:'#ffffff',skinDk:'#e0e0e0',patch:'#1a1a1a', ov:'#2d5a2d',ovLt:'#4a7a4a',ovDk:'#1a3a1a', premium:true,gemCost:15,desc:'Rare & lovable'},
+  capybara:{name:'Capybara', emoji:'🦫', skin:'#9a7040',skinLt:'#b88858',skinDk:'#7a5028',muzzle:'#c09868',ov:'#5a4080',ovLt:'#7a60a0',ovDk:'#3a2860', premium:true,gemCost:20,desc:'Chill & friendly'},
+  penguin: {name:'Penguin',  emoji:'🐧', skin:'#181818',skinLt:'#282828',skinDk:'#080808',belly:'#f4f4f4',beak:'#e07018',ov:'#2a4878',ovLt:'#4a68a8',ovDk:'#1a2858', premium:true,gemCost:15,desc:'Dapper & sweet'},
+  redpanda:{name:'Red Panda',emoji:'🦝', skin:'#c03818',skinLt:'#d85030',skinDk:'#9a2010',earTip:'#f0e8d8',face:'#e8d0b0',ov:'#285040',ovLt:'#487060',ovDk:'#183828', premium:true,gemCost:20,desc:'Exotic & playful'}
+};
+
+const OUTFITS={
+  classic:{name:'Classic Denim', desc:"Each animal's natural look",  cost:{coins:0}},
+  forest: {name:'Forest Green',  desc:'Earthy & calming',            ov:'#3a7050',ovLt:'#5a9070',ovDk:'#285040', cost:{coins:80}},
+  royal:  {name:'Royal Red',     desc:'Bold & proud',                ov:'#a03030',ovLt:'#c05050',ovDk:'#801818', cost:{coins:80}},
+  pastel: {name:'Pastel Rose',   desc:'Sweet & soft',                ov:'#b05888',ovLt:'#d07aa8',ovDk:'#903868', cost:{coins:100}},
+  ocean:  {name:'Ocean Blue',    desc:'Deep & cool',                 ov:'#2858a0',ovLt:'#4878c0',ovDk:'#184080', cost:{coins:100}},
+  sunset: {name:'Sunset Orange', desc:'Warm & bright',               ov:'#b05020',ovLt:'#d07040',ovDk:'#883010', cost:{coins:120}},
+  galaxy: {name:'Galaxy',        desc:'Out of this world ✨',        ov:'#302860',ovLt:'#504090',ovDk:'#201848', cost:{gems:10}},
+  vintage:{name:'Vintage Gold',  desc:'Classic & warm',              ov:'#907028',ovLt:'#b09040',ovDk:'#705018', cost:{gems:8}},
+};
+const ACCESSORIES={
+  none:   {name:'None',          desc:'Clean look',        cost:{coins:0},  svg:''},
+  tophat: {name:'Top Hat',       desc:'Sophisticated!',    cost:{coins:120},svg:`<rect x="28" y="8" width="64" height="7" rx="3.5" fill="#1a1a1a"/><rect x="38" y="-10" width="44" height="19" rx="6" fill="#1a1a1a"/><rect x="38" y="4" width="44" height="5" rx="2" fill="#444"/>`},
+  flower: {name:'Flower Crown',  desc:'Bloom!',            cost:{coins:100},svg:`<path d="M30,10 Q60,0 90,10" stroke="#5a8040" stroke-width="3" fill="none"/><circle cx="30" cy="10" r="6" fill="#ff8080"/><circle cx="30" cy="10" r="3" fill="#ffe080"/><circle cx="46" cy="3" r="6" fill="#80c0ff"/><circle cx="46" cy="3" r="3" fill="#ffe080"/><circle cx="60" cy="0" r="6" fill="#80e080"/><circle cx="60" cy="0" r="3" fill="#ffe080"/><circle cx="74" cy="3" r="6" fill="#ffb060"/><circle cx="74" cy="3" r="3" fill="#ffe080"/><circle cx="90" cy="10" r="6" fill="#d080ff"/><circle cx="90" cy="10" r="3" fill="#ffe080"/>`},
+  shades: {name:'Sunglasses',    desc:'Cool vibes 😎',     cost:{coins:80}, svg:`<rect x="34" y="30" width="18" height="12" rx="5" fill="#101010" opacity=".92"/><rect x="68" y="30" width="18" height="12" rx="5" fill="#101010" opacity=".92"/><line x1="52" y1="35" x2="68" y2="35" stroke="#222" stroke-width="2.5"/><line x1="20" y1="34" x2="34" y2="34" stroke="#222" stroke-width="2"/><line x1="86" y1="34" x2="100" y2="34" stroke="#222" stroke-width="2"/>`},
+  bow:    {name:'Bow Tie',       desc:'Very dapper!',      cost:{coins:80}, svg:`<polygon points="44,73 56,78 44,83" fill="#cc2828"/><polygon points="76,73 64,78 76,83" fill="#cc2828"/><circle cx="60" cy="78" r="5.5" fill="#aa1818"/>`},
+  pack:   {name:'Backpack',      desc:'Adventure ready!',  cost:{coins:100},svg:`<rect x="4" y="72" width="24" height="32" rx="6" fill="#5088b0" opacity=".95"/><line x1="10" y1="72" x2="10" y2="104" stroke="#3a6888" stroke-width="2.5"/><line x1="20" y1="72" x2="20" y2="104" stroke="#3a6888" stroke-width="2.5"/><rect x="9" y="84" width="14" height="10" rx="3" fill="#3a6888"/>`},
+  wizard: {name:'Wizard Hat',    desc:'Magical! ✨',        cost:{gems:12}, svg:`<ellipse cx="60" cy="16" rx="34" ry="8" fill="#4a2878"/><polygon points="60,-16 30,15 90,15" fill="#5a38a8"/><circle cx="50" cy="5" r="4" fill="#ffe040" opacity=".75"/><circle cx="70" cy="2" r="3" fill="#80e8ff" opacity=".85"/><circle cx="60" cy="-7" r="2.5" fill="#ff80ff" opacity=".9"/>`},
+  stargls:{name:'Star Glasses',  desc:'Shine bright! ⭐',  cost:{gems:10}, svg:`<path d="M43,36 l2.5,-5 l2.5,5 l5,-1 l-3.5,4 l1.5,5 l-5.5,-3 l-5.5,3 l1.5,-5 l-3.5,-4Z" fill="#ffd020" opacity=".93"/><path d="M77,36 l2.5,-5 l2.5,5 l5,-1 l-3.5,4 l1.5,5 l-5.5,-3 l-5.5,3 l1.5,-5 l-3.5,-4Z" fill="#ffd020" opacity=".93"/>`},
+};
+
+// ---- SVG CHARACTER BUILDER ----
+function eyes(x1,y1,x2,y2,state){
+  if(state==='sleeping')return`<path d="M${x1-7},${y1} Q${x1},${y1-5} ${x1+7},${y1}" stroke="#2d2a26" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M${x2-7},${y2} Q${x2},${y2-5} ${x2+7},${y2}" stroke="#2d2a26" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
+  if(state==='sad')return`<ellipse cx="${x1}" cy="${y1}" rx="7" ry="7.5" fill="white"/><circle cx="${x1}" cy="${y1+1}" r="4.5" fill="#1a1a1a"/><circle cx="${x1+2}" cy="${y1-1.5}" r="1.6" fill="white"/><path d="M${x1-5},${y1-9} Q${x1},${y1-13} ${x1+5},${y1-9}" stroke="#555" stroke-width="1.5" fill="none"/><ellipse cx="${x2}" cy="${y2}" rx="7" ry="7.5" fill="white"/><circle cx="${x2}" cy="${y2+1}" r="4.5" fill="#1a1a1a"/><circle cx="${x2+2}" cy="${y2-1.5}" r="1.6" fill="white"/><path d="M${x2-5},${y2-9} Q${x2},${y2-13} ${x2+5},${y2-9}" stroke="#555" stroke-width="1.5" fill="none"/>`;
+  if(state==='happy')return`<path d="M${x1-7},${y1+2} Q${x1},${y1-9} ${x1+7},${y1+2}" fill="#1a1a1a"/><path d="M${x2-7},${y2+2} Q${x2},${y2-9} ${x2+7},${y2+2}" fill="#1a1a1a"/>`;
+  return`<ellipse cx="${x1}" cy="${y1}" rx="7" ry="8" fill="white"/><circle cx="${x1}" cy="${y1+0.5}" r="4.5" fill="#1a1a1a"/><circle cx="${x1+2}" cy="${y1-2}" r="1.8" fill="white"/><ellipse cx="${x2}" cy="${y2}" rx="7" ry="8" fill="white"/><circle cx="${x2}" cy="${y2+0.5}" r="4.5" fill="#1a1a1a"/><circle cx="${x2+2}" cy="${y2-2}" r="1.8" fill="white"/>`;
+}
+function mouth(cx,cy,mood,w=9){
+  if(mood==='happy')return`<path d="M${cx-w},${cy} Q${cx},${cy+9} ${cx+w},${cy}" stroke="#b05030" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  if(mood==='sad')return`<path d="M${cx-w},${cy+7} Q${cx},${cy} ${cx+w},${cy+7}" stroke="#b05030" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  return`<path d="M${cx-6},${cy} Q${cx},${cy+4} ${cx+6},${cy}" stroke="#b05030" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+}
+function cheeks(mood){
+  if(mood!=='happy')return'';
+  return`<ellipse cx="32" cy="46" rx="10" ry="6" fill="#ffaaaa" opacity="0.45"/><ellipse cx="88" cy="46" rx="10" ry="6" fill="#ffaaaa" opacity="0.45"/>`;
+}
+
+function animalHead(key,A,eyeState,mood){
+  const ck=cheeks(mood);
+  switch(key){
+    case'pig':return`
+      <ellipse cx="32" cy="18" rx="14" ry="16" fill="${A.skin}"/>
+      <ellipse cx="88" cy="18" rx="14" ry="16" fill="${A.skin}"/>
+      <ellipse cx="32" cy="18" rx="9" ry="11" fill="${A.skinDk}"/>
+      <ellipse cx="88" cy="18" rx="9" ry="11" fill="${A.skinDk}"/>
+      <circle cx="60" cy="40" r="31" fill="url(#hg)"/>
+      <circle cx="60" cy="40" r="31" fill="none" stroke="${A.skinDk}" stroke-width="1.2"/>
+      <ellipse cx="60" cy="54" rx="16" ry="12" fill="${A.skinDk}"/>
+      <circle cx="54" cy="55" r="5" fill="#b06080" opacity="0.65"/>
+      <circle cx="66" cy="55" r="5" fill="#b06080" opacity="0.65"/>
+      ${ck}${eyes(42,35,78,35,eyeState)}${mouth(60,49,mood,8)}`;
+    case'cat':return`
+      <polygon points="20,24 36,3 52,24" fill="${A.skin}"/><polygon points="68,24 84,3 100,24" fill="${A.skin}"/>
+      <polygon points="26,22 36,7 47,22" fill="${A.skinDk}" opacity=".7"/><polygon points="73,22 84,7 95,22" fill="${A.skinDk}" opacity=".7"/>
+      <circle cx="60" cy="40" r="30" fill="url(#hg)"/>
+      <circle cx="60" cy="40" r="30" fill="none" stroke="${A.skinDk}" stroke-width="1.2"/>
+      <polygon points="60,48 55,53 65,53" fill="${A.skinDk}"/>
+      <line x1="16" y1="47" x2="52" y2="50" stroke="${A.skinDk}" stroke-width="1.2" opacity=".55"/>
+      <line x1="16" y1="52" x2="52" y2="52" stroke="${A.skinDk}" stroke-width="1.2" opacity=".55"/>
+      <line x1="104" y1="47" x2="68" y2="50" stroke="${A.skinDk}" stroke-width="1.2" opacity=".55"/>
+      <line x1="104" y1="52" x2="68" y2="52" stroke="${A.skinDk}" stroke-width="1.2" opacity=".55"/>
+      ${ck}${eyes(42,35,78,35,eyeState)}${mouth(60,55,mood,7)}`;
+    case'dog':return`
+      <ellipse cx="20" cy="40" rx="16" ry="24" fill="${A.skinDk}" transform="rotate(-12,20,40)"/>
+      <ellipse cx="100" cy="40" rx="16" ry="24" fill="${A.skinDk}" transform="rotate(12,100,40)"/>
+      <circle cx="60" cy="38" r="30" fill="url(#hg)"/>
+      <circle cx="60" cy="38" r="30" fill="none" stroke="${A.skinDk}" stroke-width="1"/>
+      <ellipse cx="60" cy="51" rx="18" ry="13" fill="${A.muzzle}"/>
+      <ellipse cx="60" cy="44" rx="9" ry="7" fill="#1a1a1a"/>
+      <circle cx="57" cy="42" r="2.5" fill="white" opacity=".5"/>
+      ${ck}${eyes(41,32,79,32,eyeState)}${mouth(60,53,mood,10)}`;
+    case'rabbit':return`
+      <ellipse cx="40" cy="-2" rx="11" ry="28" fill="${A.skin}"/><ellipse cx="80" cy="-2" rx="11" ry="28" fill="${A.skin}"/>
+      <ellipse cx="40" cy="-2" rx="7" ry="23" fill="${A.earIn}"/><ellipse cx="80" cy="-2" rx="7" ry="23" fill="${A.earIn}"/>
+      <circle cx="60" cy="40" r="29" fill="url(#hg)"/>
+      <circle cx="60" cy="40" r="29" fill="none" stroke="${A.skinDk}" stroke-width="1"/>
+      <circle cx="60" cy="51" r="6" fill="${A.skinDk}"/>
+      ${ck}${eyes(43,35,77,35,eyeState)}${mouth(60,55,mood,7)}`;
+    case'bear':return`
+      <circle cx="32" cy="16" r="15" fill="${A.skin}"/><circle cx="88" cy="16" r="15" fill="${A.skin}"/>
+      <circle cx="32" cy="16" r="10" fill="${A.skinDk}"/><circle cx="88" cy="16" r="10" fill="${A.skinDk}"/>
+      <circle cx="60" cy="40" r="31" fill="url(#hg)"/>
+      <circle cx="60" cy="40" r="31" fill="none" stroke="${A.skinDk}" stroke-width="1.2"/>
+      <ellipse cx="60" cy="53" rx="17" ry="12" fill="${A.muzzle}"/>
+      <ellipse cx="60" cy="46" rx="10" ry="8" fill="#1a1a1a"/>
+      <circle cx="57" cy="44" r="2.8" fill="white" opacity=".45"/>
+      ${ck}${eyes(42,34,78,34,eyeState)}${mouth(60,56,mood,9)}`;
+    case'cow':return`
+      <path d="M28,24 Q18,5 28,12" stroke="${A.horn}" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M92,24 Q102,5 92,12" stroke="${A.horn}" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <ellipse cx="22" cy="32" rx="11" ry="15" fill="${A.skin}" transform="rotate(-18,22,32)"/>
+      <ellipse cx="98" cy="32" rx="11" ry="15" fill="${A.skin}" transform="rotate(18,98,32)"/>
+      <ellipse cx="22" cy="32" rx="7" ry="10" fill="${A.skinDk}" transform="rotate(-18,22,32)"/>
+      <ellipse cx="98" cy="32" rx="7" ry="10" fill="${A.skinDk}" transform="rotate(18,98,32)"/>
+      <circle cx="60" cy="38" r="30" fill="url(#hg)"/>
+      <ellipse cx="44" cy="26" rx="11" ry="8" fill="${A.spot}" opacity=".65"/>
+      <ellipse cx="79" cy="35" rx="9" ry="7" fill="${A.spot}" opacity=".55"/>
+      <ellipse cx="60" cy="51" rx="18" ry="13" fill="${A.muzzle}"/>
+      <circle cx="54" cy="52" r="4.5" fill="${A.skinDk}" opacity=".6"/>
+      <circle cx="66" cy="52" r="4.5" fill="${A.skinDk}" opacity=".6"/>
+      ${ck}${eyes(42,33,78,33,eyeState)}${mouth(60,48,mood,9)}`;
+    case'duck':return`
+      <circle cx="60" cy="36" r="30" fill="url(#hg)"/>
+      <circle cx="60" cy="36" r="30" fill="none" stroke="${A.skinDk}" stroke-width="1"/>
+      <ellipse cx="56" cy="10" rx="9" ry="7" fill="${A.skinDk}" transform="rotate(-15,56,10)"/>
+      <ellipse cx="66" cy="8" rx="9" ry="7" fill="${A.skinDk}" transform="rotate(10,66,8)"/>
+      <path d="M43,48 Q60,60 77,48 Q60,55 43,48Z" fill="${A.beak}"/>
+      <line x1="43" y1="48" x2="77" y2="48" stroke="${A.beakDk}" stroke-width="1.5"/>
+      ${eyes(43,32,77,32,eyeState)}`;
+    case'sheep':return`
+      <circle cx="28" cy="22" r="16" fill="${A.wool}"/><circle cx="48" cy="10" r="18" fill="${A.wool}"/>
+      <circle cx="72" cy="10" r="18" fill="${A.wool}"/><circle cx="92" cy="22" r="16" fill="${A.wool}"/>
+      <circle cx="18" cy="38" r="13" fill="${A.wool}"/><circle cx="102" cy="38" r="13" fill="${A.wool}"/>
+      <circle cx="28" cy="22" r="10" fill="${A.woolSh}" opacity=".4"/>
+      <circle cx="60" cy="44" r="25" fill="url(#hg)"/>
+      <ellipse cx="22" cy="46" rx="10" ry="7" fill="${A.skin}" transform="rotate(-15,22,46)"/>
+      <ellipse cx="98" cy="46" rx="10" ry="7" fill="${A.skin}" transform="rotate(15,98,46)"/>
+      <ellipse cx="60" cy="56" rx="13" ry="10" fill="${A.skinDk}"/>
+      <circle cx="55" cy="57" r="3.5" fill="#111" opacity=".55"/>
+      <circle cx="65" cy="57" r="3.5" fill="#111" opacity=".55"/>
+      ${ck.replace(/#ffaaaa/g,'#fff')}${eyes(45,39,75,39,eyeState)}${mouth(60,52,mood,6)}`;
+    case'fox':return`
+      <path d="M26,36 L28,8 L42,28Z" fill="${A.skin}"/>
+      <path d="M94,36 L92,8 L78,28Z" fill="${A.skin}"/>
+      <path d="M28,34 L30,12 L41,29Z" fill="white" opacity=".6"/>
+      <path d="M92,34 L90,12 L79,29Z" fill="white" opacity=".6"/>
+      <circle cx="60" cy="40" r="30" fill="url(#hg)"/>
+      <circle cx="60" cy="40" r="30" fill="none" stroke="${A.skinDk}" stroke-width="1"/>
+      <ellipse cx="60" cy="52" rx="18" ry="12" fill="${A.muzzle}"/>
+      <ellipse cx="60" cy="46" rx="9" ry="6" fill="#1a1a1a"/>
+      <circle cx="57" cy="44" r="2.5" fill="white" opacity=".5"/>
+      ${ck}${eyes(41,34,79,34,eyeState)}${mouth(60,54,mood,10)}`;
+    case'panda':return`
+      <circle cx="30" cy="20" r="16" fill="${A.skin}"/>
+      <circle cx="90" cy="20" r="16" fill="${A.skin}"/>
+      <circle cx="30" cy="20" r="10" fill="#1a1a1a" opacity=".85"/>
+      <circle cx="90" cy="20" r="10" fill="#1a1a1a" opacity=".85"/>
+      <circle cx="60" cy="40" r="30" fill="url(#hg)"/>
+      <ellipse cx="43" cy="36" rx="11" ry="13" fill="${A.patch}" opacity=".88"/>
+      <ellipse cx="77" cy="36" rx="11" ry="13" fill="${A.patch}" opacity=".88"/>
+      <ellipse cx="60" cy="54" rx="14" ry="10" fill="${A.skinDk}"/>
+      <ellipse cx="60" cy="48" rx="8" ry="6" fill="#1a1a1a"/>
+      <circle cx="57" cy="46" r="2.2" fill="white" opacity=".45"/>
+      ${ck.replace(/#ffaaaa/g,'#ffcccc')}${eyes(43,35,77,35,eyeState)}${mouth(60,55,mood,7)}`;
+    case'capybara':return`
+      <ellipse cx="26" cy="30" rx="9" ry="12" fill="${A.skin}" transform="rotate(-8,26,30)"/>
+      <ellipse cx="94" cy="30" rx="9" ry="12" fill="${A.skin}" transform="rotate(8,94,30)"/>
+      <circle cx="60" cy="38" r="31" fill="url(#hg)"/>
+      <circle cx="60" cy="38" r="31" fill="none" stroke="${A.skinDk}" stroke-width="1"/>
+      <rect x="36" y="44" width="48" height="20" rx="11" fill="${A.muzzle}"/>
+      <ellipse cx="53" cy="47" rx="5" ry="4" fill="${A.skinDk}" opacity=".5"/>
+      <ellipse cx="67" cy="47" rx="5" ry="4" fill="${A.skinDk}" opacity=".5"/>
+      ${ck}${eyes(42,31,78,31,eyeState)}${mouth(60,54,mood,12)}`;
+    case'penguin':return`
+      <circle cx="60" cy="36" r="31" fill="url(#hg)"/>
+      <ellipse cx="60" cy="40" rx="22" ry="26" fill="${A.belly}"/>
+      <path d="M46,50 Q60,57 74,50" stroke="${A.beak}" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <line x1="46" y1="50" x2="74" y2="50" stroke="${A.beak}" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="38" cy="28" rx="8" ry="5" fill="${A.skin}" transform="rotate(-18,38,28)"/>
+      <ellipse cx="82" cy="28" rx="8" ry="5" fill="${A.skin}" transform="rotate(18,82,28)"/>
+      ${eyes(43,33,77,33,eyeState)}`;
+    case'redpanda':return`
+      <ellipse cx="30" cy="18" rx="14" ry="16" fill="${A.skin}"/>
+      <ellipse cx="90" cy="18" rx="14" ry="16" fill="${A.skin}"/>
+      <ellipse cx="30" cy="16" rx="9" ry="11" fill="${A.earTip}"/>
+      <ellipse cx="90" cy="16" rx="9" ry="11" fill="${A.earTip}"/>
+      <circle cx="60" cy="40" r="30" fill="url(#hg)"/>
+      <ellipse cx="60" cy="42" rx="24" ry="18" fill="${A.face}"/>
+      <path d="M36,30 Q42,24 48,30" stroke="${A.skinDk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M72,30 Q78,24 84,30" stroke="${A.skinDk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="60" cy="50" rx="12" ry="8" fill="${A.skinDk}" opacity=".6"/>
+      <ellipse cx="60" cy="46" rx="7" ry="5" fill="#1a1a1a"/>
+      <circle cx="57" cy="44" r="2" fill="white" opacity=".45"/>
+      ${ck}${eyes(42,36,78,36,eyeState)}${mouth(60,54,mood,8)}`;
+  }
+  return'';
+}
+
+function buildCharSVG(animalKey,actId,moodScore){
+  const A=ANIMALS[animalKey]||ANIMALS.pig;
+  // Apply outfit (classic = animal's own color, others override)
+  const outfitKey=G?.cosmetics?.outfit||'classic';
+  const O=(outfitKey!=='classic'&&OUTFITS[outfitKey])||null;
+  const ov=O?O.ov:A.ov, ovLt=O?O.ovLt:A.ovLt, ovDk=O?O.ovDk:A.ovDk;
+  // Active accessory
+  const accSVG=ACCESSORIES[G?.cosmetics?.accessory||'none']?.svg||'';
+  const mood=moodScore>=65?'happy':moodScore<=30?'sad':'neutral';
+  const eyeState=actId==='sleeping'?'sleeping':mood;
+  // Arm angles per activity
+  const lAng=actId==='playing'?-40:actId==='studying'?20:15;
+  const rAng=actId==='eating'?-80:actId==='playing'?40:actId==='studying'?-35:-15;
+  return`<svg viewBox="0 0 120 158" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;overflow:visible">
+  <defs>
+    <radialGradient id="hg" cx="36%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="${A.skinLt}"/>
+      <stop offset="100%" stop-color="${A.skin}"/>
+    </radialGradient>
+    <radialGradient id="og" cx="50%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="${ovLt}"/>
+      <stop offset="100%" stop-color="${ov}"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-10%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#00000025"/>
+    </filter>
+  </defs>
+
+  <!-- Ground shadow -->
+  <ellipse cx="60" cy="155" rx="26" ry="5" fill="#00000018"/>
+
+  <!-- Shoes -->
+  <ellipse cx="37" cy="142" rx="15" ry="7" fill="#1a1a1a"/>
+  <ellipse cx="83" cy="142" rx="15" ry="7" fill="#1a1a1a"/>
+  <ellipse cx="35" cy="140" rx="10" ry="4" fill="#2d2d2d"/>
+  <ellipse cx="81" cy="140" rx="10" ry="4" fill="#2d2d2d"/>
+
+  <!-- Legs -->
+  <rect x="26" y="106" width="25" height="38" rx="10" fill="${ov}"/>
+  <rect x="69" y="106" width="25" height="38" rx="10" fill="${ov}"/>
+  <!-- Leg seams -->
+  <line x1="38" y1="110" x2="38" y2="140" stroke="${ovDk}" stroke-width="1" opacity=".4"/>
+  <line x1="82" y1="110" x2="82" y2="140" stroke="${ovDk}" stroke-width="1" opacity=".4"/>
+
+  <!-- Overalls body -->
+  <path d="M14,104 Q12,72 60,68 Q108,72 106,104 Q108,124 60,126 Q12,124 14,104Z" fill="url(#og)" filter="url(#shadow)"/>
+
+  <!-- White shirt collar -->
+  <ellipse cx="60" cy="78" rx="32" ry="14" fill="white" opacity=".92"/>
+
+  <!-- Suspenders -->
+  <rect x="43" y="54" width="9" height="32" rx="4.5" fill="${ov}" transform="rotate(-9,47,70)"/>
+  <rect x="68" y="54" width="9" height="32" rx="4.5" fill="${ov}" transform="rotate(9,73,70)"/>
+
+  <!-- Bib -->
+  <rect x="35" y="55" width="50" height="30" rx="13" fill="url(#og)"/>
+  <rect x="36" y="56" width="48" height="28" rx="12" fill="${ovDk}" opacity=".18"/>
+  <!-- Bib pocket line -->
+  <rect x="46" y="62" width="28" height="16" rx="5" fill="${ovDk}" opacity=".22"/>
+  <!-- Buttons -->
+  <circle cx="60" cy="64" r="4.5" fill="${ovDk}"/>
+  <circle cx="60" cy="64" r="2.5" fill="${ovLt}" opacity=".6"/>
+  <circle cx="60" cy="76" r="4.5" fill="${ovDk}"/>
+  <circle cx="60" cy="76" r="2.5" fill="${ovLt}" opacity=".6"/>
+
+  <!-- Left arm -->
+  <rect id="wm-arm-l" x="8" y="74" width="16" height="40" rx="8" fill="${A.skin}" transform="rotate(${lAng},16,74)"/>
+
+  <!-- Right arm -->
+  <rect id="wm-arm-r" x="96" y="74" width="16" height="40" rx="8" fill="${A.skin}" transform="rotate(${rAng},104,74)"/>
+
+  <!-- Animal head -->
+  ${animalHead(animalKey,A,eyeState,mood)}
+  <!-- Accessory -->
+  ${accSVG}
+</svg>`;
+}
+
+// Compact SVG for setup preview (no body, just head + tiny overalls peek)
+function buildPreviewSVG(key){
+  const A=ANIMALS[key]||ANIMALS.pig;
+  const mood='happy',eyeState='happy';
+  return`<svg viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg" style="width:54px;height:64px">
+  <defs>
+    <radialGradient id="hg${key}" cx="36%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="${A.skinLt}"/><stop offset="100%" stop-color="${A.skin}"/>
+    </radialGradient>
+    <radialGradient id="og${key}" cx="50%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="${A.ovLt}"/><stop offset="100%" stop-color="${A.ov}"/>
+    </radialGradient>
+  </defs>
+  <!-- Overalls peek -->
+  <path d="M20,112 Q18,88 60,84 Q102,88 100,112 Q102,128 60,130 Q18,128 20,112Z" fill="url(#og${key})"/>
+  <ellipse cx="60" cy="92" rx="28" ry="12" fill="white" opacity=".9"/>
+  <rect x="38" y="74" width="44" height="26" rx="11" fill="url(#og${key})"/>
+  <circle cx="60" cy="82" r="4" fill="${A.ovDk}"/>
+  <circle cx="60" cy="93" r="4" fill="${A.ovDk}"/>
+  <!-- Arm stubs -->
+  <rect x="10" y="88" width="14" height="32" rx="7" fill="${A.skin}" transform="rotate(15,17,88)"/>
+  <rect x="96" y="88" width="14" height="32" rx="7" fill="${A.skin}" transform="rotate(-15,103,88)"/>
+  <!-- Head -->
+  ${animalHead(key,{...A,skinLt:A.skinLt,muzzle:A.muzzle||A.skinDk,beak:A.beak,beakDk:A.beakDk,spot:A.spot,horn:A.horn,earIn:A.earIn,wool:A.wool,woolSh:A.woolSh},eyeState,mood).replace(/id="hg"/g,`id="hg${key}"`)}
+  </svg>`;
+}
+
+// ---- ROLES ----
+const ROLES={
+  teacher:{icon:'📚',label:'Teacher',color:'#5088b0'},
+  parent:{icon:'🏠',label:'Parent',color:'#5ca06e'},
+  doctor:{icon:'🩺',label:'Doctor',color:'#c45050'},
+  lawyer:{icon:'⚖️',label:'Lawyer',color:'#8868a8'},
+  therapist:{icon:'💜',label:'Therapist',color:'#d4a030'},
+  friend:{icon:'🤝',label:'Friend',color:'#e07850'}
+};
+const STAGES={
+  child:{label:'Childhood',min:5,max:12},
+  teen:{label:'Adolescence',min:13,max:17},
+  youngAdult:{label:'Young Adult',min:18,max:25},
+  adult:{label:'Adulthood',min:26,max:40}
+};
+const BACKGROUNDS={
+  5:['Grew up in a large, noisy family with three siblings','Only child of a single parent who works long hours','Lives with grandparents in a quiet countryside town','Recently moved to a new city and knows nobody'],
+  13:['Honor student who secretly feels the pressure is crushing','Athletic kid who struggles with academics','Creative soul in a family that values practicality','Shy newcomer trying to fit in at a new school'],
+  18:['First in the family to go to college, far from home','Gap year after high school, unsure about the future','Starting a first job to support the family','Recovering from a difficult high school experience'],
+  30:['Successful career but feeling empty inside','Single parent balancing work and a young child','Just went through a major breakup, starting over','Moved abroad for work, building a life from scratch']
+};
+const ACTIVITIES=[
+  {id:'eating',   label:'Eating',      icon:'🍽️',scene:'kitchen', needKey:'hunger', restore:2.5,prop:'🥣'},
+  {id:'sleeping', label:'Sleeping',    icon:'😴',scene:'bedroom', needKey:'energy', restore:2.0,prop:'🛏️'},
+  {id:'bathing',  label:'Bathing',     icon:'🚿',scene:'bathroom',needKey:'hygiene',restore:2.5,prop:'🛁'},
+  {id:'playing',  label:'Playing',     icon:'🎮',scene:'outside', needKey:'fun',    restore:2.0,prop:'⚽'},
+  {id:'chatting', label:'Being social',icon:'💬',scene:'living',  needKey:'social', restore:2.0,prop:'📱'},
+  {id:'studying', label:'Studying',    icon:'📚',scene:'study',   needKey:null,     restore:0,  prop:'📖'},
+  {id:'idle',     label:'Relaxing',    icon:'😌',scene:'bedroom', needKey:null,     restore:0,  prop:'🌱'}
+];
+const NEED_INTERACTIONS={
+  hunger:{label:'Hunger',icon:'🍎',alertMsg:'Looks hungry — check in?',openings:["I forgot to eat again. Been too busy.","Not really hungry but I know I should eat...","I haven't had a real meal since... I don't even remember."],goodSignals:['eat','food','meal','hungry','lunch','breakfast','dinner','snack','cook','bite'],goodResp:"Yeah... you're right. I'll go eat something. Thanks for noticing.",weakResp:"I'm fine. Don't worry about it.",resolve:(g)=>{g.needs.hunger.v=clamp(g.needs.hunger.v+45,0,100);g.emotions.stress=clamp(g.emotions.stress-5,0,100);}},
+  energy:{label:'Energy',icon:'⚡',alertMsg:'Seems exhausted — say something?',openings:["I'm so tired. I just ran out of fuel.","Was going to sleep but couldn't stop scrolling. It's 2am.","Can barely keep my eyes open."],goodSignals:['sleep','rest','nap','tired','exhausted','bed','relax','break','take it easy','energy'],goodResp:"You're right. I need to just rest. Thanks for giving me permission.",weakResp:"I'll sleep when I'm done. Still stuff to do.",resolve:(g)=>{g.needs.energy.v=clamp(g.needs.energy.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+3,0,100);}},
+  hygiene:{label:'Hygiene',icon:'🧼',alertMsg:"Hasn't been taking care of themselves",openings:["I haven't showered in... a bit. Don't have the energy.","Self-care has not been happening. Everything feels like too much.","I look like a disaster. I can't seem to care right now."],goodSignals:['shower','bath','wash','clean','hygiene','freshen','self-care','routine'],goodResp:"Ha. Yeah. I'll go get cleaned up. Sometimes you just need someone to say it.",weakResp:"I'll deal with it later.",resolve:(g)=>{g.needs.hygiene.v=clamp(g.needs.hygiene.v+45,0,100);g.emotions.confidence=clamp(g.emotions.confidence+6,0,100);}},
+  social:{label:'Social',icon:'💬',alertMsg:'Seems lonely — reach out?',openings:["I've been alone a lot lately. Not dramatically, just... a lot.","Haven't really talked to anyone today. Or yesterday.","I'm fine! Just kind of disconnected."],goodSignals:['talk','listen','here','alone','lonely','connect','together','friend','hang'],goodResp:"Yeah. Just talking helps. Thanks for checking in.",weakResp:"I'm used to it. It's fine.",resolve:(g)=>{g.needs.social.v=clamp(g.needs.social.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+8,0,100);}},
+  fun:{label:'Fun',icon:'🎮',alertMsg:'Everything feels flat — offer some joy?',openings:["I don't remember the last time I had real fun.","Everything feels kind of gray. Not sad, just... flat.","I want to want to do things, but nothing sounds good."],goodSignals:['fun','play','game','laugh','enjoy','hobby','creative','draw','music','silly','break'],goodResp:"That sounds really nice. Maybe I'll try. I forgot I'm allowed to enjoy things.",weakResp:"Nothing sounds fun. Maybe later.",resolve:(g)=>{g.needs.fun.v=clamp(g.needs.fun.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+10,0,100);g.skills.creative=clamp(g.skills.creative+2,0,100);}},
+  health:{label:'Health',icon:'❤️',alertMsg:"Health declining — check in?",openings:["I haven't been feeling great. Just run-down.","My body feels neglected. Everything kind of aches.","I think I'm getting sick. Or just falling apart slowly."],goodSignals:['health','doctor','medicine','sick','rest','care','feel better','check up','body','physical'],goodResp:"You know what, I'll actually take care of myself this week. Thanks.",weakResp:"I'll get over it.",resolve:(g)=>{g.needs.health.v=clamp(g.needs.health.v+25,0,100);g.skills.physical=clamp(g.skills.physical+3,0,100);}}
+};
+
+// ---- ROLE SIGNALS ----
+const ROLE_SIGNALS={
+  teacher:{kw:['learn','study','practice','knowledge','skill','lesson','understand','curious','explore','try','figure out','approach','strategy','plan','method','break it down','analyze','pros and cons','consider','what if you','option','different way','exercise','write down'],pat:[/let'?s (figure|work|think|look)/i,/have you (tried|considered|thought)/i,/what (do you think|if you|would happen)/i,/try (this|to|a different)/i,/the (reason|key|trick|way)/i]},
+  parent:{kw:['proud','love','safe','home','family','protect','care','worry','always here','never alone','no matter what','sweetheart','honey','support','brave','strong','believe in you','unconditional','together'],pat:[/i('m| am) (so )?(proud|here|with you)/i,/you('re| are) (not alone|safe|loved|enough|brave)/i,/no matter what/i,/(it'?s okay|don'?t worry)/i,/i (love|care|believe)/i]},
+  doctor:{kw:['sleep','eat','exercise','health','body','rest','tired','energy','breathe','breathing','calm','relax','water','hydrate','nutrition','routine','physical','self-care','break','burnout','deep breaths'],pat:[/how (are you|have you been) (sleeping|eating|feeling)/i,/take (a break|care|deep|some time)/i,/your (body|health|brain) (needs|is)/i,/(get|need) (some )?(rest|sleep)/i,/deep breath/i]},
+  lawyer:{kw:['right','rights','fair','unfair','rule','law','boundary','boundaries','deserve','owe','responsibility','accountable','consequence','justice','stand up','speak up','advocate','reasonable','entitled','report','policy','allowed'],pat:[/you (have the right|deserve|are entitled|don'?t have to)/i,/that'?s (not fair|not okay|wrong)/i,/set (a )?boundar/i,/stand (up|your ground)/i,/you('re| are) (allowed|within your rights)/i]},
+  therapist:{kw:['feel','feeling','feelings','emotion','valid','validate','acknowledge','process','anxiety','cope','coping','pattern','aware','reflect','express','okay to feel','normal to','it makes sense','sit with','heal','pain','underneath'],pat:[/how (does|did) (that|this|it) (make you )?feel/i,/it('s| is) (okay|normal|valid) to (feel|be)/i,/what (are you|do you) (feeling|feel)/i,/tell me (more|about)/i,/that (sounds|must be) (really )?(hard|difficult|painful)/i,/i (hear|see|understand|notice) (you|that)/i]},
+  friend:{kw:['fun','cool','awesome','hang out','together','laugh','chill','dude','buddy','hey','honestly','been there','get it','wanna','sucks','crazy'],pat:[/i('ve| have) been there/i,/that (sucks|blows|is rough)/i,/want to (hang|chill|talk|do something)/i,/let'?s (go|do|get|hang|just)/i,/i get (it|that|you)/i]}
+};
+const POS_Q={kw:['listen','hear you','understand','tell me more','what do you think','how do you feel','your choice','take your time','you matter'],pat:[/you (don'?t|do not) have to/i,/what (do|would) you (think|want|need)/i,/i('m| am) (listening|here for you)/i]};
+const NEG_Q={kw:["just get over","stop crying","man up","grow up","it's not a big deal","overreacting","toughen up","deal with it","suck it up"],pat:[/stop (being|acting|feeling)/i,/get over (it|yourself)/i,/it'?s (not|no) (big|a big) deal/i,/just (deal|cope|move on|forget)/i]};
+
+// ---- GAME STATE ----
+let G={
+  charName:'',animal:'pig',age:5,startAge:5,day:1,background:'',
+  personality:{openness:50,conscientiousness:50,extraversion:50,agreeableness:50,neuroticism:50},
+  emotions:{happiness:60,stress:30,confidence:50,trust:50},
+  skills:{academic:20,social:20,emotional:15,physical:30,creative:20,practical:10},
+  playerRoles:{teacher:5,parent:5,doctor:5,lawyer:5,therapist:5,friend:5},
+  needs:{
+    hunger:{v:80,icon:'🍎',label:'Hunger',rate:.35,color:'#e07850'},
+    energy:{v:90,icon:'⚡',label:'Energy',rate:.22,color:'#5088b0'},
+    hygiene:{v:85,icon:'🧼',label:'Hygiene',rate:.14,color:'#5ca06e'},
+    social:{v:70,icon:'💬',label:'Social',rate:.28,color:'#8868a8'},
+    fun:{v:75,icon:'🎮',label:'Fun',rate:.18,color:'#d4a030'},
+    health:{v:80,icon:'❤️',label:'Health',rate:.08,color:'#c45050'}
+  },
+  wallet:{coins:150,gems:0},
+  cosmetics:{outfit:'classic',accessory:'none'},
+  owned:{outfits:['classic'],accessories:['none'],animals:['pig','cat','dog','rabbit','bear','cow','duck','sheep'],packs:[],premium:false},
+  weekSnapshot:null,
+  packProgress:{},
+  currentActivity:'idle',currentEvent:null,phase:'waiting',
+  eventHistory:[],activeNeedInteraction:null,
+  responseCount:0,maxResponses:3,memories:[],
+  history:{snapshots:[],interactions:[],roleUsage:{teacher:0,parent:0,doctor:0,lawyer:0,therapist:0,friend:0}},
+  blinkTimer:null,tickTimer:null
+};
+
+// ---- SETUP ----
+let selAgeV=null,selBgV=null,selAnimalV='pig';
+
+function initAnimalGrid(){
+  const g=document.getElementById('animal-grid');
+  g.innerHTML=Object.entries(ANIMALS).filter(([k,a])=>!a.premium).map(([k,a])=>`
+    <div class="animal-opt ${k==='pig'?'sel':''}" id="aopt-${k}" onclick="selAnimal('${k}')">
+      <div class="a-sel-badge">✓</div>
+      ${buildPreviewSVG(k)}
+      <div class="a-name">${a.name}</div>
+    </div>`).join('');
+  selAnimalV='pig';
+}
+
+function selAnimal(key){
+  document.querySelectorAll('.animal-opt').forEach(o=>o.classList.remove('sel'));
+  document.getElementById('aopt-'+key)?.classList.add('sel');
+  selAnimalV=key;
+  checkReady();
+}
+
+function selAge(el){
+  document.querySelectorAll('.age-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  selAgeV=parseInt(el.dataset.age);
+  selBgV=null;
+  document.getElementById('bg-opts').innerHTML='';
+  (BACKGROUNDS[selAgeV]||[]).forEach((b,i)=>{
+    const d=document.createElement('div');d.className='bg-opt';d.textContent=b;
+    d.onclick=()=>{document.querySelectorAll('.bg-opt').forEach(o=>o.classList.remove('sel'));d.classList.add('sel');selBgV=b;checkReady();};
+    document.getElementById('bg-opts').appendChild(d);
+  });
+  checkReady();
+}
+
+function checkReady(){document.getElementById('start-btn').disabled=!(document.getElementById('char-name').value.trim()&&selAgeV&&selBgV&&selAnimalV);}
+document.getElementById('char-name').addEventListener('input',checkReady);
+
+function startGame(){
+  G.charName=document.getElementById('char-name').value.trim();
+  G.animal=selAnimalV;G.age=selAgeV;G.startAge=selAgeV;G.background=selBgV;
+  seedPersonality();seedSkills();
+  document.getElementById('setup-screen').classList.remove('active');
+  document.getElementById('game-screen').classList.add('active');
+  updateCharSVG();updateAllUI();
+  startTick();startBlink();
+  beginDay();
+}
+
+function seedPersonality(){
+  const b={openness:50,conscientiousness:50,extraversion:50,agreeableness:50,neuroticism:50};
+  for(let k in b)b[k]+=rand(-10,10);
+  const bg=G.background.toLowerCase();
+  if(bg.includes('large')||bg.includes('noisy')){b.extraversion+=10;b.agreeableness+=5;}
+  if(bg.includes('single parent')||bg.includes('long hours')){b.neuroticism+=10;b.conscientiousness+=5;}
+  if(bg.includes('quiet')||bg.includes('countryside')){b.openness+=5;b.extraversion-=10;}
+  if(bg.includes('new city')||bg.includes('newcomer')||bg.includes('new school')){b.neuroticism+=10;b.openness+=5;}
+  if(bg.includes('honor')||bg.includes('pressure')){b.conscientiousness+=15;b.neuroticism+=10;}
+  if(bg.includes('athletic'))b.extraversion+=10;
+  if(bg.includes('creative'))b.openness+=15;
+  if(bg.includes('shy')){b.extraversion-=15;b.neuroticism+=5;}
+  if(bg.includes('breakup'))b.neuroticism+=15;
+  for(let k in b)G.personality[k]=clamp(b[k],5,95);
+}
+function seedSkills(){
+  const ab=Math.max(0,(G.age-5)*3);
+  for(let k in G.skills)G.skills[k]=clamp(10+ab+rand(0,14),5,70);
+  const bg=G.background.toLowerCase();
+  if(bg.includes('honor'))G.skills.academic+=15;
+  if(bg.includes('athletic'))G.skills.physical+=15;
+  if(bg.includes('creative'))G.skills.creative+=15;
+  if(bg.includes('successful')){G.skills.academic+=10;G.skills.practical+=15;}
+  for(let k in G.skills)G.skills[k]=clamp(G.skills[k],5,95);
+}
+
+// ---- UTILS ----
+function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+function rand(mn,mx){return Math.floor(Math.random()*(mx-mn+1))+mn;}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function getStage(){if(G.age<=12)return'child';if(G.age<=17)return'teen';if(G.age<=25)return'youngAdult';return'adult';}
+function getStageName(){return STAGES[getStage()].label;}
+function getMoodScore(){return Math.round(G.emotions.happiness*.4+(100-G.emotions.stress)*.3+G.emotions.confidence*.2+G.emotions.trust*.1);}
+
+// ---- CHARACTER SVG UPDATE ----
+function updateCharSVG(){
+  const mood=getMoodScore();
+  const wrap=document.getElementById('char-svg-wrap');
+  if(!wrap)return;
+  wrap.innerHTML=buildCharSVG(G.animal,G.currentActivity,mood);
+  // State class for animation
+  let stateClass='state-idle';
+  if(G.currentActivity==='sleeping')stateClass='state-sleeping';
+  else if(mood>=72)stateClass='state-happy';
+  else if(mood<=30)stateClass='state-sad';
+  wrap.className=`char-svg-wrap ${stateClass}`;
+  // ZZZ
+  document.getElementById('zzz-wrap').style.display=G.currentActivity==='sleeping'?'block':'none';
+  // Scene
+  const act=ACTIVITIES.find(a=>a.id===G.currentActivity)||ACTIVITIES[6];
+  document.getElementById('scene-bg').className=`scene-bg ${act.scene}`;
+  document.getElementById('scene-prop').textContent=act.prop;
+  document.getElementById('activity-badge').textContent=`${act.icon} ${act.label}`;
+}
+
+function startBlink(){
+  if(G.blinkTimer)clearInterval(G.blinkTimer);
+  // SVG eyes blink: briefly re-render with sleeping state then back
+  G.blinkTimer=setInterval(()=>{
+    if(G.currentActivity==='sleeping')return;
+    const wrap=document.getElementById('char-svg-wrap');
+    if(!wrap)return;
+    const eyeEls=wrap.querySelectorAll('ellipse[ry="8"],ellipse[ry="7.5"]');
+    // Simple: briefly add opacity animation to simulate blink
+    const mood=getMoodScore();
+    const savedHTML=wrap.innerHTML;
+    // Draw sleeping-eyes version momentarily
+    wrap.innerHTML=buildCharSVG(G.animal,G.currentActivity==='sleeping'?'sleeping':'__blink__',mood);
+    // Patch: replace eye draws with blink lines inside
+    setTimeout(()=>{wrap.innerHTML=savedHTML;},110);
+  },3200+Math.random()*1800);
+}
+
+// ---- TICK / NEEDS ----
+function startTick(){
+  if(G.tickTimer)clearInterval(G.tickTimer);
+  G.tickTimer=setInterval(tickNeeds,8000);
+}
+
+function tickNeeds(){
+  if(G.phase==='evaluating')return;
+  for(const[key,n]of Object.entries(G.needs)){
+    let rate=n.rate;
+    if(key==='energy'&&G.currentActivity==='sleeping')rate=-n.rate*2;
+    if(key==='hunger'&&G.currentActivity==='eating')rate=-n.rate*2.5;
+    if(key==='hygiene'&&G.currentActivity==='bathing')rate=-n.rate*3;
+    if(key==='fun'&&G.currentActivity==='playing')rate=-n.rate*2;
+    if(key==='social'&&G.currentActivity==='chatting')rate=-n.rate*2;
+    n.v=clamp(n.v-rate,0,100);
+  }
+  const avg=(G.needs.hunger.v+G.needs.energy.v+G.needs.hygiene.v)/3;
+  G.needs.health.v=clamp(G.needs.health.v+(avg>60?.3:-.4),0,100);
+  if(G.needs.hunger.v<30)G.emotions.stress=clamp(G.emotions.stress+.5,0,100);
+  if(G.needs.energy.v<25)G.emotions.happiness=clamp(G.emotions.happiness-.3,0,100);
+  if(G.needs.social.v<25)G.emotions.happiness=clamp(G.emotions.happiness-.3,0,100);
+  if(G.needs.fun.v<20)G.emotions.stress=clamp(G.emotions.stress+.4,0,100);
+  if(Math.random()<.33)pickActivity();
+  updateNeedsUI();updateAlertsUI();updateCharSVG();updateAllUI();
+}
+
+function pickActivity(){
+  let best=ACTIVITIES[6],bestScore=-1;
+  for(const act of ACTIVITIES){
+    if(!act.needKey)continue;
+    const n=G.needs[act.needKey];
+    if(!n)continue;
+    const urgency=100-n.v;
+    if(urgency>bestScore){bestScore=urgency;best=act;}
+  }
+  G.currentActivity=bestScore>40?best.id:pick(['idle','studying','playing','idle']);
+}
+
+// ---- UI ----
+function updateNeedsUI(){
+  const c=document.getElementById('needs-list');
+  if(!c)return;
+  c.innerHTML=Object.entries(G.needs).map(([k,n])=>{
+    const pct=n.v,cls=pct>60?'high':pct>30?'mid':'low';
+    return`<div class="need-row"><span class="need-icon">${n.icon}</span><div class="need-track"><div class="need-fill ${cls}" style="width:${pct}%"></div></div><span class="need-val">${Math.round(pct)}</span></div>`;
+  }).join('');
+}
+function updateAlertsUI(){
+  const c=document.getElementById('alerts-section');
+  if(!c)return;
+  const alerts=Object.entries(G.needs).filter(([k,n])=>n.v<35&&NEED_INTERACTIONS[k]).map(([k,n])=>({key:k,ni:NEED_INTERACTIONS[k],critical:n.v<20,v:n.v})).sort((a,b)=>a.v-b.v);
+  c.innerHTML=alerts.slice(0,3).map(({key,ni,critical})=>`
+    <div class="alert-chip ${critical?'critical':''}" onclick="startNeedInteraction('${key}')">
+      <span class="a-icon">${ni.icon}</span>
+      <span class="a-text">${ni.alertMsg}</span>
+      <span class="a-cta">→ Respond</span>
+    </div>`).join('');
+}
+function updateAllUI(){
+  document.getElementById('hdr-day').textContent=`Day ${G.day}`;
+  document.getElementById('hdr-age').textContent=`Age ${G.age}`;
+  document.getElementById('hdr-stage').textContent=getStageName();
+  const hc=document.getElementById('hdr-coins');if(hc)hc.textContent=G.wallet.coins;
+  const hg=document.getElementById('hdr-gems');if(hg)hg.textContent=G.wallet.gems;
+  const emoC={happiness:'#5ca06e',stress:'#c45050',confidence:'#5088b0',trust:'#d4a030'};
+  document.getElementById('emo-stats').innerHTML=Object.entries(G.emotions).map(([k,v])=>`<div class="stat-bar"><span class="sn">${k[0].toUpperCase()+k.slice(1)}</span><div class="bt"><div class="bf" style="width:${v}%;background:${emoC[k]}"></div></div><span class="sv">${v}</span></div>`).join('');
+  const skC={academic:'#5088b0',social:'#e07850',emotional:'#8868a8',physical:'#5ca06e',creative:'#d4a030',practical:'#c45050'};
+  document.getElementById('skill-stats').innerHTML=Object.entries(G.skills).map(([k,v])=>`<div class="stat-bar"><span class="sn">${k[0].toUpperCase()+k.slice(1)}</span><div class="bt"><div class="bf" style="width:${v}%;background:${skC[k]}"></div></div><span class="sv">${v}</span></div>`).join('');
+  document.getElementById('role-list').innerHTML=Object.entries(G.playerRoles).map(([k,v])=>`<div class="role-row"><div class="role-ic">${ROLES[k].icon}</div><div class="role-info"><div class="rn">${ROLES[k].label}</div><div class="rb"><div class="rf" style="width:${v}%"></div></div><div class="rl">Lv ${Math.floor(v/20)+1} · ${v}%</div></div></div>`).join('');
+  if(G.memories.length>0)document.getElementById('mem-list').innerHTML=G.memories.slice(-6).reverse().map(m=>`<div class="mem-entry"><span class="ma">Age ${m.age}</span> — ${m.summary}</div>`).join('');
+  updateNeedsUI();updateAlertsUI();
+}
+
+// ---- CHAT ----
+const chatEl=document.getElementById('chat-scroll');
+function addChat(type,content){
+  const d=document.createElement('div');d.className='chat-entry';
+  if(type==='narrator')d.innerHTML=`<div class="narrator">${content}</div>`;
+  else if(type==='char')d.innerHTML=`<div class="char-bubble"><div class="spk">💬 ${G.charName}</div>${content}</div>`;
+  else if(type==='thought')d.innerHTML=`<div class="char-thought">💭 ${content}</div>`;
+  else if(type==='player')d.innerHTML=`<div class="player-bubble"><div class="spk">You</div>${content}</div>`;
+  else if(type==='sys')d.innerHTML=`<div class="sys-msg">${content}</div>`;
+  else if(type==='eval')d.innerHTML=content;
+  else if(type==='weekly')d.innerHTML=`<div class="weekly-card">${content}</div>`;
+  else if(type==='typing')d.innerHTML=`<div class="typing-dots"><span></span><span></span><span></span></div>`;
+  chatEl.appendChild(d);chatEl.scrollTop=chatEl.scrollHeight;
+  return d;
+}
+function setInput(on){
+  const ta=document.getElementById('chat-ta'),sb=document.getElementById('send-btn');
+  if(ta){ta.disabled=!on;if(on)ta.focus();}
+  if(sb)sb.disabled=!on;
+}
+function restoreInput(){
+  document.getElementById('chat-input-area').innerHTML=`
+    <div class="chat-row">
+      <textarea class="chat-ta" id="chat-ta" placeholder="Respond to ${G.charName}..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMsg()">&#x27A4;</button>
+    </div>
+    <div class="chat-hint">Respond naturally — your words shape how they grow</div>`;
+  setInput(false);
+}
+
+// ---- ANALYSIS ----
+function analyzeText(text){
+  const lo=text.toLowerCase();
+  const roles={};
+  for(const[role,sig]of Object.entries(ROLE_SIGNALS)){
+    let sc=0;
+    for(const kw of sig.kw)if(lo.includes(kw))sc+=3;
+    for(const pt of sig.pat)if(pt.test(text))sc+=5;
+    if(text.length>100)sc+=1;if(text.length>200)sc+=1;
+    roles[role]=Math.min(sc,30);
+  }
+  let best=null,bestV=0;
+  for(const[r,v]of Object.entries(roles))if(v>bestV){bestV=v;best=r;}
+  let q=0;
+  for(const kw of POS_Q.kw)if(lo.includes(kw))q+=4;
+  for(const pt of POS_Q.pat)if(pt.test(text))q+=5;
+  for(const kw of NEG_Q.kw)if(lo.includes(kw))q-=8;
+  for(const pt of NEG_Q.pat)if(pt.test(text))q-=10;
+  if(text.length<15)q-=5;else if(text.length<40)q-=2;else if(text.length>80)q+=2;else if(text.length>150)q+=3;
+  if(text.includes('?'))q+=3;
+  if(lo.includes(G.charName.toLowerCase()))q+=3;
+  return{roles,bestRole:best,quality:clamp(q,-20,25)};
+}
+function computeEval(analysis){
+  const score=clamp(Math.round(((analysis.quality+20)/45)*100),5,98);
+  const activeRoles=Object.entries(analysis.roles).filter(([_,v])=>v>=3).sort((a,b)=>b[1]-a[1]).map(([role,strength])=>({role,strength:strength>=10?'strong':strength>=5?'moderate':'light'}));
+  let grade,gCls,gEmoji;
+  if(score>=75){grade='Excellent';gCls='great';gEmoji='🌟';}
+  else if(score>=55){grade='Good';gCls='good';gEmoji='👍';}
+  else if(score>=35){grade='Okay';gCls='okay';gEmoji='🤔';}
+  else{grade='Needs Work';gCls='poor';gEmoji='💭';}
+  const posMap={teacher:'Guiding without lecturing builds independent thinking.',parent:'Unconditional warmth creates a foundation of safety.',doctor:'Attending to physical wellbeing shows care for the whole person.',lawyer:'Advocating for rights builds self-worth and agency.',therapist:'Creating space for feelings develops emotional intelligence.',friend:'Being genuine and relatable builds real trust.'};
+  let fb='';
+  if(activeRoles.length===0)fb='Try engaging more — ask a question, acknowledge feelings, or simply show you\'re present.';
+  else if(score>=75){fb=`Strong ${ROLES[activeRoles[0].role].label} approach. ${posMap[activeRoles[0].role]||''}`;if(activeRoles.length>1)fb+=` You also brought ${ROLES[activeRoles[1].role].label} skills.`;}
+  else if(score>=35)fb='Good instincts. Try also acknowledging feelings before jumping to solutions.';
+  else fb='Consider listening first. What does this person actually need right now?';
+  const fx={};
+  if(score>=75){fx.happiness=rand(5,10);fx.stress=rand(-10,-5);fx.confidence=rand(4,8);fx.trust=rand(5,10);}
+  else if(score>=55){fx.happiness=rand(2,6);fx.stress=rand(-6,-2);fx.confidence=rand(2,5);fx.trust=rand(2,5);}
+  else if(score>=35){fx.happiness=rand(0,3);fx.stress=rand(-3,0);fx.confidence=rand(0,2);fx.trust=rand(0,2);}
+  else{fx.happiness=rand(-5,-1);fx.stress=rand(2,6);fx.confidence=rand(-4,-1);fx.trust=rand(-6,-2);}
+  const rSkills={teacher:['academic','practical'],parent:['emotional','social'],doctor:['physical','emotional'],lawyer:['practical','social'],therapist:['emotional','social'],friend:['social','creative']};
+  for(const{role,strength}of activeRoles){const bonus=strength==='strong'?rand(3,6):strength==='moderate'?rand(1,3):1;for(const sk of(rSkills[role]||[])){fx[sk]=(fx[sk]||0)+bonus;}}
+  return{score,grade,gCls,gEmoji,activeRoles,feedback:fb,effects:fx};
+}
+
+// ---- SEND MESSAGE ----
+function sendMsg(){
+  const ta=document.getElementById('chat-ta');
+  if(!ta)return;
+  const text=ta.value.trim();
+  if(!text||(G.phase!=='responding'&&G.phase!=='needInteraction'))return;
+  ta.value='';setInput(false);
+  addChat('player',text);G.responseCount++;
+  const typing=addChat('typing');
+  setTimeout(()=>{
+    typing.remove();
+    if(G.phase==='needInteraction')handleNeedResp(text);
+    else handleEventResp(text);
+  },900+Math.random()*700);
+}
+function handleEventResp(text){
+  const analysis=analyzeText(text);
+  const evaluation=computeEval(analysis);
+  addChat('char',genCharResp(evaluation.score,G.currentEvent));
+  for(const{role}of evaluation.activeRoles)G.history.roleUsage[role]=(G.history.roleUsage[role]||0)+1;
+  if(G.responseCount>=G.maxResponses||evaluation.score>=80){setTimeout(()=>showEval(evaluation,analysis),700);}
+  else{
+    if(evaluation.score<50&&G.currentEvent?.id!=='idle'){
+      setTimeout(()=>{addChat('char',pick([`"But what I really need is for you to understand what I'm going through."`,`"Can you tell me more? I need more than that."`,`"Let me try to explain what's actually bothering me..."`]));G.phase='responding';setInput(true);},500);
+    } else {G.phase='responding';setInput(true);}
+  }
+}
+function handleNeedResp(text){
+  const ni=G.activeNeedInteraction;
+  const lo=text.toLowerCase();
+  const isGood=ni.goodSignals.some(s=>lo.includes(s))||text.includes('?')||text.length>60;
+  if(isGood){addChat('char',ni.goodResp);ni.resolve(G);setTimeout(()=>showNeedEval(rand(65,85),ni),700);}
+  else{addChat('char',ni.weakResp);setTimeout(()=>showNeedEval(rand(28,48),ni),700);}
+  G.activeNeedInteraction=null;
+}
+function genCharResp(score,event){
+  const good=event?.goodResponses||[`"...Thank you. I really needed to hear that."`,`"That helps. More than you know."`,`"I hadn't thought about it that way."`];
+  const ok=event?.okResponses||[`"Yeah... I guess you're right."`,`"Maybe. I'll think about it."`,`"Thanks for listening."`];
+  const weak=event?.weakResponses||[`"...Okay."`,`"Sure. I'll figure it out."`,`"It's not that simple, but okay."`];
+  if(score>=75)return pick(good);
+  if(score>=55)return pick(ok);
+  if(score>=35)return pick(weak);
+  return G.emotions.trust>50?pick([`"That's not what I needed to hear."`,`"I opened up and that's all you have?"`]):pick([`"...Fine."`,`"Forget I said anything."`]);
+}
+
+function showNeedEval(score,ni){
+  const gCls=score>=75?'great':score>=55?'good':score>=35?'okay':'poor';
+  const gEmoji=score>=75?'🌟':score>=55?'👍':'🤔';
+  addChat('eval',`<div class="eval-card"><h4>Daily Care Check</h4><div class="eval-top"><div class="eval-score ${gCls}">${score}</div><div><div class="eval-grade">${gEmoji} ${score>=65?'Well noticed!':score>=45?'Good check-in':'Keep watching'}</div><div style="font-size:11px;color:var(--soft);margin-top:2px">${ni.label} addressed</div></div></div><div class="eval-fb">${score>=60?`Noticing and responding to ${ni.label.toLowerCase()} needs is an important part of daily care.`:`Try being more specific — name what you see and offer something concrete.`}</div></div>`);
+  G.memories.push({age:G.age,summary:`Noticed ${ni.label.toLowerCase()} need and checked in`});
+  G.history.interactions.push({day:G.day,score,roles:['doctor','parent'],title:`${ni.label} check-in`,grade:score>=75?'Excellent':score>=55?'Good':'Okay'});
+  const coinReward=score>=65?20:10;G.wallet.coins+=coinReward;setTimeout(()=>spawnCoinPop(coinReward),300);
+  G.phase='idle';updateAllUI();updateCharSVG();
+  setTimeout(showNextDayBtn,400);
+}
+
+function showEval(evaluation,analysis){
+  G.phase='evaluating';
+  const fx=evaluation.effects;const changes={};
+  for(const[k,v]of Object.entries(fx)){
+    if(k in G.emotions){const old=G.emotions[k];G.emotions[k]=clamp(G.emotions[k]+v,0,100);changes[k]=G.emotions[k]-old;}
+    else if(k in G.skills){const old=G.skills[k];G.skills[k]=clamp(G.skills[k]+v,0,100);changes[k]=G.skills[k]-old;}
+  }
+  for(const{role,strength}of evaluation.activeRoles){const bonus=strength==='strong'?rand(4,8):strength==='moderate'?rand(2,4):rand(1,2);G.playerRoles[role]=clamp(G.playerRoles[role]+bonus,0,100);}
+  G.history.interactions.push({day:G.day,score:evaluation.score,roles:evaluation.activeRoles.map(r=>r.role),title:G.currentEvent?.title||'Check-in',grade:evaluation.grade});
+  const roleNames=evaluation.activeRoles.slice(0,2).map(r=>ROLES[r.role].label).join(' & ')||'—';
+  G.memories.push({age:G.age,summary:`${G.currentEvent?.title||'Check-in'} — ${roleNames} (${evaluation.grade})`});
+  let rolesHTML=evaluation.activeRoles.map(r=>`<span class="eval-role ${r.strength}">${ROLES[r.role].icon} ${ROLES[r.role].label}</span>`).join('');
+  if(!rolesHTML)rolesHTML=`<span class="eval-role light">No clear role</span>`;
+  let changesHTML=Object.entries(changes).filter(([_,v])=>v!==0).map(([k,v])=>`<span class="eval-chg ${v>0?'pos':'neg'}">${k} ${v>0?'+':''}${v}</span>`).join('');
+  addChat('eval',`<div class="eval-card"><h4>Interaction Evaluation</h4><div class="eval-top"><div class="eval-score ${evaluation.gCls}">${evaluation.score}</div><div><div class="eval-grade">${evaluation.gEmoji} ${evaluation.grade}</div></div></div><div class="eval-roles">${rolesHTML}</div>${changesHTML?`<div class="eval-changes">${changesHTML}</div>`:''}<div class="eval-fb">${evaluation.feedback}</div></div>`);
+  G.currentEvent=null;updateAllUI();updateCharSVG();
+  // Award coins for interaction
+  const coinReward=evaluation.score>=75?50:evaluation.score>=55?30:evaluation.score>=35?15:5;
+  G.wallet.coins+=coinReward;
+  setTimeout(()=>spawnCoinPop(coinReward),300);
+  setTimeout(showNextDayBtn,400);
+}
+
+function showNextDayBtn(){
+  G.phase='idle';
+  document.getElementById('skip-btn').style.display='inline-flex';
+  document.getElementById('chat-input-area').innerHTML=`<button class="next-day-btn" onclick="nextDay()">Let time pass... → Day ${G.day+1}</button>`;
+}
+
+function startNeedInteraction(needKey){
+  if(G.phase!=='idle'&&G.phase!=='waiting')return;
+  const ni=NEED_INTERACTIONS[needKey];if(!ni)return;
+  G.activeNeedInteraction=ni;G.phase='needInteraction';G.responseCount=0;
+  restoreInput();document.getElementById('skip-btn').style.display='none';
+  addChat('sys',`<em>You check in on ${G.charName}...</em>`);
+  setTimeout(()=>{addChat('char',pick(ni.openings));setInput(true);document.getElementById('chat-ta').placeholder=`How do you respond about their ${ni.label.toLowerCase()}?`;},400);
+}
+
+// ---- EVENTS ----
+const EVENTS={
+  child:[
+    {id:'first_day',title:'First Day at School',weight:10,trigger:(g)=>g.day<=3,
+     narration:(g)=>`It's ${g.charName}'s first day at a new school. The hallways are loud and unfamiliar. Other children already seem to know each other.`,
+     opening:(g)=>{if(g.personality.extraversion>60)return`"There are so many kids here! I want to say hi but... what if they don't like me?"`;if(g.personality.neuroticism>60)return`"I don't want to go in. My stomach hurts. Can I just go home?"`;return`"It's really big in there. What if I get lost?"`;},
+     thought:(g)=>g.emotions.confidence<40?"I'm scared. Everyone is looking at me.":"Okay. Maybe someone will be nice.",
+     goodResponses:[`"You really think I'll be okay? ...Okay. I'll try."`,`"That actually helps. The butterflies are still there but they're friendlier."`,`"Maybe I'll find someone who likes the same things I do."`]},
+    {id:'bullying',title:'Trouble at Recess',weight:8,trigger:(g)=>g.day>3&&g.skills.social<50,
+     narration:(g)=>`${g.charName} comes home unusually quiet. The truth comes out: an older kid has been taking their snack and calling them names.`,
+     opening:(g)=>g.emotions.trust>55?`"Someone at school is being really mean to me. I didn't say anything because I thought you'd think I'm a baby."`:g.emotions.confidence<40?`"...Nothing happened. I'm fine."`: `"There's this kid who's kind of mean. Whatever. Everyone deals with it."`,
+     thought:()=>"Maybe they're right. Maybe something IS wrong with me.",
+     goodResponses:[`"You don't think I'm being dumb? It feels SO much better to tell someone."`,`"Wait — it's NOT my fault? I was starting to think maybe I deserved it."`,`"I have rights? Like, it's actually not okay what they're doing?"`]},
+    {id:'reading',title:'Struggling with Reading',weight:7,trigger:(g)=>g.day>5&&g.skills.academic<45,
+     narration:(g)=>`${g.charName}'s teacher sent a note home about falling behind in reading. The homework sits untouched on the table.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I tried! I really tried! The words get all jumbled."`: `"I don't want to read. Reading is stupid."`,
+     thought:()=>"Everyone else can do it. Maybe I'm just dumb.",
+     goodResponses:[`"Wait — my brain isn't broken? It just works differently?"`,`"Can we read together again? It was actually kind of fun that way."`,`"I didn't know grown-ups struggled too. That makes me feel less weird."`]},
+    {id:'friendship',title:'A Broken Friendship',weight:6,trigger:(g)=>g.day>8,
+     narration:(g)=>`${g.charName}'s best friend shared a secret they'd been told with the whole class.`,
+     opening:(g)=>g.personality.neuroticism>60?`"I'm never telling anyone ANYTHING again! Everyone uses your secrets against you!"`: `"They say it just 'slipped out.' But how does a secret just slip out?"`,
+     thought:()=>"If my best friend can't keep secrets, who can I trust?",
+     goodResponses:[`"I don't OWE them forgiveness — but I could choose it. That feels different."`,`"I needed to cry first before I could even think. Thanks for letting me."`,`"You can be mad AND still care about someone. That's confusing but it feels true."`]}
+  ],
+  teen:[
+    {id:'party',title:'The Party',weight:9,trigger:()=>true,
+     narration:(g)=>`The popular group is throwing a party. ${g.charName} got invited for the first time. Word is there'll be alcohol and no parents.`,
+     opening:(g)=>g.personality.extraversion>60?`"Everyone's going! If I don't show, they'll think I'm a baby."`: g.personality.conscientiousness>60?`"I know I shouldn't go. But this is my ONE chance."`: `"I don't even know if I want to go. But I don't want to be the loser who stayed home."`,
+     thought:()=>"If I say no, I go back to being nobody. If I say yes, I become someone I might not like.",
+     goodResponses:[`"The people worth knowing won't drop me over one party. It's hard to believe but... yeah."`,`"If I can call you to pick me up anytime, no questions asked — that changes everything."`,`"What I really want is to belong. The party is just the closest thing I can see."`]},
+    {id:'identity',title:'Who Am I?',weight:8,trigger:(g)=>g.day>4,
+     narration:(g)=>`${g.charName} has been staring at the ceiling for hours. Today it came out: "I don't know who I am anymore."`,
+     opening:()=>`"Everyone has their thing — the smart kid, the athlete, the funny one. What am I? I feel like nothing."`,
+     thought:()=>"Maybe I don't have a 'thing.' Maybe I'm just background noise in everyone else's story.",
+     goodResponses:[`"Not knowing who I am IS the assignment? That's... actually relieving."`,`"You see me? Not the version I show everyone, but the real me?"`,`"Build, not find. I like that. Maybe I'll try something new."`]},
+    {id:'grades',title:'The Grades Spiral',weight:7,trigger:(g)=>g.day>3&&g.skills.academic<55,
+     narration:(g)=>`${g.charName}'s grades are slipping. A major test is coming and the pressure is building. Last night they studied until 2 AM.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I studied SIX HOURS and I still don't get it. What's wrong with me?"`: `"Everyone says 'just study harder.' Like effort is the only thing that matters."`,
+     thought:()=>"If I fail this, everyone will know I'm not smart enough.",
+     goodResponses:[`"Studying smarter vs harder — can you help me figure out how?"`,`"You're right... I'm too tired to think straight. Maybe sleep is more helpful."`,`"One test isn't my whole future. Hard to believe, but I hear you."`]},
+    {id:'social_media',title:'The Post',weight:6,trigger:(g)=>g.day>7,
+     narration:(g)=>`Someone posted an embarrassing photo of ${g.charName} online. Dozens of cruel comments. They found out when people at school were laughing.`,
+     opening:(g)=>g.emotions.confidence<40?`"Everyone saw it. EVERYONE. I can never go back to school."`: `"I know it's not the end of the world but it FEELS like it."`,
+     thought:()=>"Why would someone do this? What did I ever do to them?",
+     goodResponses:[`"They can't just post things without my permission? We can actually do something?"`,`"The shame I feel doesn't mean I did something wrong."`,`"Thanks for not minimizing it. It IS a big deal. And it will pass."`]}
+  ],
+  youngAdult:[
+    {id:'career',title:'The Fork in the Road',weight:9,trigger:()=>true,
+     narration:(g)=>`Two paths: a stable but uninspiring job with good pay, or an unpaid internship in a field ${g.charName} is passionate about. Rent is due.`,
+     opening:(g)=>g.personality.openness>60?`"My whole body says take the internship. My bank account says grow up."`: g.personality.conscientiousness>60?`"The responsible choice is obvious. But every time I think about it, I feel like I'm burying part of myself."`: `"How am I supposed to choose when I can't see where either road goes?"`,
+     thought:()=>"Passion doesn't pay rent. But the safe path feels like giving up.",
+     goodResponses:[`"A third option? I hadn't even considered that."`,`"The 'safe' path isn't actually safe long-term. I need to look at the facts."`,`"The 'what if' scares me more than struggling. ...The internship."`]},
+    {id:'heartbreak',title:'Heartbreak',weight:8,trigger:(g)=>g.day>4,
+     narration:(g)=>`The relationship ${g.charName} thought would last is over. Everything reminds them of that person.`,
+     opening:(g)=>g.emotions.trust>55?`"I keep going over every conversation trying to figure out what I did wrong."`: `"I'm fine. People break up all the time. Not a big deal."`,
+     thought:()=>"What if no one ever loves me like that again?",
+     goodResponses:[`"I keep saying I'm fine, but I'm not. And maybe that's okay?"`,`"I haven't eaten a real meal in three days. Maybe I should start there."`,`"The relationship ending doesn't mean I'm broken. I need to write that down."`]},
+    {id:'finances',title:'The Bill',weight:7,trigger:(g)=>g.day>6&&g.skills.practical<50,
+     narration:(g)=>`An unexpected bill arrives. ${g.charName} doesn't have the savings to cover it.`,
+     opening:()=>`"I've been pretending I have it together but I'm behind on everything. I don't know how to manage this."`,
+     thought:()=>"Everyone else figures this out. Why can't I manage basic adult life?",
+     goodResponses:[`"We can make a plan? I thought I just had to panic."`,`"Okay. Small steps. What first?"`,`"I didn't know those options existed. Why doesn't anyone teach this stuff?"`]}
+  ],
+  adult:[
+    {id:'burnout',title:'The Wall',weight:9,trigger:()=>true,
+     narration:(g)=>`${g.charName} hasn't had a day off in weeks. Last night, they sat in the car for twenty minutes after getting home, unable to walk inside.`,
+     opening:(g)=>g.emotions.stress>55?`"I'm fine. I just need to push through. Everyone else manages."`: `"I think something is wrong with me. I used to love this work."`,
+     thought:()=>"If I stop, everything falls apart. If I don't stop, I fall apart.",
+     goodResponses:[`"'Running on empty isn't strength.' I need to write that somewhere."`,`"When did I last do something fun? I literally can't remember. That's alarming."`,`"I have 18 unused PTO days. That's insane. I'll book something."`]},
+    {id:'parenting',title:'Am I Doing This Right?',weight:8,trigger:(g)=>g.day>4,
+     narration:(g)=>`${g.charName}'s child had a meltdown in public. A stranger made a comment. Now ${g.charName} is questioning every parenting decision.`,
+     opening:()=>`"What if I'm messing them up? What if 20 years from now they're in therapy because of me?"`,
+     thought:()=>"My parents did their best and I still have issues. What chance do I have?",
+     goodResponses:[`"The fact that I'm worried about being a good parent... means I probably am one?"`,`"A stranger's comment doesn't get to define me as a parent."`,`"I needed permission to not be perfect. No one gave me that before."`]},
+    {id:'aging_parent',title:'The Call',weight:7,trigger:(g)=>g.day>7,
+     narration:(g)=>`${g.charName} got a call: a parent fell and is in hospital. The roles are reversing in ways ${g.charName} wasn't prepared for.`,
+     opening:()=>`"I had to help my dad walk to the bathroom today. My dad. The man who carried me on his shoulders."`,
+     thought:()=>"I'm not ready for this. I'm not ready to be the strong one.",
+     goodResponses:[`"Grief for what was — I didn't think of it that way. But yes. That's exactly it."`,`"Maybe I can be scared AND still show up. Those aren't mutually exclusive."`,`"I don't have to have it all together. I just have to be there."`]}
+  ]
+};
+
+// ---- ARCHETYPES ----
+const ARCHETYPES={
+  confidant:{key:'confidant',emoji:'💛',title:'The Confidant',subtitle:'Empathy first, always',color:'#c8900a',bg:'#fffbf0',
+    desc:'You create space before offering solutions. People feel genuinely heard in your presence — not advised, not fixed, just seen. That\'s rarer than you think.',
+    strength:'Creating safe emotional space',grow:'Try introducing gentle structure alongside support — sometimes people need both a witness and a direction.'},
+  mentor:{key:'mentor',emoji:'📚',title:'The Wise Mentor',subtitle:'Growth through understanding',color:'#5088b0',bg:'#f0f5fa',
+    desc:'You believe in people enough to challenge them. You ask the right questions, offer frameworks, and trust that the other person can figure it out — with the right scaffolding.',
+    strength:'Building independent thinking',grow:'Don\'t skip the emotional layer — understanding often needs to be felt before it can be learned.'},
+  protector:{key:'protector',emoji:'🏡',title:'The Steadfast Protector',subtitle:'Safety is a gift',color:'#5ca06e',bg:'#f2faf4',
+    desc:'You show up consistently, unconditionally. You\'re the person someone calls at 2am because they know you\'ll answer. Your warmth isn\'t performative — it\'s structural.',
+    strength:'Providing reliable unconditional warmth',grow:'Try stepping back occasionally — empowerment sometimes means letting people stumble safely.'},
+  advocate:{key:'advocate',emoji:'⚖️',title:'The Fierce Advocate',subtitle:'Justice as care',color:'#8868a8',bg:'#f7f3fc',
+    desc:'You notice when things are wrong and you say so. You remind people of their rights, their worth, their agency. You don\'t let unfairness slide — and neither should they.',
+    strength:'Recognizing and naming injustice',grow:'Pair your advocacy with emotional validation — people need to feel heard before they can act.'},
+  healer:{key:'healer',emoji:'🩺',title:'The Gentle Healer',subtitle:'Wellbeing in all its forms',color:'#c45050',bg:'#fdf2f2',
+    desc:'You notice when someone\'s body and daily rhythms are speaking. Sleep, food, movement, rest — you treat these as acts of care, not afterthoughts.',
+    strength:'Attending to physical and practical wellbeing',grow:'Don\'t neglect the inner world — emotional health and physical health always speak to each other.'},
+  balancer:{key:'balancer',emoji:'🌀',title:'The Renaissance Caregiver',subtitle:'Adaptive and whole',color:'#e07850',bg:'#fdf7f3',
+    desc:'You read each situation differently and respond accordingly. You\'re not locked into one way of helping — you flow between roles with awareness. This flexibility is a superpower.',
+    strength:'Adaptive caregiving across all contexts',grow:'Consider deepening one area — versatility is powerful but depth in a specialty builds mastery.'},
+  specialist:{key:'specialist',emoji:'🎯',title:'The Specialist',subtitle:'Deep mastery, singular focus',color:'#404040',bg:'#f7f7f7',
+    desc:'You\'ve found where you\'re most effective and you go there reliably. Your consistency in one area means people know exactly what to expect — and they trust it.',
+    strength:'Deep reliable expertise in your domain',grow:'Expand your range gradually — the people you care for have needs beyond your specialty.'},
+  novice:{key:'novice',emoji:'🌱',title:'The Emerging Caregiver',subtitle:'Your style is taking shape',color:'#8868a8',bg:'#f7f3fc',
+    desc:'You\'re still learning what kind of caregiver you are — and that\'s exactly right. Every interaction is teaching you something. Pay attention to what feels natural.',
+    strength:'Openness and willingness to show up',grow:'Try a range of approaches — curiosity about different roles is how your style will crystallize.'}
+};
+
+function detectCaregiverArchetype(){
+  const ru=G.history.roleUsage;
+  const total=Object.values(ru).reduce((s,v)=>s+v,0)||1;
+  const pct={};for(const k in ru)pct[k]=(ru[k]||0)/total;
+  const sorted=Object.entries(pct).sort((a,b)=>b[1]-a[1]);
+  const top=sorted[0]?.[0]||'friend';
+  const topPct=sorted[0]?.[1]||0;
+  const ints=G.history.interactions.length;
+  if(ints<3)return ARCHETYPES.novice;
+  if(topPct>0.6)return ARCHETYPES.specialist;
+  const vals=Object.values(pct);const mean=vals.reduce((s,v)=>s+v,0)/vals.length;
+  const variance=vals.reduce((s,v)=>s+Math.abs(v-mean),0)/vals.length;
+  if(variance<0.07)return ARCHETYPES.balancer;
+  const map={therapist:'confidant',friend:'confidant',teacher:'mentor',parent:'protector',doctor:'healer',lawyer:'advocate'};
+  return ARCHETYPES[map[top]||'balancer'];
+}
+
+// ---- PREMIUM INSIGHTS ----
+function purchasePremium(){
+  if(G.owned.premium){showToast('✨ Premium Insights already unlocked!');return;}
+  if(G.wallet.gems<30){showToast('Need 30 💎 to unlock Premium Insights');openGemStore();return;}
+  G.wallet.gems-=30;G.owned.premium=true;
+  updateAllUI();renderPremiumTab();
+  showToast('✨ Premium Insights unlocked! Your full caregiving profile is now revealed.');
+}
+
+function renderPremiumTab(){
+  const c=document.getElementById('premium-content');if(!c)return;
+  if(!G.owned.premium){
+    c.innerHTML=`<div class="premium-lock-box">
+      <div class="premium-lock-icon">✨</div>
+      <div class="premium-lock-title">Premium Insights</div>
+      <div class="premium-lock-desc">Unlock your full caregiving profile — your archetype, your impact on ${G.charName||'your character'}, strength zones, growth gaps, a downloadable profile card, and weekly growth reports.</div>
+      <button class="premium-unlock-btn" onclick="purchasePremium()">💎 Unlock for 30 Gems</button>
+      <div style="font-size:11px;color:var(--soft)">One-time unlock · Includes all future insights</div>
+    </div>`;
+    return;
+  }
+  const arch=detectCaregiverArchetype();
+  const ints=G.history.interactions;
+  const avg=ints.length?Math.round(ints.reduce((s,i)=>s+i.score,0)/ints.length):0;
+  const ru=G.history.roleUsage;
+  const totalRU=Object.values(ru).reduce((s,v)=>s+v,0)||1;
+  // Impact analysis: skill growth since start
+  const firstSnap=G.history.snapshots[0];
+  const lastSnap=G.history.snapshots[G.history.snapshots.length-1];
+  const skillDeltas=firstSnap&&lastSnap?Object.fromEntries(Object.keys(G.skills).map(k=>[k,lastSnap.skills[k]-firstSnap.skills[k]])):null;
+  const emoDeltas=firstSnap&&lastSnap?Object.fromEntries(Object.keys(G.emotions).map(k=>[k,lastSnap.emotions[k]-firstSnap.emotions[k]])):null;
+  // Strength / gap analysis
+  const sortedRoles=Object.entries(ru).sort((a,b)=>b[1]-a[1]);
+  const topRole=sortedRoles[0]?.[0];const bottomRole=sortedRoles[sortedRoles.length-1]?.[0];
+  c.innerHTML=`
+    <div class="archetype-card" style="background:${arch.bg};border-color:${arch.color}33;">
+      <div style="position:absolute;top:12px;right:14px"><span class="premium-badge">✨ Premium</span></div>
+      <span class="archetype-emoji">${arch.emoji}</span>
+      <div class="archetype-title" style="color:${arch.color}">${arch.title}</div>
+      <div class="archetype-subtitle" style="color:${arch.color}">${arch.subtitle}</div>
+      <div class="archetype-desc">${arch.desc}</div>
+      <div class="archetype-tags">
+        <span class="archetype-tag strength">✓ ${arch.strength}</span>
+        <span class="archetype-tag grow">↑ ${arch.grow.split(' ').slice(0,4).join(' ')}...</span>
+      </div>
+      <button class="profile-card-btn" style="color:${arch.color};border-color:${arch.color}55;background:${arch.bg}" onclick="openProfileCard()">
+        🪪 View &amp; Download Profile Card
+      </button>
+    </div>
+
+    <div class="dash-grid">
+      <div class="insight-section">
+        <h4>📈 Your Caregiving Impact</h4>
+        ${skillDeltas?Object.entries(skillDeltas).filter(([k,v])=>Math.abs(v)>0).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`
+          <div class="impact-row">
+            <span class="ir-label">${k[0].toUpperCase()+k.slice(1)}</span>
+            <div class="bt" style="flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden"><div style="width:${Math.min(100,Math.abs(v))*2}%;height:100%;background:${v>0?'var(--green)':'var(--red)'};border-radius:3px"></div></div>
+            <span class="ir-delta ${v>0?'pos':v<0?'neg':'neu'}">${v>0?'+':''}${v}</span>
+          </div>`).join(''):`<div style="font-size:12px;color:var(--soft);font-style:italic">Play more days to see impact data.</div>`}
+      </div>
+      <div class="insight-section">
+        <h4>🎭 Role Breakdown</h4>
+        ${Object.entries(ru).sort((a,b)=>b[1]-a[1]).map(([k,v])=>{const pct=Math.round((v/totalRU)*100);return`
+          <div class="impact-row">
+            <span class="ir-label">${ROLES[k].icon} ${ROLES[k].label}</span>
+            <div class="bt" style="flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${ROLES[k].color};border-radius:3px"></div></div>
+            <span class="ir-delta neu">${pct}%</span>
+          </div>`}).join('')}
+      </div>
+    </div>
+
+    <div class="insight-section">
+      <h4>💡 Your Caregiving Profile</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-size:11px;color:var(--soft);font-weight:700;margin-bottom:6px">STRENGTH ZONE</div>
+          <div style="font-size:13px;font-weight:700;color:var(--green)">${topRole?ROLES[topRole].icon+' '+ROLES[topRole].label:'—'}</div>
+          <div style="font-size:11px;color:var(--soft);margin-top:3px;line-height:1.5">Your most natural approach. When you're in this mode, people feel it.</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--soft);font-weight:700;margin-bottom:6px">GROWTH EDGE</div>
+          <div style="font-size:13px;font-weight:700;color:var(--yellow)">${bottomRole?ROLES[bottomRole].icon+' '+ROLES[bottomRole].label:'—'}</div>
+          <div style="font-size:11px;color:var(--soft);margin-top:3px;line-height:1.5">Expanding into this role will make you a more complete caregiver.</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--soft);font-weight:700;margin-bottom:6px">AVERAGE QUALITY</div>
+          <div style="font-size:20px;font-weight:800;color:var(--accent)">${avg}<span style="font-size:12px;color:var(--soft)">/100</span></div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--soft);font-weight:700;margin-bottom:6px">SESSIONS TOGETHER</div>
+          <div style="font-size:20px;font-weight:800;color:var(--blue)">${ints.length}<span style="font-size:12px;color:var(--soft)"> interactions</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-section" style="border-color:#d4a030;background:linear-gradient(135deg,#fffdf5,#faf7e8)">
+      <h4>💌 From ${G.charName||'Your Character'}</h4>
+      <div style="font-size:13px;line-height:1.7;color:var(--text);font-style:italic">
+        "${generateCharacterMessage(arch,avg)}"
+      </div>
+    </div>`;
+}
+
+function generateCharacterMessage(arch,avg){
+  const name=G.charName||'You';
+  if(avg>=75){
+    const msgs={
+      confidant:`The way you just listen — without fixing, without advising — it makes me feel like I'm actually allowed to be complicated. Thank you for that.`,
+      mentor:`You ask questions that make me think differently. Not just about the thing — about myself. That's what good teachers do.`,
+      protector:`I know you're there. That knowing is half the battle. On hard days I think of you and I feel less alone in it.`,
+      advocate:`You remind me that I have rights. That I deserve things. I forget that more than I should, and you keep saying it until I believe it.`,
+      healer:`You notice when I'm not okay before I say it. That attention — to my body, my sleep, my basic stuff — feels like being really cared for.`,
+      balancer:`You meet me where I am every single time. Some days you're gentle, some days you challenge me. You read it right.`,
+      specialist:`I always know what to expect from you, and there's something really comforting about that kind of reliability.`,
+      novice:`You're still figuring out how to help me, and that's okay. The fact that you keep showing up is already everything.`
+    };
+    return msgs[arch.key]||msgs.balancer;
+  }
+  return`I can tell you're trying. Some of our conversations have really landed. I'd love more of those — the moments when you really see me.`;
+}
+
+function openProfileCard(){
+  const arch=detectCaregiverArchetype();
+  const wrap=document.getElementById('profile-card-svg-wrap');
+  if(wrap)wrap.innerHTML=generateProfileCardSVG(arch);
+  document.getElementById('profile-card-modal').classList.add('open');
+}
+function closeProfileCard(){document.getElementById('profile-card-modal').classList.remove('open');}
+
+function generateProfileCardSVG(arch){
+  const A=ANIMALS[G.animal]||ANIMALS.pig;
+  const avg=G.history.interactions.length?Math.round(G.history.interactions.reduce((s,i)=>s+i.score,0)/G.history.interactions.length):0;
+  const ru=G.history.roleUsage;const totalRU=Object.values(ru).reduce((s,v)=>s+v,0)||1;
+  const topRoles=Object.entries(ru).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const c=arch.color;
+  return`<svg viewBox="0 0 380 540" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;border-radius:14px">
+  <defs>
+    <linearGradient id="pcBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#faf7f2"/><stop offset="100%" stop-color="#f0ebe3"/></linearGradient>
+    <linearGradient id="pcHdr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c}"/><stop offset="100%" stop-color="${c}bb"/></linearGradient>
+    <filter id="pcs"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#00000018"/></filter>
+  </defs>
+  <!-- Card background -->
+  <rect width="380" height="540" rx="20" fill="url(#pcBg)" filter="url(#pcs)"/>
+  <rect width="378" height="538" x="1" y="1" rx="19" fill="none" stroke="${c}33" stroke-width="1.5"/>
+  <!-- Header -->
+  <rect width="380" height="170" rx="20" fill="url(#pcHdr)"/>
+  <rect x="0" y="150" width="380" height="20" fill="${c}"/>
+  <!-- Wemakoshi title -->
+  <text x="26" y="36" font-size="11" font-weight="700" fill="rgba(255,255,255,.65)" font-family="sans-serif" letter-spacing="2.5">WEMAKOSHI</text>
+  <text x="354" y="36" font-size="11" font-weight="700" fill="rgba(255,255,255,.65)" font-family="sans-serif" text-anchor="end">✨ PREMIUM</text>
+  <!-- Animal emoji circle -->
+  <circle cx="62" cy="106" r="44" fill="rgba(255,255,255,.18)"/>
+  <text x="62" y="122" text-anchor="middle" font-size="48">${A.emoji}</text>
+  <!-- Archetype info -->
+  <text x="120" y="76" font-size="24" font-weight="700" fill="white" font-family="sans-serif">${arch.emoji} ${arch.title}</text>
+  <text x="120" y="98" font-size="12" fill="rgba(255,255,255,.75)" font-family="sans-serif" font-weight="600" letter-spacing=".5">${arch.subtitle.toUpperCase()}</text>
+  <text x="120" y="120" font-size="13" fill="rgba(255,255,255,.9)" font-family="sans-serif">Caring for ${G.charName||'—'} · Age ${G.age}</text>
+  <text x="120" y="140" font-size="11" fill="rgba(255,255,255,.7)" font-family="sans-serif">Day ${G.day} together</text>
+  <!-- Stats row -->
+  <rect x="20" y="182" width="100" height="62" rx="10" fill="white" opacity=".9"/>
+  <text x="70" y="208" text-anchor="middle" font-size="26" font-weight="800" fill="${c}" font-family="sans-serif">${avg}</text>
+  <text x="70" y="226" text-anchor="middle" font-size="9" fill="#6b6560" font-family="sans-serif" font-weight="700">AVG SCORE</text>
+  <rect x="140" y="182" width="100" height="62" rx="10" fill="white" opacity=".9"/>
+  <text x="190" y="208" text-anchor="middle" font-size="26" font-weight="800" fill="${c}" font-family="sans-serif">${G.history.interactions.length}</text>
+  <text x="190" y="226" text-anchor="middle" font-size="9" fill="#6b6560" font-family="sans-serif" font-weight="700">INTERACTIONS</text>
+  <rect x="260" y="182" width="100" height="62" rx="10" fill="white" opacity=".9"/>
+  <text x="310" y="208" text-anchor="middle" font-size="26" font-weight="800" fill="${c}" font-family="sans-serif">${G.day}</text>
+  <text x="310" y="226" text-anchor="middle" font-size="9" fill="#6b6560" font-family="sans-serif" font-weight="700">DAYS</text>
+  <!-- Role bars -->
+  <text x="20" y="270" font-size="10" font-weight="700" fill="#6b6560" font-family="sans-serif" letter-spacing="1">TOP ROLES</text>
+  ${topRoles.map(([role,count],i)=>{const pct=Math.round((count/totalRU)*100);return`
+  <text x="20" y="${298+i*30}" font-size="12" font-weight="600" fill="#2d2a26" font-family="sans-serif">${ROLES[role].icon} ${ROLES[role].label}</text>
+  <rect x="150" y="${285+i*30}" width="190" height="9" rx="4.5" fill="#e8e2da"/>
+  <rect x="150" y="${285+i*30}" width="${Math.round(190*pct/100)}" height="9" rx="4.5" fill="${ROLES[role].color}"/>
+  <text x="348" y="${296+i*30}" font-size="10" font-weight="700" fill="#6b6560" font-family="sans-serif">${pct}%</text>`}).join('')}
+  <!-- Archetype desc -->
+  <rect x="20" y="376" width="340" height="2" rx="1" fill="${c}33"/>
+  <text x="20" y="400" font-size="11" fill="#6b6560" font-family="sans-serif" font-style="italic">"${arch.strength}"</text>
+  <!-- Growth edge -->
+  <text x="20" y="428" font-size="10" font-weight="700" fill="#6b6560" font-family="sans-serif" letter-spacing="1">GROWTH EDGE</text>
+  <text x="20" y="446" font-size="11" fill="#2d2a26" font-family="sans-serif">${arch.grow.slice(0,58)}${arch.grow.length>58?'...':''}</text>
+  <!-- Footer -->
+  <rect x="0" y="496" width="380" height="44" rx="20" fill="${c}18"/>
+  <rect x="0" y="476" width="380" height="20" fill="${c}18"/>
+  <text x="190" y="523" text-anchor="middle" font-size="10" fill="${c}" font-family="sans-serif" font-weight="700">wemakoshi.game · Grow a life. Learn to care.</text>
+</svg>`;
+}
+
+function downloadProfileCard(){
+  const arch=detectCaregiverArchetype();
+  const svgStr=generateProfileCardSVG(arch);
+  const blob=new Blob([svgStr],{type:'image/svg+xml'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`${G.charName||'wemakoshi'}-caregiver-profile.svg`;
+  a.click();URL.revokeObjectURL(url);
+  showToast('Profile card downloaded! ⬇');
+}
+
+// ---- WEEKLY REPORT ----
+function generateWeeklyReport(){
+  const weekNum=Math.floor(G.day/7);
+  const weekStart=G.day-7;
+  const weekInts=G.history.interactions.filter(i=>i.day>weekStart);
+  const weekAvg=weekInts.length?Math.round(weekInts.reduce((s,i)=>s+i.score,0)/weekInts.length):0;
+  // Role usage this week
+  const weekRoles={};
+  weekInts.forEach(i=>(i.roles||[]).forEach(r=>{weekRoles[r]=(weekRoles[r]||0)+1;}));
+  const topWeekRole=Object.entries(weekRoles).sort((a,b)=>b[1]-a[1])[0]?.[0];
+  // Skill growth (compare last two snapshots, at least 7 days apart)
+  const snaps=G.history.snapshots;
+  const recent=snaps[snaps.length-1];const prior=snaps.length>7?snaps[snaps.length-8]:snaps[0];
+  const skillGrowth=recent&&prior?Object.entries(recent.skills).map(([k,v])=>({k,delta:v-(prior.skills[k]||0)})).filter(x=>x.delta>0).sort((a,b)=>b.delta-a.delta).slice(0,3):[];
+  const wellbeing=getMoodScore();
+  const arch=detectCaregiverArchetype();
+  // Emojis for week number
+  const wkEmojis=['🌱','🌿','☀️','🌻','🍂','❄️','🌟','💫'];
+  const wkEmoji=wkEmojis[(weekNum-1)%wkEmojis.length];
+  const gradeEmoji=weekAvg>=75?'🌟':weekAvg>=55?'👍':weekAvg>=35?'🤔':'💭';
+  return`<div class="wk-header">
+    <div class="wk-emoji">${wkEmoji}</div>
+    <div><div class="wk-title">Week ${weekNum} Together</div><div class="wk-sub">${G.charName} · Age ${G.age} · Day ${G.day}</div></div>
+  </div>
+  <div class="wk-grid">
+    <div class="wk-stat"><div class="wk-stat-val">${gradeEmoji} ${weekAvg||'—'}</div><div class="wk-stat-lbl">This week's avg score</div></div>
+    <div class="wk-stat"><div class="wk-stat-val">${weekInts.length}</div><div class="wk-stat-lbl">Interactions this week</div></div>
+  </div>
+  ${skillGrowth.length?`<div class="wk-growth">
+    <div style="font-size:10px;font-weight:700;color:var(--soft);letter-spacing:1px;margin-bottom:6px">BECAUSE OF YOU, ${G.charName.toUpperCase()||'THEY'} GREW</div>
+    ${skillGrowth.map(({k,delta})=>`<div class="wk-growth-row"><span class="wgr-name">${k[0].toUpperCase()+k.slice(1)}</span><div class="wgr-bar"><div class="wgr-fill" style="width:${Math.min(100,delta*8)}%"></div></div><span style="font-size:11px;font-weight:700;color:var(--green)">+${delta}</span></div>`).join('')}
+  </div>`:''}
+  <div class="wk-insight">${topWeekRole?`This week you leaned into your ${ROLES[topWeekRole].label} role. ${weekAvg>=65?`It shows — ${G.charName} responded well.`:`Keep developing it — consistency builds trust.`}`:`${G.charName}'s wellbeing is at ${wellbeing}/100 this week. ${wellbeing>=65?'Things are going well.':'They could use a little more support.'}`}</div>
+  ${!G.owned.premium?`<div class="premium-upsell">✨ <a onclick="openDash();switchTab('premium')">Unlock Premium Insights</a> for your full archetype profile and downloadable caregiver card.</div>`:''}`;
+}
+
+// ---- STORY PACKS ----
+const STORY_PACKS={
+  spring:{
+    name:'Spring Blooms',icon:'🌸',season:'Spring',
+    desc:'Five events exploring new beginnings, unexpected growth, and the bittersweet close of the school year.',
+    price:{gems:20},reward:{coins:60},
+    events:[
+      {id:'sp_clean',title:'Spring Cleaning',weight:9,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`The windows are open for the first time in months. ${g.charName} is in their room surrounded by old things — old drawings, old notes, old versions of themselves.`,
+       opening:(g)=>g.age<13?`"I found this drawing I made when I was really little. I don't even remember being that kid."`:g.age<18?`"I'm supposed to be cleaning but I just keep finding things and feeling things. Is that normal?"`:g.emotions.happiness>55?`"Spring hits different this year. I'm going through everything — deciding what's worth keeping."`:` "There's so much stuff in here. Some of it feels like it belongs to someone I don't even know anymore."`,
+       thought:(g)=>g.personality.openness>60?'Every old thing is a conversation with a past self.':'Am I different? Or am I just pretending to be?',
+       goodResponses:[`"You're allowed to grieve old versions of yourself and celebrate new ones at the same time."`,`"Keeping something doesn't mean you're stuck. It means you remember."`,`"The fact that you noticed the change is already growth."`,`"Spring is literally the season of shedding and blooming. You're right on time."`]},
+      {id:'sp_garden',title:'Something Growing',weight:8,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>g.eventHistory.includes('sp_clean'),
+       narration:(g)=>`${g.charName} started something quietly — a small plant on the windowsill, a new habit, a journal. Something that requires patience.`,
+       opening:(g)=>g.age<13?`"I planted a seed but I keep checking it every hour and nothing is happening. Did I do it wrong?"`:g.age<18?`"I started something new but I'm already scared it won't work out. What's the point if it dies?"`:g.personality.neuroticism>60?`"I'm trying this new thing but I'm already catastrophizing. Why can't I just let things grow?"`:` "I started something small. I don't know if it'll become anything but it felt like the right time."`,
+       thought:()=>'What if I give this everything and it still fails?',
+       goodResponses:[`"The act of starting is already something. Most things die — starting anyway is courage."`,`"Patience isn't passive. You're doing something by waiting well."`,`"The checking IS the caring. That's not wrong — it's investment."`,`"Small things that grow slowly tend to last the longest."`]},
+      {id:'sp_fever',title:'The Spring Cold',weight:7,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`Allergies or a stubborn cold — ${g.charName} is down right when the weather finally got good. They're frustrated and sniffly and not handling it gracefully.`,
+       opening:(g)=>g.age<13?`"It's not FAIR. Everyone is outside and I'm stuck inside with a runny nose."`:g.age<18?`"I have plans. I've been waiting for warm weather and now I'm sick. Of course."`:g.emotions.stress>55?`"I cannot afford to be sick right now. My body has absolutely terrible timing."`:` "It's just a cold but I feel irrationally sad about it. Missing the first real warm days."`,
+       thought:()=>'Why does my body always do this to me?',
+       goodResponses:[`"Your body is reminding you it's part of the team. Rest is productive."`,`"The sun will still be there. Missing one beautiful day doesn't delete the whole season."`,`"Being frustrated at your body while also taking care of it — that's actually growth."`,`"What would you say to a friend who was sick and sad about it?"`]},
+      {id:'sp_bittersweet',title:'End of Year Feelings',weight:8,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>g.eventHistory.includes('sp_garden'),
+       narration:(g)=>`Something is ending — a school year, a chapter, a version of things that worked. ${g.charName} can feel it finishing and isn't sure whether to hold on or let go.`,
+       opening:(g)=>g.age<13?`"I don't want my grade to end. What if the next one is harder and my friends aren't there?"`:g.age<18?`"Everything is changing and I want it to and I don't. I don't know how to feel."`:g.personality.agreeableness>60?`"I'm watching something good wrap up and I just feel grateful and sad at the same time."`:` "It's wrapping up. I thought I'd be relieved but I just feel... the weight of it."`,
+       thought:(g)=>g.emotions.trust>50?'They get it. Maybe endings are okay.':'Endings always mean something is wrong.',
+       goodResponses:[`"Bittersweet means something mattered. That's not a problem to solve — it's proof of a life lived."`,`"You can grieve an ending and trust that what comes next will matter too."`,`"The fact that it hurts to end means it was real. That's rare."`,`"Holding on and letting go can happen at the same time. It doesn't have to be one or the other."`]},
+      {id:'sp_bloom',title:'First Warm Day',weight:10,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`The temperature finally shifted overnight. ${g.charName} walked outside this morning and something in them exhaled — a feeling they'd been waiting months for without realizing it.`,
+       opening:(g)=>g.age<13?`"I don't even know why but today feels like everything is going to be OKAY. Is that weird?"`:g.age<18?`"I went outside and I just... felt better. Like reset. Is that a thing that happens to everyone?"`:g.emotions.happiness>60?`"There's something about this kind of day that makes all the hard stuff feel survivable."`:` "I wasn't expecting to feel this much from a weather change. But something shifted."`,
+       thought:()=>'Maybe I can start again. Maybe that\'s allowed.',
+       goodResponses:[`"Yes. Warmth is real medicine. The body remembers what hope feels like."`,`"That exhale you felt — that's your nervous system coming back online. It's not small."`,`"What if you let today be evidence that good things still come?"`,`"The reset you felt? That's available again. Remember this when the dark comes back."`]}
+    ]
+  },
+  summer:{
+    name:'Summer Adventures',icon:'☀️',season:'Summer',
+    desc:'Five events following the heat, the freedom, the boredom, and the fleeting magic of a summer that changes everything.',
+    price:{gems:20},reward:{coins:60},
+    events:[
+      {id:'su_start',title:'School\'s Out',weight:10,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`It's the first real day of freedom. ${g.charName} woke up with nowhere to be and is already unsure what to do with that.`,
+       opening:(g)=>g.age<13?`"I've been waiting for summer FOREVER and now it's here and I don't know what to do."`:g.age<18?`"Three months of nothing. Should feel amazing. But I just woke up anxious. What is wrong with me?"`:g.personality.conscientiousness>65?`"I made a whole summer plan. But already I feel the shape of it slipping."`:` "It started today. The long open thing. I'm not sure I know how to just... not."`,
+       thought:()=>'Am I someone who can rest? Or have I forgotten how?',
+       goodResponses:[`"Your nervous system doesn't switch off overnight. Give it a week before judging the summer."`,`"Structure leaving doesn't mean you're failing. It means you're not used to space yet."`,`"What would 'resting well' actually look like for you — if you let it be imperfect?"`,`"The anxiety is your system looking for something to worry about. The worry isn't the truth."`]},
+      {id:'su_heat',title:'The Heat Wave',weight:8,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`A brutal heat wave has settled in for days. ${g.charName} is stuck inside, everything feels slow and irritable, and tempers — their own and others' — are shorter than usual.`,
+       opening:(g)=>g.age<13?`"It's too hot to do ANYTHING and I'm bored and I'm mad and I don't even know why I'm mad."`:g.age<18?`"I had a stupid fight with someone I like because it was hot and I was tired. I feel awful."`:g.emotions.stress>50?`"I've been a worse version of myself this week. The heat is an excuse and I know it."`:` "Heat makes everything feel more urgent and more wrong. I said something I'm not sure I meant."`,
+       thought:()=>'Why do I always do that when things get hard?',
+       goodResponses:[`"The heat doesn't cause the feelings — it removes the buffer you usually have. The feelings were already there."`,`"Accountability doesn't mean punishment. It means 'I see what happened and I want to do differently.'"`,`"What do you need before you can have that conversation? Water, rest, space — those count."`,`"Being a worse version sometimes doesn't erase who you are. It just shows you're human."`]},
+      {id:'su_stranger',title:'A Chance Meeting',weight:7,stages:['teen','youngAdult','adult'],
+       trigger:(g)=>g.age>=13,
+       narration:(g)=>`In a random place — a bus, a park bench, a queue — ${g.charName} had a conversation with someone they'd never see again. It stuck with them more than they expected.`,
+       opening:(g)=>g.age<18?`"I talked to this random person for like twenty minutes and it was honestly one of the best conversations I've had all summer. Why is that?"`:g.personality.extraversion<40?`"I talked to a stranger today. I never do that. And something they said — I can't stop thinking about it."`:` "Sometimes a stranger sees you more clearly in twenty minutes than people who've known you for years. That happened today."`,
+       thought:()=>'What if I\'d just looked at my phone?',
+       goodResponses:[`"Strangers don't have a narrative about you yet. That's why they can sometimes see more clearly."`,`"What they said — does it feel true, or does it feel like what you needed to hear?"`,`"The best conversations often happen when we're not trying to manage how we're seen."`,`"Some people are in your life for twenty minutes and it's enough. That's a beautiful thing to notice."`]},
+      {id:'su_boredom',title:'The Long Afternoon',weight:8,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>g.eventHistory.includes('su_start'),
+       narration:(g)=>`The novelty wore off. ${g.charName} is deep in a long, empty afternoon — the kind where time slows and every option feels pointless. Real summer boredom.`,
+       opening:(g)=>g.age<13?`"There's nothing to do. I've done everything. Even my games are boring. I feel like I'm disappearing."`:g.age<18?`"I've been lying here for hours. I'm not sad exactly. Just... empty. Flat."`:g.personality.openness<40?`"I need something to happen. I don't do well with empty time. I don't know what I'm without it."`:` "The emptiness is starting to feel like something. I can't tell if it's bad or if it's just... real."`,
+       thought:()=>'Is this what I actually am when nothing is happening?',
+       goodResponses:[`"Boredom is actually data. It's showing you what you want by making its absence loud."`,`"Some people never sit with themselves long enough to feel this. It's uncomfortable — and it's growth."`,`"The flat feeling isn't the truth about you. It's what depletion feels like. What have you been giving out?"`,`"What would feel like enough right now? Even something very small?"`]},
+      {id:'su_last',title:'The Last Week',weight:9,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>g.eventHistory.includes('su_boredom')||g.eventHistory.includes('su_heat'),
+       narration:(g)=>`Summer is almost over. ${g.charName} can feel the clock ticking — that particular urgency of trying to squeeze meaning out of the days before everything changes again.`,
+       opening:(g)=>g.age<13?`"We only have a few more days and I want to make them the BEST DAYS EVER but I don't even know how."`:g.age<18?`"I feel this pressure to do something meaningful with the last days. And that pressure is ruining the last days."`:g.emotions.happiness>55?`"I want to be present for this. I keep narrating the ending in my head instead of just living it."`:` "There's this grief that comes before the goodbye. I'm already mourning something that hasn't ended yet."`,
+       thought:()=>'What if I just let it end? What would happen to me?',
+       goodResponses:[`"Pre-grieving is real. It's love that arrived early. But it's taking you out of the moment."`,`"What if the 'best' last days are just regular days that you were actually present for?"`,`"There's no right way to end something that mattered. You just let it end, and carry what it gave you."`,`"The next chapter will have its own good things. That's not a betrayal of this one."`]}
+    ]
+  },
+  autumn:{
+    name:'Autumn Feelings',icon:'🍂',season:'Autumn',
+    desc:'Five events about darker days, quiet change, and the particular melancholy of things winding down before they can begin again.',
+    price:{gems:20},reward:{coins:60},
+    events:[
+      {id:'au_return',title:'Back Again',weight:9,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`The rhythm returns. School. Schedules. Earlier darkness. ${g.charName} is back in the familiar pattern and isn't sure how to feel about it.`,
+       opening:(g)=>g.age<13?`"Summer is gone. I thought I'd be ready but my stomach hurts on the way in and I hate that."`:g.age<18?`"Back. Everything is the same but different. Or I'm different. I can't tell."`:g.personality.conscientiousness>60?`"I should be glad to have structure back. I am, mostly. But something about the return feels like a door closing."`:` "There's something about autumn that makes me take stock. Am I where I thought I'd be by now?"`,
+       thought:(g)=>g.emotions.confidence<45?'What if I can\'t do this year?':'Let\'s see who I become this time.',
+       goodResponses:[`"The fact that it still feels significant means you haven't stopped growing. That's good."`,`"It's okay if it takes a few weeks to find your footing. You don't have to be okay immediately."`,`"Every return teaches you something new about who you've become since the last time."`,`"The stomach-hurt is care. You care what happens. That's not nothing."`]},
+      {id:'au_leaves',title:'The Leaves Are Turning',weight:7,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`${g.charName} stopped walking to look at a tree today. Full amber and gold. Something about it made them stand still longer than made sense.`,
+       opening:(g)=>g.age<13?`"I know leaves die in autumn but they're so pretty when they do. Is it weird to think dying can be beautiful?"`:g.age<18?`"I stopped to look at a tree for way too long today. Something about it made me feel really... I don't know. Full?"`:g.personality.openness>60?`"Beautiful things that are also ending. I can't stop thinking about whether that's true of everything."`:` "There's this melancholy to autumn I actually don't mind. Like permission to feel the weight of things."`,
+       thought:()=>'Maybe endings can be beautiful. Maybe I\'ve been thinking about them wrong.',
+       goodResponses:[`"You just discovered wabi-sabi without knowing it. The beauty OF the impermanence, not despite it."`,`"That full feeling you mentioned — that's called being moved. Not everyone lets themselves feel it."`,`"Dying things being beautiful isn't weird. It's wisdom."`,`"What else in your life might look different if you gave it that kind of attention?"`]},
+      {id:'au_rain',title:'A Week of Rain',weight:8,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>g.eventHistory.includes('au_return'),
+       narration:(g)=>`It's been raining for days. ${g.charName} has been inside, inside their head, circling thoughts they usually outrun. The quiet has gotten loud.`,
+       opening:(g)=>g.age<13?`"It won't stop raining and I've been inside forever and I keep thinking about things I don't want to think about."`:g.age<18?`"When it's too quiet I start thinking. And right now the thoughts aren't kind."`:g.emotions.stress>55?`"A week of rain and I've spiralled. I know that's not rational but here we are."`:` "Rainy weeks have a way of pulling up everything you've been keeping underwater. Not all of it is comfortable."`,
+       thought:()=>'What if these thoughts are the truth about me?',
+       goodResponses:[`"Thoughts that circle in the quiet aren't the truth — they're what's left when the distractions run out. Big difference."`,`"What would you do if these thoughts were weather, not verdicts? Let them pass through?"`,`"Rainy weeks don't create bad thoughts. They just turn down the noise so you can hear the ones that were always there."`,`"You don't have to resolve every circling thought. Sometimes 'I hear you and I'm still okay' is enough."`]},
+      {id:'au_harvest',title:'The Gathering',weight:8,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`Something pulled ${g.charName} toward people this week — a dinner, a gathering, the instinct to be less alone as the days get darker.`,
+       opening:(g)=>g.age<13?`"We had everyone over and it was loud and messy and I didn't want it to end. Why do I miss it when it's already over?"`:g.age<18?`"I actually wanted to be with people this week. That's new. Usually I'd rather be alone."`:g.personality.extraversion<40?`"I surprised myself — I reached out. Made plans. Autumn must do something to me."`:` "There's something about this season that makes me want to gather people in. Before the real cold."`,
+       thought:(g)=>g.emotions.trust>50?'These people are good. I should let them be.':'Do they actually want me here, or am I just convenient?',
+       goodResponses:[`"That pull toward people in autumn is ancient. You're part of something bigger than your own story."`,`"Missing it while it's happening — that's love. That's being present enough to know it matters."`,`"You reaching out took something. That's worth noticing."`,`"What would happen if you let these people know what this meant to you?"`]},
+      {id:'au_prepare',title:'Before the Cold',weight:9,stages:['teen','youngAdult','adult'],
+       trigger:(g)=>g.age>=13&&(g.eventHistory.includes('au_leaves')||g.eventHistory.includes('au_harvest')),
+       narration:(g)=>`There's a particular feeling at the end of autumn — something like urgency, something like preparation. ${g.charName} is taking stock of where things stand before the real dark comes.`,
+       opening:(g)=>g.age<18?`"I feel like I need to get things in order before winter. Is that a survival instinct or am I just anxious?"`:g.personality.conscientiousness>60?`"I always do this before winter. Check in with everyone. Fix what I can. I don't know what I'm afraid of."`:g.emotions.happiness<45?`"Before everything gets harder, I wanted to say something. To someone. I'm not sure what yet."`:` "There's a small window left before everything contracts. I want to use it right."`,
+       thought:()=>'What do I actually want to carry into winter?',
+       goodResponses:[`"That instinct is wise. Autumn is a real checkpoint. What do you want to bring with you?"`,`"There's no 'getting things in order' perfectly. But the intention to try is already something."`,`"What would it mean to go into the dark season feeling okay? Not perfect — just okay?"`,`"What you carry in is what you'll have to work with. Choose it consciously if you can."`]}
+    ]
+  },
+  winter:{
+    name:'Winter Warmth',icon:'❄️',season:'Winter',
+    desc:'Five events about cold, closeness, the pressure of the holidays, and what it means to find light in the longest dark.',
+    price:{gems:25},reward:{coins:80},
+    events:[
+      {id:'wi_snow',title:'First Snow',weight:10,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`Snow overnight. ${g.charName} saw it when they opened the curtains — everything white and hushed and slightly unreal.`,
+       opening:(g)=>g.age<13?`"SNOW! There's SNOW! Everything looks like a different world! Why does snow make everything feel okay?"`:g.age<18?`"First snow always does something to me. I feel five years old for like two minutes. Then normal again."`:g.emotions.happiness>55?`"There's that thing that happens when the world goes white. Something inside quiets."`:` "I wasn't expecting to feel anything when I saw it. But there was something. Relief, maybe."`,
+       thought:()=>'The world can still surprise me. I should remember that.',
+       goodResponses:[`"The wonder you feel at first snow is real and worth protecting. Don't let anyone convince you it's childish."`,`"The world getting quiet under snow — that's a gift. Not everyone notices it."`,`"That 'five years old for two minutes' feeling — what does it feel like in your body?"`,`"What would you carry into the rest of winter from that moment at the window?"`]},
+      {id:'wi_pressure',title:'Holiday Pressure',weight:9,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>g.eventHistory.includes('wi_snow'),
+       narration:(g)=>`The season has expectations. ${g.charName} is navigating family obligations, the weight of cheer they don't always feel, and the gap between what holidays are supposed to look like and what they actually are.`,
+       opening:(g)=>g.age<13?`"Everyone keeps saying I should be HAPPY because it's the holidays but I don't always feel happy and I feel bad about not feeling happy."`:g.age<18?`"The holidays make everyone act like things are fine even when they aren't. I'm tired of performing."`:g.personality.agreeableness>65?`"I'm going through all the motions for everyone else. I don't know how much of what I'm feeling is real."`:` "The season has this pressure. Be well. Be warm. Be grateful. It's exhausting when you're also just... human."`,
+       thought:()=>'Am I broken for not feeling what I\'m supposed to feel?',
+       goodResponses:[`"Feeling the gap between holiday expectations and reality is one of the most honest things a person can do."`,`"You're not broken. Performing cheer you don't feel is exhausting, not ungrateful."`,`"What would the holidays look like if they were actually for you — not for the idea of the holidays?"`,`"You're allowed to feel multiple things at once. The gratitude can be real even if the performance is hard."`]},
+      {id:'wi_gift',title:'The Gift',weight:8,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>true,
+       narration:(g)=>`${g.charName} gave something this season — a real gift, one that cost something. Or received something unexpected that landed differently than they thought it would.`,
+       opening:(g)=>g.age<13?`"I made something for someone and I was so nervous to give it. What if they don't like it? What if I got it wrong?"`:g.age<18?`"Someone got me something that was really... me. They paid attention. I didn't expect it."`:g.personality.agreeableness>60?`"I spent a lot of time finding the right thing for someone. I didn't know how much that would mean to me."`:` "It's just a thing. But someone gave it and it meant something about how they see me. I don't know what to do with that."`,
+       thought:(g)=>g.emotions.trust<40?'Why is being known so hard to receive?':'Maybe I\'m not as invisible as I thought.',
+       goodResponses:[`"Being seen is terrifying and wonderful. The fact that it got to you is the whole point."`,`"Making something for someone — putting yourself in it — that's one of the bravest things there is."`,`"What would it mean to let yourself be cared for without immediately deflecting?"`,`"The vulnerability of giving something real is the same vulnerability as receiving something real. Both take courage."`]},
+      {id:'wi_newyr',title:'New Year\'s Eve',weight:9,stages:['child','teen','youngAdult','adult'],
+       trigger:(g)=>g.eventHistory.includes('wi_pressure')||g.eventHistory.includes('wi_gift'),
+       narration:(g)=>`The year is ending. ${g.charName} is somewhere in the feeling between relief and dread and the complicated hope of a clean start.`,
+       opening:(g)=>g.age<13?`"Is it a rule that you have to make a wish at midnight? What if I don't know what to wish for?"`:g.age<18?`"Everyone is so hopeful tonight and I want to be but I keep thinking about all the things that didn't change last year."`:g.personality.openness>60?`"New Year's Eve feels like a permission slip I'm not sure I've earned."`:` "Another year. Harder parts and better parts than I expected. I don't quite know how to hold that."`,
+       thought:()=>'What do I actually want from the year ahead?',
+       goodResponses:[`"You don't have to earn hope. It's not a reward for good behavior — it's a choice you make despite the evidence."`,`"Holding the hard parts and the better parts at once — that's not confusion. That's honesty."`,`"What's one thing from this year you want to bring with you? Not fix — just bring."`,`"A clean start doesn't mean you have to be a different person. What if you were the same person, but kinder to yourself?"`]},
+      {id:'wi_deep',title:'Deep Winter',weight:8,stages:['teen','youngAdult','adult'],
+       trigger:(g)=>g.age>=13&&(g.eventHistory.includes('wi_newyr')||g.eventHistory.includes('wi_snow')),
+       narration:(g)=>`The holidays are over. The dark is still here. This is the part no one makes cards about — the long, slow middle of winter, when you have to find warmth without the occasion.`,
+       opening:(g)=>g.age<18?`"Everyone acted like the new year would fix things. It's January. Nothing is fixed. I feel kind of cheated."`:g.emotions.happiness<40?`"This is the part of winter they don't warn you about. I'm just trying to get through days."`:g.personality.neuroticism>60?`"It's the deep cold part. I know it ends but right now it doesn't feel like it ends."`:` "The long middle of winter teaches you something about where your warmth actually comes from."`,
+       thought:()=>'Where is the light supposed to come from when there\'s no occasion for it?',
+       goodResponses:[`"The light in deep winter has to come from inside. That's harder and more real than the holiday kind."`,`"'Just getting through days' is a complete strategy when the days are hard. It's enough."`,`"What has winter taught you about what you actually need — not what you thought you needed?"`,`"Spring is the payoff for enduring this. But you don't have to wait for spring to deserve warmth."`]}
+    ]
+  }
+};
+
+// ---- GAME FLOW ----
+function saveSnapshot(){
+  G.history.snapshots.push({day:G.day,age:G.age,skills:{...G.skills},emotions:{...G.emotions},needsAvg:Object.values(G.needs).reduce((s,n)=>s+n.v,0)/Object.keys(G.needs).length});
+}
+function driftEmotions(){
+  G.emotions.happiness=Math.round(G.emotions.happiness+(55-G.emotions.happiness)*.05);
+  G.emotions.stress=Math.round(G.emotions.stress+(35-G.emotions.stress)*.05);
+  G.emotions.confidence=Math.round(G.emotions.confidence+(50-G.emotions.confidence)*.03);
+  if(G.personality.neuroticism>60)G.emotions.stress=clamp(G.emotions.stress+1,0,100);
+  if(G.personality.agreeableness>60)G.emotions.happiness=clamp(G.emotions.happiness+1,0,100);
+}
+function getIdleLine(){
+  const h=G.emotions.happiness,s=G.emotions.stress,c=G.emotions.confidence;
+  if(h>70)return pick(["Things feel pretty good lately. Wanted to check in.","I had a genuinely good day today. Just felt like sharing.","You know what? I think I'm actually growing."]);
+  if(h<35)return pick(["Everything feels heavy. Like walking through mud.","Do you ever feel like you're pretending to be okay?","I don't know what's wrong exactly. Just... off."]);
+  if(s>65)return pick(["I'm so stressed. My head won't stop buzzing.","Everything is piling up and I can't keep track.","I feel like I'm underwater."]);
+  if(c<35)return pick(["I messed up again today. I always mess up.","Do you think I'll ever be good at anything?","Sometimes I wonder what the point of trying is."]);
+  return pick(["Nothing major today. Just wanted to talk.","Hey. I just needed a person to say hi to.","Normal day. Normal is okay, right?"]);
+}
+function generateAutoLog(){
+  const evts=[];
+  if(G.personality.extraversion>65&&Math.random()<.3){evts.push(`${G.charName} made a new acquaintance today.`);G.skills.social=clamp(G.skills.social+1,0,100);}
+  if(G.personality.openness>65&&Math.random()<.25){evts.push(`${G.charName} explored something new out of pure curiosity.`);G.skills.creative=clamp(G.skills.creative+1,0,100);}
+  if(G.personality.neuroticism>65&&Math.random()<.25){evts.push(`${G.charName} seemed withdrawn, lost in worries.`);G.emotions.stress=clamp(G.emotions.stress+2,0,100);}
+  if(G.emotions.happiness>75&&Math.random()<.3)evts.push(`${G.charName} was humming and seemed at peace.`);
+  if(G.emotions.stress>70&&Math.random()<.3)evts.push(`${G.charName} had trouble sleeping and seemed tired.`);
+  return evts.length?evts.join(' '):null;
+}
+function beginDay(){
+  G.phase='waiting';G.responseCount=0;
+  document.getElementById('skip-btn').style.display='none';
+  restoreInput();setInput(false);
+  if(G.day>1&&G.day%10===0){
+    G.age++;
+    addChat('sys',`<em>Time passes... ${G.charName} is now ${G.age} years old.</em>`);
+    if(G.age===13||G.age===18||G.age===26)addChat('sys',`<em>A new chapter: ${getStageName()}</em>`);
+  }
+  saveSnapshot();driftEmotions();updateAllUI();updateCharSVG();
+  // Weekly report on every 7th day
+  if(G.day>1&&G.day%7===0){
+    setTimeout(()=>{addChat('weekly',generateWeeklyReport());},600);
+  }
+  addChat('sys',`— Day ${G.day} —`);
+  const autoLog=generateAutoLog();
+  if(autoLog)setTimeout(()=>addChat('narrator',autoLog),300);
+  // Collect available story pack events (40% chance if packs owned)
+  let packPool=[];
+  for(const packId of G.owned.packs){
+    const pack=STORY_PACKS[packId];if(!pack)continue;
+    const done=G.packProgress[packId]||[];
+    const stage=getStage();
+    for(const e of pack.events){
+      if(!done.includes(e.id)&&(!e.stages||e.stages.includes(stage))&&(!e.trigger||e.trigger(G)))
+        packPool.push({...e,_packId:packId,_packName:pack.name,_packIcon:pack.icon});
+    }
+  }
+  const usePackEvent=packPool.length>0&&Math.random()<.4;
+  const stage=getStage();
+  const pool=EVENTS[stage]||EVENTS.child;
+  const avail=pool.filter(e=>!G.eventHistory.includes(e.id)&&e.trigger(G));
+  const chooseFrom=usePackEvent?packPool:avail;
+  if(chooseFrom.length>0&&(G.day<=3||Math.random()<.65)){
+    const tw=chooseFrom.reduce((s,e)=>s+e.weight,0);let r=Math.random()*tw,chosen=chooseFrom[0];
+    for(const e of chooseFrom){r-=e.weight;if(r<=0){chosen=e;break;}}
+    G.currentEvent=chosen;G.eventHistory.push(chosen.id);
+    // Track pack progress
+    if(chosen._packId){
+      if(!G.packProgress[chosen._packId])G.packProgress[chosen._packId]=[];
+      G.packProgress[chosen._packId].push(chosen.id);
+      // Check pack completion
+      const pack=STORY_PACKS[chosen._packId];
+      if(G.packProgress[chosen._packId].length>=pack.events.length){
+        setTimeout(()=>completePack(chosen._packId),3000);
+      }
+    }
+    setTimeout(()=>{
+      const arcBadge=chosen._packId?`<div style="display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-glow);border:1px solid var(--accent-l);border-radius:20px;padding:2px 9px;margin-bottom:8px">${chosen._packIcon} ${chosen._packName} · Seasonal Arc</div><br>`:'';
+      addChat('narrator',`${arcBadge}<strong>${chosen.title}</strong><br><br>${typeof chosen.narration==='function'?chosen.narration(G):chosen.narration}`);
+      setTimeout(()=>{
+        addChat('char',typeof chosen.opening==='function'?chosen.opening(G):chosen.opening);
+        if(G.playerRoles.therapist>=15&&chosen.thought){setTimeout(()=>addChat('thought',typeof chosen.thought==='function'?chosen.thought(G):chosen.thought),400);}
+        G.phase='responding';restoreInput();setInput(true);
+        document.getElementById('chat-ta').placeholder=`How do you respond to ${G.charName}?`;
+      },700);
+    },700);
+  } else {
+    G.currentEvent={id:'idle',title:'Check-in',goodResponses:[`"Thanks for checking in. It helps."`,`"You always know how to make things feel a bit lighter."`]};
+    setTimeout(()=>{addChat('char',getIdleLine());G.phase='responding';restoreInput();setInput(true);document.getElementById('chat-ta').placeholder=`How do you respond to ${G.charName}?`;},500);
+  }
+}
+function nextDay(){driftEmotions();G.day++;document.getElementById('skip-btn').style.display='none';beginDay();}
+
+// ---- DASHBOARD ----
+function openDash(){renderDash();document.getElementById('dashboard').classList.add('open');}
+function closeDash(){document.getElementById('dashboard').classList.remove('open');}
+function switchTab(id){
+  document.querySelectorAll('.dash-tab').forEach((t,i)=>{const ids=['growth','player','journal','premium'];t.classList.toggle('active',ids[i]===id);});
+  document.querySelectorAll('.dash-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById(`tab-${id}`)?.classList.add('active');
+  renderDash();
+}
+function renderDash(){
+  const a=document.querySelector('.dash-pane.active')?.id?.replace('tab-','');
+  if(a==='growth')renderGrowthTab();
+  if(a==='player')renderPlayerTab();
+  if(a==='journal')renderJournalTab();
+  if(a==='premium')renderPremiumTab();
+}
+function renderGrowthTab(){
+  drawSkillsChart();drawEmotionsChart();
+  const c=document.getElementById('needs-satisfaction');
+  if(c){const cols={hunger:'#e07850',energy:'#5088b0',hygiene:'#5ca06e',social:'#8868a8',fun:'#d4a030',health:'#c45050'};
+    c.innerHTML=Object.entries(G.needs).map(([k,n])=>`<div class="dash-stat-row"><span class="dsn">${n.icon} ${n.label}</span><div class="dsb"><div class="dbf" style="width:${n.v}%;background:${cols[k]}"></div></div><span class="dsv" style="color:${cols[k]}">${Math.round(n.v)}</span></div>`).join('');}
+  const wb=getMoodScore();
+  document.getElementById('wellbeing-num').textContent=wb;
+  document.getElementById('wellbeing-lbl').textContent=wb>=80?'🌟 Thriving':wb>=65?'😊 Doing well':wb>=50?'🙂 Getting by':wb>=35?'😟 Struggling':'😢 In crisis';
+  const pH={openness:'Open',conscientiousness:'Disciplined',extraversion:'Social',agreeableness:'Kind',neuroticism:'Sensitive'};
+  const pL={openness:'Cautious',conscientiousness:'Flexible',extraversion:'Quiet',agreeableness:'Independent',neuroticism:'Steady'};
+  document.getElementById('personality-dash').innerHTML=Object.entries(G.personality).map(([k,v])=>`<div class="dash-stat-row"><span class="dsn">${v>=55?pH[k]:v<=45?pL[k]:pH[k]}</span><div class="dsb"><div class="dbf" style="width:${v}%;background:var(--accent)"></div></div><span class="dsv" style="color:var(--accent)">${v}</span></div>`).join('');
+}
+function drawSkillsChart(){
+  const canvas=document.getElementById('canvas-skills');if(!canvas)return;
+  const ctx=canvas.getContext('2d');canvas.width=canvas.offsetWidth||320;canvas.height=180;
+  const W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);
+  const skills=Object.entries(G.skills);const bW=Math.floor((W-40)/(skills.length*2));
+  const cols=['#5088b0','#e07850','#8868a8','#5ca06e','#d4a030','#c45050'];
+  ctx.font='10px Nunito,sans-serif';
+  skills.forEach(([k,v],i)=>{const x=20+i*(bW*2+5);const bH=Math.floor((v/100)*(H-38));const y=H-28-bH;ctx.fillStyle=cols[i];rRect(ctx,x,y,bW,bH,3);ctx.fillStyle='#888';ctx.fillText(k.slice(0,4),x,H-14);ctx.fillStyle='#333';ctx.fillText(v,x+bW/2-8,y-4);});
+}
+function drawEmotionsChart(){
+  const canvas=document.getElementById('canvas-emotions');if(!canvas)return;
+  const ctx=canvas.getContext('2d');canvas.width=canvas.offsetWidth||320;canvas.height=180;
+  const W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);
+  if(G.history.snapshots.length<2){ctx.fillStyle='#aaa';ctx.font='12px Nunito,sans-serif';ctx.fillText('Play more days to see trends',W/2-90,H/2);return;}
+  const snaps=G.history.snapshots.slice(-12);const emoKeys=['happiness','stress','confidence','trust'];const emoC=['#5ca06e','#c45050','#5088b0','#d4a030'];
+  const pad=18,cW=W-pad*2,cH=H-pad*2-10;
+  ctx.strokeStyle='#eee';ctx.lineWidth=1;
+  [25,50,75].forEach(v=>{const y=pad+cH-(v/100)*cH;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();});
+  emoKeys.forEach((key,ki)=>{ctx.strokeStyle=emoC[ki];ctx.lineWidth=2;ctx.beginPath();snaps.forEach((s,i)=>{const x=pad+i*(cW/(snaps.length-1||1));const y=pad+cH-(s.emotions[key]/100)*cH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.stroke();});
+  emoKeys.forEach((key,ki)=>{ctx.fillStyle=emoC[ki];ctx.fillRect(pad+ki*60,H-9,9,9);ctx.fillStyle='#888';ctx.font='9px Nunito,sans-serif';ctx.fillText(key.slice(0,4),pad+ki*60+12,H-1);});
+}
+function renderPlayerTab(){
+  const canvas=document.getElementById('canvas-scores');if(canvas){
+    const ctx=canvas.getContext('2d');canvas.width=canvas.offsetWidth||320;canvas.height=180;
+    const W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);
+    const ints=G.history.interactions||[];
+    if(ints.length===0){ctx.fillStyle='#aaa';ctx.font='12px Nunito,sans-serif';ctx.fillText('No interactions yet',W/2-70,H/2);return;}
+    const recent=ints.slice(-10);const bW=Math.floor((W-40)/recent.length)-3;
+    const gC={Excellent:'#5ca06e',Good:'#5088b0',Okay:'#d4a030','Needs Work':'#c45050'};
+    ctx.font='10px Nunito,sans-serif';
+    recent.forEach((inter,i)=>{const x=20+i*(bW+3);const bH=Math.floor((inter.score/100)*(H-38));const y=H-28-bH;ctx.fillStyle=gC[inter.grade]||'#e07850';rRect(ctx,x,y,bW,bH,3);ctx.fillStyle='#333';ctx.fillText(inter.score,x+bW/2-9,y-4);ctx.fillStyle='#888';ctx.fillText((inter.title||'').slice(0,5),x-2,H-14);});
+    const avg=Math.round(recent.reduce((s,i)=>s+i.score,0)/recent.length);const avgY=H-28-Math.floor((avg/100)*(H-38));
+    ctx.strokeStyle='#e07850';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(20,avgY);ctx.lineTo(W-20,avgY);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#e07850';ctx.fillText(`avg ${avg}`,W-50,avgY-3);
+  }
+  const ru=G.history.roleUsage||{};const total=Object.values(ru).reduce((s,v)=>s+v,0)||1;
+  document.getElementById('role-usage').innerHTML=Object.entries(ROLES).map(([k,r])=>{const c=ru[k]||0;const p=Math.round((c/total)*100);return`<div class="dash-stat-row"><span class="dsn">${r.icon} ${r.label}</span><div class="dsb"><div class="dbf" style="width:${p}%;background:${r.color}"></div></div><span class="dsv" style="color:${r.color}">${c}</span></div>`}).join('');
+  const ints=G.history.interactions||[];
+  if(ints.length>=3){
+    const avg=Math.round(ints.reduce((s,i)=>s+i.score,0)/ints.length);
+    const sorted=Object.entries(ru).sort((a,b)=>b[1]-a[1]);
+    const top=sorted[0]?.[0];const least=sorted[sorted.length-1]?.[0];
+    const pMap={teacher:'You tend to guide and teach — helping others think through situations builds independence.',parent:'You lead with warmth and unconditional support. People feel safe being vulnerable with you.',doctor:'You pay attention to physical wellbeing — the basics others often overlook.',lawyer:'You advocate for rights and fairness, helping others understand they deserve better.',therapist:'You create space for feelings first. This emotional grounding is the foundation of real healing.',friend:'You connect through authenticity. People feel seen rather than counselled.'};
+    document.getElementById('profile-text').textContent=`Avg score: ${avg}/100. ${top?pMap[top]:'Keep playing to reveal your style.'}`;
+    document.getElementById('profile-tags').innerHTML=`${top?`<span class="profile-tag strength">✓ ${ROLES[top]?.label} strength</span>`:''}${avg>=70?'<span class="profile-tag strength">✓ Consistent caregiver</span>':''}${avg<50?'<span class="profile-tag grow">↑ Practice listening more</span>':''}${least&&(ru[least]||0)<2?`<span class="profile-tag grow">↑ Try more ${ROLES[least]?.label}</span>`:''}`;
+  }
+}
+function renderJournalTab(){
+  const c=document.getElementById('journal-list');if(!c)return;
+  const ints=G.history.interactions||[];
+  if(ints.length===0){c.innerHTML='<div style="color:var(--soft);font-size:13px;font-style:italic">No events yet...</div>';return;}
+  const gC={Excellent:'great',Good:'good',Okay:'okay','Needs Work':'poor'};
+  c.innerHTML=[...ints].reverse().map(i=>`<div class="journal-entry"><div class="je-day">Day ${i.day}</div><div class="je-content"><div class="je-title">${i.title}</div><div class="je-note">${(i.roles||[]).map(r=>ROLES[r]?.icon+' '+ROLES[r]?.label).join(', ')||'—'}</div><span class="je-score ${gC[i.grade]||'okay'}">${i.grade} · ${i.score}</span></div></div>`).join('');
+}
+function rRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();ctx.fill();}
+
+// ---- SHOP ----
+let shopCurrentTab='animals';
+function openShop(){updateShopWallet();shopTab(shopCurrentTab);document.getElementById('shop-modal').classList.add('open');}
+function closeShop(){document.getElementById('shop-modal').classList.remove('open');}
+function openGemStore(){document.getElementById('gem-store-modal').classList.add('open');}
+function closeGemStore(){document.getElementById('gem-store-modal').classList.remove('open');}
+function updateShopWallet(){
+  const sc=document.getElementById('shop-coins'),sg=document.getElementById('shop-gems');
+  if(sc)sc.textContent=G.wallet.coins;if(sg)sg.textContent=G.wallet.gems;
+}
+function shopTab(tab){
+  shopCurrentTab=tab;
+  document.querySelectorAll('.shop-tab').forEach((t,i)=>{const tabs=['animals','outfits','accessories','packs'];t.classList.toggle('active',tabs[i]===tab);});
+  renderShopContent(tab);
+}
+function renderShopContent(tab){
+  const body=document.getElementById('shop-body');if(!body)return;
+  if(tab==='animals')body.innerHTML=renderAnimalShop();
+  else if(tab==='outfits')body.innerHTML=renderOutfitShop();
+  else if(tab==='accessories')body.innerHTML=renderAccessoryShop();
+  else body.innerHTML=renderPackShop();
+}
+function renderAnimalShop(){
+  return`<div class="shop-grid">${Object.entries(ANIMALS).map(([k,a])=>{
+    const owned=G.owned.animals.includes(k);
+    const equipped=G.animal===k;
+    const premium=a.premium;
+    let badge='',btn='';
+    if(equipped){badge=`<span class="si-badge equipped">✓ Active</span>`;btn=`<button class="si-buy-btn equipped-btn" disabled>Active</button>`;}
+    else if(owned){badge=`<span class="si-badge owned">Owned</span>`;btn=`<button class="si-buy-btn equip-btn" onclick="equipAnimal('${k}')">Switch To</button>`;}
+    else if(premium){badge=`<span class="si-badge premium">💎 Premium</span>`;btn=`<button class="si-buy-btn buy-gem" onclick="buyAnimal('${k}')">💎 ${a.gemCost} Unlock</button>`;}
+    const cls=equipped?'equipped':owned?'owned':premium?'premium-locked':'';
+    return`<div class="shop-item ${cls}">${badge}<div class="si-preview">${buildPreviewSVG(k)}</div><div class="si-name">${a.name} ${a.emoji}</div><div class="si-desc">${a.desc}</div><div class="si-price ${premium&&!owned?'gem':'free'}">${premium&&!owned?'💎 '+a.gemCost+' gems':'✓ Available'}</div>${btn}</div>`;
+  }).join('')}</div>`;
+}
+function renderOutfitShop(){
+  return`<div class="shop-grid">${Object.entries(OUTFITS).map(([k,o])=>{
+    const owned=G.owned.outfits.includes(k);
+    const equipped=G.cosmetics.outfit===k;
+    const cost=o.cost;
+    let badge='',btn='';
+    if(equipped){badge=`<span class="si-badge equipped">✓ Wearing</span>`;btn=`<button class="si-buy-btn equipped-btn" disabled>Wearing</button>`;}
+    else if(owned){btn=`<button class="si-buy-btn equip-btn" onclick="equipOutfit('${k}')">Wear It</button>`;}
+    else if(cost.gems){badge=`<span class="si-badge premium">💎 Premium</span>`;btn=`<button class="si-buy-btn buy-gem" onclick="buyOutfit('${k}')">💎 ${cost.gems} Unlock</button>`;}
+    else{btn=`<button class="si-buy-btn buy-coin" onclick="buyOutfit('${k}')">${cost.coins===0?'Select':'🪙 '+cost.coins+' Buy'}</button>`;}
+    const cls=equipped?'equipped':owned?'owned':cost.gems?'premium-locked':'';
+    return`<div class="shop-item ${cls}">${badge}<div class="si-preview">${buildOutfitPreview(k,o)}</div><div class="si-name">${o.name}</div><div class="si-desc">${o.desc}</div>${!owned?`<div class="si-price ${cost.gems?'gem':cost.coins===0?'free':'coin'}">${cost.gems?'💎 '+cost.gems+' gems':cost.coins===0?'Free':'🪙 '+cost.coins}</div>`:''} ${btn}</div>`;
+  }).join('')}</div>`;
+}
+function buildOutfitPreview(key,o){
+  const ov=key==='classic'?'#4a7eb5':o.ov, ovLt=key==='classic'?'#6a9ed5':o.ovLt, ovDk=key==='classic'?'#3a6da0':o.ovDk;
+  return`<svg viewBox="18 52 84 64" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:52px">
+    <defs><radialGradient id="op${key}" cx="50%" cy="20%" r="80%"><stop offset="0%" stop-color="${ovLt}"/><stop offset="100%" stop-color="${ov}"/></radialGradient></defs>
+    <path d="M20,100 Q18,78 60,74 Q102,78 100,100 Q102,116 60,118 Q18,116 20,100Z" fill="url(#op${key})"/>
+    <rect x="30" y="100" width="21" height="14" rx="7" fill="${ov}"/><rect x="69" y="100" width="21" height="14" rx="7" fill="${ov}"/>
+    <rect x="38" y="60" width="44" height="22" rx="10" fill="url(#op${key})"/>
+    <ellipse cx="60" cy="78" rx="26" ry="11" fill="white" opacity=".9"/>
+    <circle cx="60" cy="66" r="4" fill="${ovDk}"/><circle cx="60" cy="76" r="4" fill="${ovDk}"/>
+  </svg>`;
+}
+function renderAccessoryShop(){
+  return`<div class="shop-grid">${Object.entries(ACCESSORIES).map(([k,a])=>{
+    const owned=G.owned.accessories.includes(k);
+    const equipped=G.cosmetics.accessory===k;
+    const cost=a.cost;
+    let badge='',btn='';
+    if(equipped){badge=`<span class="si-badge equipped">✓ On</span>`;btn=`<button class="si-buy-btn equipped-btn" disabled>Wearing</button>`;}
+    else if(owned){btn=`<button class="si-buy-btn equip-btn" onclick="equipAccessory('${k}')">Wear It</button>`;}
+    else if(cost.gems){badge=`<span class="si-badge premium">💎 Premium</span>`;btn=`<button class="si-buy-btn buy-gem" onclick="buyAccessory('${k}')">💎 ${cost.gems} Unlock</button>`;}
+    else if(cost.coins===0){btn=`<button class="si-buy-btn equip-btn" onclick="equipAccessory('${k}')">Select</button>`;}
+    else{btn=`<button class="si-buy-btn buy-coin" onclick="buyAccessory('${k}')">🪙 ${cost.coins} Buy</button>`;}
+    const cls=equipped?'equipped':owned?'owned':cost.gems?'premium-locked':'';
+    const preview=k==='none'?`<div style="font-size:36px;line-height:82px">✨</div>`:`<svg viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:44px">${a.svg}<circle cx="60" cy="40" r="24" fill="#f0c870" opacity=".55"/><ellipse cx="43" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="43" cy="38.5" r="3.5" fill="#1a1a1a"/><ellipse cx="77" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="77" cy="38.5" r="3.5" fill="#1a1a1a"/><path d="M51,51 Q60,58 69,51" stroke="#b05030" stroke-width="2" fill="none"/></svg>`;
+    return`<div class="shop-item ${cls}">${badge}<div class="si-preview">${preview}</div><div class="si-name">${a.name}</div><div class="si-desc">${a.desc}</div>${!owned||cost.coins===0?`<div class="si-price ${cost.gems?'gem':cost.coins===0?'free':'coin'}">${cost.gems?'💎 '+cost.gems+' gems':cost.coins===0?'Free':'🪙 '+cost.coins}</div>`:''} ${btn}</div>`;
+  }).join('')}</div>`;
+}
+function buyAnimal(key){
+  const a=ANIMALS[key];if(!a||!a.premium)return;
+  if(G.owned.animals.includes(key)){equipAnimal(key);return;}
+  if(G.wallet.gems<a.gemCost){showToast('Not enough gems! Get more below. 💎');openGemStore();return;}
+  G.wallet.gems-=a.gemCost;G.owned.animals.push(key);
+  updateShopWallet();updateAllUI();equipAnimal(key);
+  showToast(`${a.name} unlocked! 🎉`);
+}
+function equipAnimal(key){
+  if(!G.owned.animals.includes(key))return;
+  G.animal=key;updateCharSVG();updateAllUI();renderShopContent(shopCurrentTab);
+  showToast(`Switched to ${ANIMALS[key].name}! ${ANIMALS[key].emoji}`);
+}
+function buyOutfit(key){
+  const o=OUTFITS[key];if(!o)return;
+  if(G.owned.outfits.includes(key)){equipOutfit(key);return;}
+  if(o.cost.gems){
+    if(G.wallet.gems<o.cost.gems){showToast('Not enough gems! 💎');openGemStore();return;}
+    G.wallet.gems-=o.cost.gems;
+  } else {
+    if(G.wallet.coins<o.cost.coins){showToast(`Need ${o.cost.coins} 🪙 — earn more by caring well!`);return;}
+    G.wallet.coins-=o.cost.coins;
+  }
+  G.owned.outfits.push(key);equipOutfit(key);
+}
+function equipOutfit(key){
+  if(!G.owned.outfits.includes(key))return;
+  G.cosmetics.outfit=key;updateCharSVG();updateShopWallet();updateAllUI();renderShopContent(shopCurrentTab);
+  showToast(`${OUTFITS[key].name} equipped! ✨`);
+}
+function buyAccessory(key){
+  const a=ACCESSORIES[key];if(!a)return;
+  if(G.owned.accessories.includes(key)){equipAccessory(key);return;}
+  if(a.cost.gems){
+    if(G.wallet.gems<a.cost.gems){showToast('Not enough gems! 💎');openGemStore();return;}
+    G.wallet.gems-=a.cost.gems;
+  } else {
+    if(a.cost.coins>0&&G.wallet.coins<a.cost.coins){showToast(`Need ${a.cost.coins} 🪙 — earn more by caring well!`);return;}
+    if(a.cost.coins>0)G.wallet.coins-=a.cost.coins;
+  }
+  G.owned.accessories.push(key);equipAccessory(key);
+}
+function equipAccessory(key){
+  if(!G.owned.accessories.includes(key))return;
+  G.cosmetics.accessory=key;updateCharSVG();updateShopWallet();updateAllUI();renderShopContent(shopCurrentTab);
+  showToast(`${ACCESSORIES[key].name} on! 🎉`);
+}
+function buyGems(amount,priceLabel){
+  G.wallet.gems+=amount;closeGemStore();updateShopWallet();updateAllUI();
+  showToast(`💎 ${amount} gems added! (Simulated — in production you'd pay ${priceLabel})`);
+}
+function showToast(msg){
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 22px;border-radius:22px;font-size:13px;font-weight:700;z-index:200;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);';
+  t.textContent=msg;document.body.appendChild(t);
+  setTimeout(()=>t.style.opacity='0',1800);setTimeout(()=>t.remove(),2200);
+}
+function spawnCoinPop(amount){
+  const e=document.getElementById('hdr-coins');if(!e)return;
+  const r=e.getBoundingClientRect();
+  const el=document.createElement('div');
+  el.className='coin-earn';el.textContent=`+${amount}🪙`;
+  el.style.left=r.left+'px';el.style.top=(r.top-8)+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1500);
+}
+
+// ---- STORY PACK ACTIONS ----
+function buyPack(packId){
+  const pack=STORY_PACKS[packId];if(!pack)return;
+  if(G.owned.packs.includes(packId)){showToast(`${pack.icon} ${pack.name} is already in your collection!`);return;}
+  if(pack.price.gems){
+    if(G.wallet.gems<pack.price.gems){showToast('Not enough gems! 💎 Get more below.');openGemStore();return;}
+    G.wallet.gems-=pack.price.gems;
+  }
+  G.owned.packs.push(packId);
+  if(!G.packProgress[packId])G.packProgress[packId]=[];
+  updateShopWallet();updateAllUI();renderShopContent(shopCurrentTab);
+  showToast(`${pack.icon} ${pack.name} unlocked! Events will weave into your story.`);
+}
+function completePack(packId){
+  const pack=STORY_PACKS[packId];if(!pack)return;
+  G.wallet.coins+=pack.reward.coins;
+  spawnCoinPop(pack.reward.coins);
+  addChat('eval',`<div class="eval-card" style="border-color:var(--yellow)"><h4>${pack.icon} Story Arc Complete</h4><div class="eval-top"><div class="eval-score great" style="font-size:26px">${pack.icon}</div><div><div class="eval-grade">🌟 ${pack.name}</div><div style="font-size:11px;color:var(--soft);margin-top:2px">All 5 seasonal events experienced</div></div></div><div class="eval-fb">You've accompanied ${G.charName} through an entire season of life. The experiences, the conversations, the growth — these are now part of who they are. +${pack.reward.coins} 🪙 reward.</div></div>`);
+  updateAllUI();
+}
+function renderPackShop(){
+  return`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">${Object.entries(STORY_PACKS).map(([k,p])=>{
+    const owned=G.owned.packs.includes(k);
+    const done=(G.packProgress[k]||[]).length;
+    const total=p.events.length;
+    const pct=Math.round((done/total)*100);
+    let btn='',badge='';
+    if(owned){
+      badge=done>=total?`<span class="si-badge equipped">✓ Complete</span>`:`<span class="si-badge owned">${done}/${total} played</span>`;
+      btn=done>=total?`<button class="si-buy-btn equipped-btn" disabled>Completed ✓</button>`:`<button class="si-buy-btn equip-btn" disabled>Active — plays automatically</button>`;
+    } else {
+      badge=`<span class="si-badge premium">💎 ${p.price.gems} gems</span>`;
+      btn=`<button class="si-buy-btn buy-gem" onclick="buyPack('${k}')">💎 ${p.price.gems} — Unlock Pack</button>`;
+    }
+    const progressBar=owned&&done<total?`<div style="margin:8px 0 4px;height:5px;background:#eee;border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:var(--accent);border-radius:3px;transition:width .6s"></div></div><div style="font-size:9px;color:var(--soft);text-align:left;margin-bottom:6px">${done} of ${total} events experienced</div>`:'';
+    const preview=p.events.slice(0,3).map(e=>`<div style="font-size:10px;color:var(--soft);padding:2px 0;border-bottom:1px solid var(--border)">${(G.packProgress[k]||[]).includes(e.id)?'✓':owned?'○':'·'} ${e.title}</div>`).join('')+`<div style="font-size:10px;color:var(--soft);padding:2px 0">... +${total-3} more</div>`;
+    return`<div class="shop-item ${owned?done>=total?'equipped':'owned':'premium-locked'}" style="text-align:left;padding:16px">
+      ${badge}
+      <div style="font-size:32px;margin-bottom:8px">${p.icon}</div>
+      <div class="si-name" style="font-size:14px;margin-bottom:4px">${p.name}</div>
+      <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">${p.season} Arc · ${total} Events</div>
+      <div class="si-desc" style="font-size:11px;line-height:1.5;margin-bottom:10px;text-align:left">${p.desc}</div>
+      ${progressBar}
+      <div style="background:var(--bg);border-radius:8px;padding:8px;margin-bottom:10px">${preview}</div>
+      <div class="si-price gem" style="justify-content:flex-start;margin-bottom:6px">${owned?`✓ Owned · +${p.reward.coins}🪙 completion reward`:`💎 ${p.price.gems} gems · +${p.reward.coins}🪙 on completion`}</div>
+      ${btn}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// Init
+initAnimalGrid();
+</script>
+</body>
+</html>

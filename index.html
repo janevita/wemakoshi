@@ -61,7 +61,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .screen.active{display:flex;}
 
 /* ===== SETUP ===== */
-#setup-screen{flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:22px;background:linear-gradient(135deg,var(--setup-grad-a),var(--setup-grad-b));}
+#setup-screen{flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:22px;background:linear-gradient(135deg,var(--setup-grad-a),var(--setup-grad-b));position:relative;}
+#setup-theme-btn{position:absolute;top:16px;right:20px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--text);transition:all .2s;}
+#setup-theme-btn:hover{border-color:var(--accent);}
 .logo{font-family:'Caveat',cursive;font-size:58px;font-weight:700;color:var(--accent);}
 .subtitle{font-size:16px;color:var(--soft);margin-top:-16px;font-weight:600;}
 .setup-card{background:var(--card);border-radius:var(--r);padding:26px 28px;max-width:560px;width:100%;box-shadow:0 4px 24px var(--shadow);border:1px solid var(--border);}
@@ -100,7 +102,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .game-title{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--accent);}
 .header-center{display:flex;gap:14px;font-size:13px;font-weight:600;color:var(--soft);}
 .header-right{display:flex;gap:8px;}
-.hbtn{padding:7px 13px;border:1.5px solid var(--border);border-radius:20px;background:transparent;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.hbtn{padding:7px 13px;border:1.5px solid var(--border);border-radius:20px;background:transparent;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;color:var(--text);}
 .hbtn:hover{border-color:var(--accent);color:var(--accent);}
 .hbtn.dash{background:var(--accent-glow);border-color:var(--accent);color:var(--accent);}
 .game-body{display:grid;grid-template-columns:240px 1fr 260px;flex:1;overflow:hidden;}
@@ -466,6 +468,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 <!-- SETUP SCREEN -->
 <div id="setup-screen" class="screen active">
+  <button id="setup-theme-btn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
   <div class="logo">Wemakoshi</div>
   <div class="subtitle">Grow a life. Learn to care.</div>
   <div class="setup-card">
@@ -870,19 +873,23 @@ function buildCharSVG(animalKey,actId,moodScore){
   const outfitKey=G?.cosmetics?.outfit||'classic';
   const O=(outfitKey!=='classic'&&OUTFITS[outfitKey])||null;
   // Outfit overrides body color in vinyl toy style
+  // Body/limb colors — outfit can override these
   const tc=O?O.ov:A.tc, tl=O?O.ovLt:A.tl, td=O?O.ovDk:A.td;
+  // Head + ear colors — always native animal color regardless of outfit
+  const hc=A.tc, hl=A.tl, hd=A.td;
   const ta=A.ta;
   const accSVG=ACCESSORIES[G?.cosmetics?.accessory||'none']?.svg||'';
   const mood=moodScore>=65?'happy':moodScore<=30?'sad':'neutral';
   const eyeState=actId==='sleeping'?'sleeping':mood;
-  const lAng=actId==='playing'?-40:actId==='studying'?20:15;
-  const rAng=actId==='eating'?-80:actId==='playing'?40:actId==='studying'?-35:-15;
+  // Arm angles: kept within viewBox (pivot at x=20 left, x=100 right; arm height 30px)
+  const lAng=actId==='playing'?-35:actId==='studying'?20:12;
+  const rAng=actId==='eating'?-55:actId==='playing'?35:actId==='studying'?-25:-12;
   const xCol=(animalKey==='panda'||animalKey==='penguin')?'white':'#1a1a1a';
   return`<svg viewBox="0 0 120 158" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;overflow:visible">
   <defs>
     <radialGradient id="hg" cx="34%" cy="28%" r="72%">
-      <stop offset="0%" stop-color="${tl}"/>
-      <stop offset="100%" stop-color="${tc}"/>
+      <stop offset="0%" stop-color="${hl}"/>
+      <stop offset="100%" stop-color="${hc}"/>
     </radialGradient>
     <radialGradient id="bg" cx="38%" cy="25%" r="75%">
       <stop offset="0%" stop-color="${tl}"/>
@@ -908,20 +915,20 @@ function buildCharSVG(animalKey,actId,moodScore){
   <rect x="17" y="76" width="86" height="58" rx="35" fill="url(#bg)" filter="url(#shadow)"/>
   <!-- Body gloss -->
   <ellipse cx="37" cy="87" rx="18" ry="10" fill="white" opacity=".14"/>
-  <!-- Ears behind head -->
-  ${toyEarsBehind(animalKey,tc,tl,td,ta)}
-  <!-- Left arm -->
-  <rect x="4" y="84" width="18" height="40" rx="9" fill="${tc}" transform="rotate(${lAng},13,84)"/>
-  <rect x="4" y="84" width="18" height="40" rx="9" fill="${td}" opacity=".2" transform="rotate(${lAng},13,84)"/>
-  <!-- Right arm -->
-  <rect x="98" y="84" width="18" height="40" rx="9" fill="${tc}" transform="rotate(${rAng},107,84)"/>
-  <rect x="98" y="84" width="18" height="40" rx="9" fill="${td}" opacity=".2" transform="rotate(${rAng},107,84)"/>
+  <!-- Ears behind head (always native color) -->
+  ${toyEarsBehind(animalKey,hc,hl,hd,ta)}
+  <!-- Left arm (pivot at shoulder center x=20) -->
+  <rect x="11" y="84" width="18" height="30" rx="9" fill="${tc}" transform="rotate(${lAng},20,84)"/>
+  <rect x="11" y="84" width="18" height="30" rx="9" fill="${td}" opacity=".2" transform="rotate(${lAng},20,84)"/>
+  <!-- Right arm (pivot at shoulder center x=100) -->
+  <rect x="91" y="84" width="18" height="30" rx="9" fill="${tc}" transform="rotate(${rAng},100,84)"/>
+  <rect x="91" y="84" width="18" height="30" rx="9" fill="${td}" opacity=".2" transform="rotate(${rAng},100,84)"/>
   <!-- Head blob -->
   <circle cx="60" cy="48" r="34" fill="url(#hg)" filter="url(#shadow)"/>
   <!-- Head gloss highlight -->
   <ellipse cx="44" cy="32" rx="13" ry="9" fill="white" opacity=".22" transform="rotate(-25,44,32)"/>
-  <!-- Face overlays -->
-  ${toyFaceOverlays(animalKey,tc,ta)}
+  <!-- Face overlays (always native color) -->
+  ${toyFaceOverlays(animalKey,hc,ta)}
   <!-- Face -->
   ${toyXEye(44,44,xCol)}
   ${toyEye(76,44,mood,eyeState)}
@@ -2072,9 +2079,14 @@ function openDash(){renderDash();document.getElementById('dashboard').classList.
 function toggleTheme(){
   const root=document.documentElement;
   const isLight=root.getAttribute('data-theme')==='light';
-  root.setAttribute('data-theme',isLight?'dark':'light');
-  document.getElementById('theme-btn').textContent=isLight?'🌙':'☀️';
-  localStorage.setItem('wemakoshi-theme',isLight?'dark':'light');
+  const next=isLight?'dark':'light';
+  root.setAttribute('data-theme',next);
+  const icon=next==='light'?'☀️':'🌙';
+  const b1=document.getElementById('theme-btn');
+  const b2=document.getElementById('setup-theme-btn');
+  if(b1)b1.textContent=icon;
+  if(b2)b2.textContent=icon;
+  localStorage.setItem('wemakoshi-theme',next);
   /* redraw canvas charts so colors update immediately */
   setTimeout(()=>{drawSkillsChart();drawEmotionsChart();renderPlayerTab();},50);
 }
@@ -2082,9 +2094,12 @@ function toggleTheme(){
 (function(){
   const saved=localStorage.getItem('wemakoshi-theme')||'dark';
   document.documentElement.setAttribute('data-theme',saved);
+  const icon=saved==='light'?'☀️':'🌙';
   window.addEventListener('DOMContentLoaded',()=>{
-    const btn=document.getElementById('theme-btn');
-    if(btn)btn.textContent=saved==='light'?'☀️':'🌙';
+    const b1=document.getElementById('theme-btn');
+    const b2=document.getElementById('setup-theme-btn');
+    if(b1)b1.textContent=icon;
+    if(b2)b2.textContent=icon;
   });
 })();
 function closeDash(){document.getElementById('dashboard').classList.remove('open');}

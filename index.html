@@ -252,6 +252,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .send-btn{width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .send-btn:hover{background:#d03c7e;transform:scale(1.05);}
 .send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.mic-btn{width:42px;height:42px;border-radius:50%;border:2px solid var(--border);background:var(--card);color:var(--soft);font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mic-btn:hover{border-color:var(--accent-l);color:var(--accent);}
+.mic-btn:disabled{opacity:.35;cursor:not-allowed;}
+.mic-btn.listening{border-color:#e05050;color:#e05050;animation:micPulse 1s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,80,80,.4);}50%{box-shadow:0 0 0 7px rgba(224,80,80,0);}}
+.voice-hbtn.off{opacity:.45;}
 .chat-hint{font-size:11px;color:#6a3a50;margin-top:4px;text-align:center;}
 .next-day-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:11px;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:all .2s;margin-top:3px;}
 .next-day-btn:hover{border-color:var(--accent);background:var(--accent-glow);}
@@ -619,6 +625,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       </div>
       <button class="hbtn" onclick="openShop()">🛍️ Shop</button>
       <button class="hbtn dash" onclick="openDash()">📊 Dashboard</button>
+      <button class="hbtn voice-hbtn" id="voice-btn" onclick="toggleVoice()" title="Character voice on/off">🔊</button>
       <button class="hbtn" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark">🌙</button>
       <div id="ai-chip" onclick="openAISettings()" title="AI settings">⚪ Scripted</div>
       <button class="hbtn" onclick="nextDay()" id="skip-btn" style="display:none">⏭ Next Day</button>
@@ -648,6 +655,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
         <div class="chat-row">
           <textarea class="chat-ta" id="chat-ta" placeholder="Respond to your character..." rows="1"
             onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+          <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak your response">🎤</button>
           <button class="send-btn" id="send-btn" onclick="sendMsg()">&#x27A4;</button>
         </div>
         <div class="chat-hint">Respond naturally — your words shape how they grow</div>
@@ -1393,7 +1401,7 @@ const chatEl=document.getElementById('chat-scroll');
 function addChat(type,content){
   const d=document.createElement('div');d.className='chat-entry';
   if(type==='narrator')d.innerHTML=`<div class="narrator">${content}</div>`;
-  else if(type==='char')d.innerHTML=`<div class="char-bubble"><div class="spk">💬 ${G.charName}</div>${content}</div>`;
+  else if(type==='char'){d.innerHTML=`<div class="char-bubble"><div class="spk">💬 ${G.charName}</div>${content}</div>`;setTimeout(()=>speakCharLine(content),80);}
   else if(type==='thought')d.innerHTML=`<div class="char-thought">💭 ${content}</div>`;
   else if(type==='player')d.innerHTML=`<div class="player-bubble"><div class="spk">You</div>${content}</div>`;
   else if(type==='sys')d.innerHTML=`<div class="sys-msg">${content}</div>`;
@@ -1413,6 +1421,7 @@ function restoreInput(){
     <div class="chat-row">
       <textarea class="chat-ta" id="chat-ta" placeholder="Respond to ${G.charName}..." rows="1"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak your response">🎤</button>
       <button class="send-btn" id="send-btn" onclick="sendMsg()">&#x27A4;</button>
     </div>
     <div class="chat-hint">Respond naturally — your words shape how they grow</div>`;
@@ -1472,6 +1481,8 @@ function sendMsg(){
   if(!ta)return;
   const text=ta.value.trim();
   if(!text||(G.phase!=='responding'&&G.phase!=='needInteraction'))return;
+  window.speechSynthesis?.cancel(); // stop character voice when player replies
+  _stopMic?.();                     // stop mic if still listening
   ta.value='';setInput(false);
   addChat('player',text);G.responseCount++;
   const typing=addChat('typing');
@@ -3402,6 +3413,132 @@ if(!document.getElementById('game-screen').classList.contains('active')){
   if(prev)_showResumeBanner(prev);
 }
 initAnimalGrid();
+
+// ---- VOICE: TTS (character speaks) + STT (player talks) ----
+
+// Persist voice-on/off preference; default on
+let _voiceEnabled=localStorage.getItem('wemakoshi-voice')!=='off';
+
+function toggleVoice(){
+  _voiceEnabled=!_voiceEnabled;
+  localStorage.setItem('wemakoshi-voice',_voiceEnabled?'on':'off');
+  if(!_voiceEnabled)window.speechSynthesis?.cancel();
+  _updateVoiceBtn();
+  showToast(_voiceEnabled?'🔊 Voice on':'🔇 Voice off');
+}
+
+function _updateVoiceBtn(){
+  const btn=document.getElementById('voice-btn');
+  if(!btn)return;
+  btn.textContent=_voiceEnabled?'🔊':'🔇';
+  btn.title=_voiceEnabled?'Character voice on (click to mute)':'Character voice off (click to enable)';
+  btn.classList.toggle('off',!_voiceEnabled);
+}
+
+// Pick an English voice appropriate to the character's age and personality
+function _pickVoice(){
+  const voices=window.speechSynthesis?.getVoices()||[];
+  const eng=voices.filter(v=>v.lang.startsWith('en'));
+  if(!eng.length)return null;
+  // Prefer a non-default local voice for naturalness
+  const local=eng.filter(v=>v.localService);
+  const pool=local.length?local:eng;
+  // Simple heuristic: younger chars lean toward higher-indexed voices (often female/lighter)
+  const stage=getStage?.();
+  if(stage==='child'||stage==='teen'){
+    // Look for voices with names suggesting female/younger tone; fallback to any
+    const pref=pool.find(v=>/samantha|karen|victoria|zira|emma|ava|nicky/i.test(v.name));
+    return pref||pool[pool.length-1];
+  }
+  // Adults: prefer a mid-range voice
+  return pool[Math.floor(pool.length/2)]||pool[0];
+}
+
+function speakCharLine(text){
+  if(!_voiceEnabled)return;
+  const synth=window.speechSynthesis;
+  if(!synth)return;
+  synth.cancel();
+  // Strip HTML tags and bracket commands
+  const clean=text.replace(/<[^>]+>/g,'').replace(/\[[^\]]+\]/g,'').replace(/&[a-z]+;/gi,' ').trim();
+  if(!clean)return;
+  const utt=new SpeechSynthesisUtterance(clean);
+  // Age-tuned pitch and rate
+  const stage=getStage?.();
+  switch(stage){
+    case'child':    utt.pitch=1.35;utt.rate=1.05;break;
+    case'teen':     utt.pitch=1.15;utt.rate=1.02;break;
+    case'youngAdult':utt.pitch=1.0;utt.rate=1.0;break;
+    default:        utt.pitch=0.9;utt.rate=0.93;break;
+  }
+  // Voice selection (voices may not be ready on first call — safe to proceed with default)
+  const v=_pickVoice();if(v)utt.voice=v;
+  synth.speak(utt);
+}
+
+// Pre-load voices list (browsers like Chrome load async)
+if(window.speechSynthesis){
+  window.speechSynthesis.onvoiceschanged=()=>{}; // triggers population
+  // Call once to prime
+  window.speechSynthesis.getVoices();
+}
+
+// ---- STT ----
+let _recognition=null;
+let _micActive=false;
+
+function toggleMic(){
+  if(_micActive){_stopMic();return;}
+  _startMic();
+}
+
+function _startMic(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showToast('Voice input not supported in this browser 🎤');return;}
+  try{
+    _recognition=new SR();
+    _recognition.continuous=false;
+    _recognition.interimResults=true;
+    _recognition.lang='en-US';
+    _micActive=true;
+    _updateMicBtn();
+    _recognition.onresult=(e)=>{
+      const transcript=Array.from(e.results).map(r=>r[0].transcript).join('');
+      const ta=document.getElementById('chat-ta');
+      if(ta){
+        ta.value=transcript;
+        ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,110)+'px';
+      }
+      if(e.results[e.results.length-1].isFinal){_stopMic();}
+    };
+    _recognition.onerror=(e)=>{
+      _stopMic();
+      if(e.error!=='aborted'&&e.error!=='no-speech')showToast('Mic error: '+e.error);
+    };
+    _recognition.onend=()=>{_stopMic();};
+    _recognition.start();
+  }catch(e){_stopMic();showToast('Could not start microphone');}
+}
+
+function _stopMic(){
+  _micActive=false;
+  if(_recognition){try{_recognition.stop();}catch(e){}_recognition=null;}
+  _updateMicBtn();
+}
+
+function _updateMicBtn(){
+  const btn=document.getElementById('mic-btn');
+  if(!btn)return;
+  btn.classList.toggle('listening',_micActive);
+  btn.title=_micActive?'Listening… (click to stop)':'Speak your response';
+}
+
+// Stop mic when a message is sent
+const _origSendMsg=sendMsg;
+// (we patch directly into sendMsg flow — mic stops on ta.value clear)
+
+// Init voice button state once game is visible
+document.addEventListener('DOMContentLoaded',()=>_updateVoiceBtn());
 </script>
 <!-- Milestone overlay -->
 <div id="milestone-overlay">

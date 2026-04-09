@@ -9,7 +9,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Wemakoshi">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <title>Wemakoshi — Grow a Life</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;700&display=swap');
@@ -64,6 +65,32 @@
   --coin-bg:rgba(212,144,10,.1);--gem-bg:rgba(96,48,168,.1);
 }
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:calc(var(--vh,1vh)*100);overflow-x:hidden;}
+.save-btn{width:100%;padding:10px 16px;border-radius:10px;border:2px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;text-align:left;}
+.save-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.save-btn:disabled{opacity:.45;cursor:default;}
+.save-btn.accent{border-color:var(--accent);color:var(--accent);}
+.save-btn.accent:hover{background:var(--accent);color:#fff;}
+/* Life ending overlay */
+#life-ending{position:fixed;inset:0;background:rgba(10,3,8,.92);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
+#life-ending.open{display:flex;}
+.ending-title{font-family:'Caveat',cursive;font-size:52px;font-weight:700;color:var(--accent);margin-bottom:12px;}
+.ending-sub{font-size:16px;color:var(--soft);margin-bottom:28px;}
+.ending-score{font-size:72px;font-weight:800;color:var(--text);line-height:1;}
+.ending-label{font-size:14px;color:var(--soft);margin-top:6px;margin-bottom:24px;}
+.ending-msg{font-size:15px;color:var(--text);max-width:420px;line-height:1.6;margin-bottom:28px;}
+.ending-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.ending-btn{padding:12px 24px;border-radius:12px;border:2px solid var(--accent);color:var(--accent);background:transparent;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
+.ending-btn.primary{background:var(--accent);color:#fff;}
+.ending-btn:hover{transform:translateY(-2px);}
+/* Milestone overlay */
+#milestone-overlay{position:fixed;inset:0;background:rgba(10,3,8,.85);z-index:190;display:none;align-items:center;justify-content:center;}
+#milestone-overlay.show{display:flex;}
+.milestone-card{background:var(--card);border:2px solid var(--accent);border-radius:20px;padding:32px;max-width:380px;width:90%;text-align:center;animation:popIn .35s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.milestone-emoji{font-size:56px;margin-bottom:12px;}
+.milestone-title{font-family:'Caveat',cursive;font-size:32px;color:var(--accent);margin-bottom:6px;}
+.milestone-desc{font-size:14px;color:var(--soft);margin-bottom:20px;}
+.milestone-close{padding:10px 28px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;}
 
@@ -71,8 +98,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 #setup-screen{flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:22px;background:linear-gradient(135deg,var(--setup-grad-a),var(--setup-grad-b));position:relative;}
 #setup-theme-btn{position:absolute;top:16px;right:20px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--text);transition:all .2s;}
 #setup-theme-btn:hover{border-color:var(--accent);}
-.logo{font-family:'Caveat',cursive;font-size:58px;font-weight:700;color:var(--accent);}
-.subtitle{font-size:16px;color:var(--soft);margin-top:-16px;font-weight:600;}
+/* logo-img: real PNG logo; logo fallback text shows only if PNG fails */
+.logo-img{display:block;width:auto;max-width:340px;height:auto;object-fit:contain;filter:drop-shadow(0 4px 18px rgba(243,92,154,.35));}
+.logo-img-hdr{display:block;height:34px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(243,92,154,.3));}
+.logo{font-family:'Caveat',cursive;font-size:58px;font-weight:700;color:var(--accent);display:none;}/* text fallback */
+.subtitle{font-size:16px;color:var(--soft);margin-top:-4px;font-weight:600;}
+@media(max-width:767px){.logo-img{max-width:230px;}.logo-img-hdr{height:26px;}}
 .setup-card{background:var(--card);border-radius:var(--r);padding:26px 28px;max-width:560px;width:100%;box-shadow:0 4px 24px var(--shadow);border:1px solid var(--border);}
 .setup-card h2{font-size:17px;margin-bottom:14px;color:var(--accent);}
 .form-group{margin-bottom:16px;}
@@ -106,7 +137,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 /* ===== GAME LAYOUT ===== */
 #game-screen{flex-direction:column;height:100vh;height:calc(var(--vh,1vh)*100);}
 .game-header{display:flex;align-items:center;justify-content:space-between;padding:10px 22px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);z-index:20;}
-.game-title{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--accent);}
+.game-title{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--accent);display:none;}/* shown only as fallback when logo.png missing */
 .header-center{display:flex;gap:14px;font-size:13px;font-weight:600;color:var(--soft);}
 .header-right{display:flex;gap:8px;}
 .hbtn{padding:7px 13px;border:1.5px solid var(--border);border-radius:20px;background:transparent;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;color:var(--text);}
@@ -532,6 +563,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 <!-- SETUP SCREEN -->
 <div id="setup-screen" class="screen active">
   <button id="setup-theme-btn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+  <img src="logo.png" alt="Wemakoshi" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
   <div class="logo">Wemakoshi</div>
   <div class="subtitle">Grow a life. Learn to care.</div>
   <div class="setup-card">
@@ -564,7 +596,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 <!-- GAME SCREEN -->
 <div id="game-screen" class="screen">
   <div class="game-header">
-    <div class="game-title">Wemakoshi</div>
+    <img src="logo.png" alt="Wemakoshi" class="logo-img-hdr" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="game-title" style="display:none">Wemakoshi</div>
     <div class="header-center">
       <span id="hdr-day">Day 1</span><span>|</span>
       <span id="hdr-age">Age 5</span><span>|</span>
@@ -754,6 +786,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <div class="dash-tab" onclick="switchTab('player')">🎯 Your Performance</div>
       <div class="dash-tab" onclick="switchTab('journal')">📖 Life Journal</div>
       <div class="dash-tab" onclick="switchTab('premium')">✨ Premium Insights</div>
+      <div class="dash-tab" onclick="switchTab('save')">💾 Save &amp; Share</div>
     </div>
     <div class="dash-body">
       <div class="dash-pane active" id="tab-growth">
@@ -782,6 +815,27 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       </div>
       <div class="dash-pane" id="tab-premium">
         <div id="premium-content"></div>
+      </div>
+      <div class="dash-pane" id="tab-save">
+        <div class="dash-card" style="margin-bottom:14px">
+          <h4>💾 Save Progress</h4>
+          <p style="font-size:13px;color:var(--soft);margin-bottom:14px">Your game saves automatically each day. Use these options to back up or restore across devices.</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="save-btn" onclick="copySaveCode()">📋 Copy Save Code</button>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="save-code-input" placeholder="Paste save code here…" style="flex:1;padding:9px 12px;border:2px solid var(--border);border-radius:9px;font-family:inherit;font-size:13px;background:var(--card);color:var(--text)" oninput="document.getElementById('load-code-btn').disabled=!this.value.trim()">
+              <button id="load-code-btn" class="save-btn" disabled onclick="loadFromInput()">Load</button>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <h4>🔗 Share</h4>
+          <p style="font-size:13px;color:var(--soft);margin-bottom:14px">Share your character's story or invite someone to watch their journey.</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="save-btn accent" onclick="shareSaveURL()">🌐 Share Link (includes save)</button>
+            <button class="save-btn" onclick="shareStoryCard()">🪪 Share Story Card</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1165,6 +1219,17 @@ function startGame(){
   G.charName=document.getElementById('char-name').value.trim();
   G.animal=selAnimalV;G.age=selAgeV;G.startAge=selAgeV;G.background=selBgV;
   seedPersonality();seedSkills();
+  // Apply legacy nudges from previous life if present
+  const leg=localStorage.getItem('wemakoshi-legacy');
+  if(leg){try{const n=JSON.parse(atob(leg));const blend=v=>Math.round(v*0.7+((n.o||50))*0.15+(50)*0.15);
+    G.personality.openness=clamp(Math.round(G.personality.openness*0.7+(n.o||50)*0.3),20,80);
+    G.personality.conscientiousness=clamp(Math.round(G.personality.conscientiousness*0.7+(n.c||50)*0.3),20,80);
+    G.personality.extraversion=clamp(Math.round(G.personality.extraversion*0.7+(n.e||50)*0.3),20,80);
+    G.personality.agreeableness=clamp(Math.round(G.personality.agreeableness*0.7+(n.a||50)*0.3),20,80);
+    G.personality.neuroticism=clamp(Math.round(G.personality.neuroticism*0.7+(n.n||50)*0.3),20,80);
+    localStorage.removeItem('wemakoshi-legacy');
+    setTimeout(()=>showToast('🌱 A spark of legacy carried forward…'),2000);
+  }catch(e){}}
   document.getElementById('setup-screen').classList.remove('active');
   document.getElementById('game-screen').classList.add('active');
   updateCharSVG();updateAllUI();
@@ -1671,7 +1736,22 @@ const EVENTS={
      narration:(g)=>`${g.charName}'s best friend shared a secret they'd been told with the whole class.`,
      opening:(g)=>g.personality.neuroticism>60?`"I'm never telling anyone ANYTHING again! Everyone uses your secrets against you!"`: `"They say it just 'slipped out.' But how does a secret just slip out?"`,
      thought:()=>"If my best friend can't keep secrets, who can I trust?",
-     goodResponses:[`"I don't OWE them forgiveness — but I could choose it. That feels different."`,`"I needed to cry first before I could even think. Thanks for letting me."`,`"You can be mad AND still care about someone. That's confusing but it feels true."`]}
+     goodResponses:[`"I don't OWE them forgiveness — but I could choose it. That feels different."`,`"I needed to cry first before I could even think. Thanks for letting me."`,`"You can be mad AND still care about someone. That's confusing but it feels true."`]},
+    {id:'losing_pet',title:'Saying Goodbye',weight:7,trigger:(g)=>g.day>10&&g.emotions.happiness>40,
+     narration:(g)=>`${g.charName}'s beloved pet passed away overnight. They found out before school.`,
+     opening:(g)=>g.emotions.trust>50?`"I know it's just an animal but... it feels like losing someone. Is that weird?"`:g.personality.neuroticism>60?`"I can't stop crying. My whole chest hurts."`: `"...I don't want to talk about it."`,
+     thought:()=>"Everything I love goes away eventually.",
+     goodResponses:[`"It's NOT just an animal. Grief is grief."`,`"I'm allowed to be sad even if other people don't understand?"`,`"Can we make a little something to remember them? That feels right."`]},
+    {id:'moving',title:'The Moving Box',weight:6,trigger:(g)=>g.day>14,
+     narration:(g)=>`The family is moving to a new city. ${g.charName} has to leave their school, their neighborhood, everything familiar.`,
+     opening:(g)=>g.personality.extraversion>60?`"How am I going to make NEW friends? What if they're all already in groups?"`:g.personality.conscientiousness>60?`"I made a list of everything I'm going to lose. It's very long."`: `"Why didn't anyone ask me if I WANTED to move?"`,
+     thought:()=>"Being the new kid is the worst possible thing.",
+     goodResponses:[`"The feelings are real even if the story changes?"`,`"Can I call my old friends whenever I want? That actually helps."`,`"You'll help me find things to look forward to? Okay. Maybe one thing."`]},
+    {id:'talent_show',title:'The Talent Show',weight:5,trigger:(g)=>g.day>12&&g.skills.creative<60,
+     narration:(g)=>`The school talent show is coming. ${g.charName} desperately wants to perform but is terrified of forgetting everything in front of everyone.`,
+     opening:(g)=>g.personality.neuroticism>60?`"What if I freeze on stage? Everyone will be staring at me."`:g.personality.openness>60?`"I want to do it SO BADLY but... what if I'm just not good enough?"`: `"Is it embarrassing to want to try? Everyone might laugh."`,
+     thought:()=>"Doing it scared is still doing it. But what if I fail?",
+     goodResponses:[`"Practicing so much it becomes automatic — that I can do."`,`"Even if it goes wrong it's not the end? That's actually... calming."`,`"You think I could be proud of myself just for trying? That's new."`]}
   ],
   teen:[
     {id:'party',title:'The Party',weight:9,trigger:()=>true,
@@ -1693,7 +1773,22 @@ const EVENTS={
      narration:(g)=>`Someone posted an embarrassing photo of ${g.charName} online. Dozens of cruel comments. They found out when people at school were laughing.`,
      opening:(g)=>g.emotions.confidence<40?`"Everyone saw it. EVERYONE. I can never go back to school."`: `"I know it's not the end of the world but it FEELS like it."`,
      thought:()=>"Why would someone do this? What did I ever do to them?",
-     goodResponses:[`"They can't just post things without my permission? We can actually do something?"`,`"The shame I feel doesn't mean I did something wrong."`,`"Thanks for not minimizing it. It IS a big deal. And it will pass."`]}
+     goodResponses:[`"They can't just post things without my permission? We can actually do something?"`,`"The shame I feel doesn't mean I did something wrong."`,`"Thanks for not minimizing it. It IS a big deal. And it will pass."`]},
+    {id:'first_job',title:'First Job Jitters',weight:7,trigger:(g)=>g.day>5,
+     narration:(g)=>`${g.charName} got their first part-time job. Day one was overwhelming — the training, the people, the fear of doing something wrong.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I wrote down EVERYTHING and I still forgot half of it."`:g.emotions.confidence<45?`"I think they realized I have no idea what I'm doing."`: `"It's a lot. But I think I like having my own money."`,
+     thought:()=>"What if I'm terrible at this? What if they fire me before I even figure it out?",
+     goodResponses:[`"Everyone is bad at new things at first? Even the people who look confident?"`,`"I earned something with my own hands. That does feel different."`,`"I can ask questions — that's not weakness, that's how you learn."`]},
+    {id:'crush',title:'The Almost-Conversation',weight:6,trigger:(g)=>g.day>6&&g.skills.social<65,
+     narration:(g)=>`${g.charName} has had a crush on someone for months. Today was the perfect moment to say something. They didn't.`,
+     opening:(g)=>g.personality.extraversion>60?`"I literally froze. Me! I talk to everyone! But I just... couldn't."`:g.personality.neuroticism>60?`"What if they say no? What if they tell everyone? What if we can't even be friends anymore?"`: `"I don't know. It feels like a lot to risk."`,
+     thought:()=>"If I never try, I never fail. But I also never... anything.",
+     goodResponses:[`"Being rejected doesn't mean I'm not enough. It means it wasn't that match."`,`"You think they might feel the same? I can't tell if that's scarier or better."`,`"What if I just started talking to them more? That feels manageable."`]},
+    {id:'mental_health',title:'Running on Empty',weight:8,trigger:(g)=>g.day>9&&g.emotions.stress>50,
+     narration:(g)=>`${g.charName} hasn't been sleeping well. School, pressure, comparison — it's all piling up. They've been canceling plans and spending a lot of time alone.`,
+     opening:(g)=>g.emotions.trust>55?`"I think something's wrong with me. Not like, physically. Just... inside."`:g.personality.neuroticism>60?`"I'm exhausted all the time but I can't sleep. Does that make sense?"`: `"Everyone says 'just think positive.' Thanks, fixed it."`,
+     thought:()=>"Maybe this is just what being a teenager is. Maybe everyone feels this and I'm just weak.",
+     goodResponses:[`"This has a name and it can get better? I needed to hear that."`,`"I'm not dramatic for struggling — real things are actually hard."`,`"I'll try one small thing. Just one. I can do one thing."`]}
   ],
   youngAdult:[
     {id:'career',title:'The Fork in the Road',weight:9,trigger:()=>true,
@@ -1710,7 +1805,27 @@ const EVENTS={
      narration:(g)=>`An unexpected bill arrives. ${g.charName} doesn't have the savings to cover it.`,
      opening:()=>`"I've been pretending I have it together but I'm behind on everything. I don't know how to manage this."`,
      thought:()=>"Everyone else figures this out. Why can't I manage basic adult life?",
-     goodResponses:[`"We can make a plan? I thought I just had to panic."`,`"Okay. Small steps. What first?"`,`"I didn't know those options existed. Why doesn't anyone teach this stuff?"`]}
+     goodResponses:[`"We can make a plan? I thought I just had to panic."`,`"Okay. Small steps. What first?"`,`"I didn't know those options existed. Why doesn't anyone teach this stuff?"`]},
+    {id:'friendship_drift',title:'Growing Apart',weight:6,trigger:(g)=>g.day>8&&g.skills.social<60,
+     narration:(g)=>`${g.charName}'s closest friend from school has slowly disappeared from their life — different cities, different lives. Last week's call felt like talking to a stranger.`,
+     opening:(g)=>g.emotions.trust>50?`"We used to talk every day. Now I'm running out of things to say to my best friend."`:g.personality.neuroticism>60?`"Am I the problem? Have I changed too much?"`: `"I know people drift apart. I just didn't think it would hurt this much."`,
+     thought:()=>"Adult friendships require effort I don't know how to give.",
+     goodResponses:[`"Scheduling friendship feels weird but... maybe that's just what real life looks like?"`,`"It's okay to grieve a friendship that's still technically alive?"`,`"We're just in different chapters — that doesn't erase what we were."`]},
+    {id:'therapy',title:'The First Session',weight:7,trigger:(g)=>g.day>5&&g.emotions.stress>45,
+     narration:(g)=>`${g.charName} finally made a therapy appointment — something they've been avoiding for months. Walking into the waiting room, they nearly turned around.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I prepared a list but when they asked 'what brings you here' I just... stared at them."`:g.emotions.confidence<45?`"I feel like I should have worse problems to be here. Like, am I too okay to need help?"`: `"I don't know what to say. I don't want to say the wrong thing."`,
+     thought:()=>"What if I tell the truth and it's more than I can handle to say out loud?",
+     goodResponses:[`"There's no minimum suffering threshold to deserve help. That's a relief."`,`"I went. That was already the hardest part?"`,`"I can go back. I don't have to have it figured out in one session."`]},
+    {id:'comparison_trap',title:'The Highlight Reel',weight:5,trigger:(g)=>g.day>10,
+     narration:(g)=>`A former classmate just announced their third major life milestone this year. ${g.charName} has been scrolling for an hour, feeling worse by the minute.`,
+     opening:()=>`"Everyone's getting promoted, engaged, buying houses. What am I doing?"`,
+     thought:()=>"My timeline is wrong. I'm behind. Everyone can see it.",
+     goodResponses:[`"I'm comparing my interior to someone else's exterior. That's a rigged game."`,`"What do *I* actually want? Not what I should want, but what I want?"`,`"Closing the app was the first right move I've made today."`]},
+    {id:'moving_in',title:'The Test of Living Together',weight:6,trigger:(g)=>g.day>12,
+     narration:(g)=>`${g.charName} moved in with their partner six months ago. Now the small things — dishes, sleep schedules, silence — are starting to chafe.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I asked them to do one thing. One. And they forgot again."`:g.emotions.trust>55?`"I don't want to be the one who always brings things up. But if I don't, nothing changes."`: `"Maybe we're just too different. Or maybe this is just what it's like?"`,
+     thought:()=>"Love is supposed to be enough. Is it enough?",
+     goodResponses:[`"Having a system isn't unromantic — it's what makes the romance sustainable."`,`"This is a solvable problem. We're not incompatible, we're just learning each other."`,`"I can ask for what I need without it being a fight. That's a skill."`]}
   ],
   adult:[
     {id:'burnout',title:'The Wall',weight:9,trigger:()=>true,
@@ -1727,7 +1842,27 @@ const EVENTS={
      narration:(g)=>`${g.charName} got a call: a parent fell and is in hospital. The roles are reversing in ways ${g.charName} wasn't prepared for.`,
      opening:()=>`"I had to help my dad walk to the bathroom today. My dad. The man who carried me on his shoulders."`,
      thought:()=>"I'm not ready for this. I'm not ready to be the strong one.",
-     goodResponses:[`"Grief for what was — I didn't think of it that way. But yes. That's exactly it."`,`"Maybe I can be scared AND still show up. Those aren't mutually exclusive."`,`"I don't have to have it all together. I just have to be there."`]}
+     goodResponses:[`"Grief for what was — I didn't think of it that way. But yes. That's exactly it."`,`"Maybe I can be scared AND still show up. Those aren't mutually exclusive."`,`"I don't have to have it all together. I just have to be there."`]},
+    {id:'midlife',title:'The Midpoint',weight:8,trigger:(g)=>g.age>=38&&g.day>4,
+     narration:(g)=>`${g.charName} has been counting things lately: years left, decisions made, roads not taken. Something shifted at the last birthday.`,
+     opening:(g)=>g.personality.openness>60?`"I keep thinking about who I was going to be. Were those people right? Was I naive?"`:g.emotions.happiness<50?`"I'm not unhappy. I'm just... not sure this is the life I meant to make."`: `"It's not a crisis. It's more like... a very long pause."`,
+     thought:()=>"Half the journey might be gone. What do I do with the half that's left?",
+     goodResponses:[`"This isn't a sign that I chose wrong — it's permission to choose again."`,`"What do I actually want now, at this age, with this life? That's a question worth sitting with."`,`"The second half doesn't have to look like the first half."`]},
+    {id:'empty_nest',title:'The Quiet House',weight:7,trigger:(g)=>g.age>=42&&g.day>6,
+     narration:(g)=>`${g.charName}'s last child moved out last week. The house is different now. Quieter. Bigger somehow.`,
+     opening:()=>`"I cried in their empty bedroom for twenty minutes. Then I felt guilty for crying. Then I cried about feeling guilty."`,
+     thought:()=>"Who am I without someone to take care of?",
+     goodResponses:[`"Grief and pride at the same time — they don't cancel each other out."`,`"This is a new chapter, not an ending. What does *my* life look like now?"`,`"The love doesn't leave when they do. It just has more room."`]},
+    {id:'legacy',title:'What Am I Leaving Behind?',weight:6,trigger:(g)=>g.age>=50&&g.day>3,
+     narration:(g)=>`${g.charName} attended an old colleague's retirement party. On the drive home, the question wouldn't stop: what mark am I making?`,
+     opening:(g)=>g.skills.emotional>60?`"I want to matter. Not in a vain way. Just... for something to be different because I was here."`:g.personality.conscientiousness>60?`"I've built things. Good things. But I don't know if they'll outlast me."`: `"Is it too late to start something that lasts?"`,
+     thought:()=>"Time is going faster. I don't know when I stopped being young.",
+     goodResponses:[`"Legacy isn't monuments — it's how the people I loved remember feeling around me."`,`"I can start something meaningful at any age. That's not naive."`,`"What do I already do that matters? Maybe I'm not seeing it."`]},
+    {id:'retirement_edge',title:'The Last Chapter',weight:7,trigger:(g)=>g.age>=58&&g.day>4,
+     narration:(g)=>`${g.charName} is approaching the end of their working years. The finish line feels both like relief and like losing a piece of identity.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I don't know who I am without this job. That's alarming, right?"`:g.emotions.stress>50?`"I'm exhausted. But I'm terrified of stopping."`: `"What do people actually DO in retirement? Wake up and... then what?"`,
+     thought:()=>"My whole life was built around a schedule. What happens when the schedule ends?",
+     goodResponses:[`"I get to discover who I am outside of my work. That's not a loss — that's the whole point."`,`"I can structure my own days now. That's enormous freedom if I let it be."`,`"The people who know how to rest built that skill. I can learn it."`]}
   ]
 };
 
@@ -2198,7 +2333,19 @@ function beginDay(){
   if(G.day>1&&G.day%10===0){
     G.age++;
     addChat('sys',`<em>Time passes... ${G.charName} is now ${G.age} years old.</em>`);
-    if(G.age===13||G.age===18||G.age===26)addChat('sys',`<em>A new chapter: ${getStageName()}</em>`);
+    saveToBrowser();
+    const milestones={13:{emoji:'🌿',title:'The Teen Years Begin',desc:`${G.charName} is now a teenager — navigating identity, pressure, and the start of who they'll become.`},
+      18:{emoji:'🎓',title:'Into Adulthood',desc:`${G.charName} turns 18. The world opens up, and so does responsibility.`},
+      25:{emoji:'🌟',title:'Finding Their Way',desc:`Quarter-century. ${G.charName} is building a life with their own hands.`},
+      30:{emoji:'🏡',title:'Roots and Reach',desc:`Thirty. ${G.charName} knows who they are a little better now.`},
+      40:{emoji:'⚖️',title:'The Midpoint',desc:`${G.charName} reaches the midpoint — a time for reflection and intentional choices.`},
+      50:{emoji:'🌅',title:'A New Horizon',desc:`Fifty years. ${G.charName} carries hard-won wisdom into the decades ahead.`},
+      65:{emoji:'🌸',title:'A Life Fully Lived',desc:`${G.charName} reaches 65 — a milestone worth celebrating before the final chapter closes.`}};
+    if(milestones[G.age]){
+      const m=milestones[G.age];
+      setTimeout(()=>showMilestone(m.emoji,m.title,m.desc,G.age===65),800);
+    }
+    if(G.age>=65&&!G._endingShown){setTimeout(()=>showLifeEnding(),4000);}
   }
   saveSnapshot();driftEmotions();updateAllUI();updateCharSVG();
   // Weekly report on every 7th day
@@ -2253,7 +2400,146 @@ function beginDay(){
     setTimeout(()=>{addChat('char',getIdleLine());G.phase='responding';restoreInput();setInput(true);document.getElementById('chat-ta').placeholder=`How do you respond to ${G.charName}?`;},500);
   }
 }
-function nextDay(){driftEmotions();G.day++;document.getElementById('skip-btn').style.display='none';beginDay();}
+function nextDay(){driftEmotions();G.day++;document.getElementById('skip-btn').style.display='none';beginDay();if(G.day%3===0)saveToBrowser();}
+
+// ---- SAVE & SHARE ----
+function _serializeState(){
+  const n={};for(const k in G.needs)n[k]=Math.round(G.needs[k].v);
+  return{v:1,cn:G.charName,an:G.animal,ag:G.age,sa:G.startAge,bg:G.background,
+    p:{...G.personality},em:{...G.emotions},sk:{...G.skills},pr:{...G.playerRoles},nd:n,
+    wl:{c:G.wallet.coins,g:G.wallet.gems},cos:{o:G.cosmetics.outfit,a:G.cosmetics.accessory},
+    own:{o:[...G.owned.outfits],a:[...G.owned.accessories],pk:[...G.owned.packs],prem:G.owned.premium},
+    pp:{...G.packProgress},ev:[...G.eventHistory],mem:[...G.memories],cm:[...G.charMemory],
+    day:G.day,ru:{...G.history.roleUsage}};
+}
+function generateSaveCode(){try{return btoa(encodeURIComponent(JSON.stringify(_serializeState())));}catch(e){return null;}}
+function loadSaveCode(code,silent){
+  try{
+    const raw=JSON.parse(decodeURIComponent(atob(code)));
+    if(!raw||raw.v!==1)throw new Error('bad version');
+    G.charName=raw.cn||'';G.animal=raw.an||'pig';G.age=raw.ag||5;G.startAge=raw.sa||5;G.background=raw.bg||'';
+    for(const k of Object.keys(G.personality))G.personality[k]=raw.p?.[k]??50;
+    for(const k of Object.keys(G.emotions))G.emotions[k]=raw.em?.[k]??50;
+    for(const k of Object.keys(G.skills))G.skills[k]=raw.sk?.[k]??20;
+    for(const k of Object.keys(G.playerRoles))G.playerRoles[k]=raw.pr?.[k]??5;
+    for(const k in raw.nd){if(G.needs[k])G.needs[k].v=raw.nd[k];}
+    G.wallet={coins:raw.wl?.c??150,gems:raw.wl?.g??0};
+    G.cosmetics={outfit:raw.cos?.o||'classic',accessory:raw.cos?.a||'none'};
+    G.owned.outfits=raw.own?.o||['classic'];G.owned.accessories=raw.own?.a||['none'];
+    G.owned.packs=raw.own?.pk||[];G.owned.premium=!!raw.own?.prem;
+    G.packProgress={...raw.pp};G.eventHistory=[...raw.ev];G.memories=[...raw.mem];G.charMemory=[...raw.cm];
+    G.day=raw.day||1;for(const k in raw.ru)G.history.roleUsage[k]=raw.ru[k]||0;
+    if(!silent)showToast(`Welcome back, ${G.charName}! 👋`);
+    return true;
+  }catch(e){if(!silent)showToast('Invalid save code — check and try again.');return false;}
+}
+function saveToBrowser(){
+  const code=generateSaveCode();
+  if(code)localStorage.setItem('wemakoshi-save',code);
+}
+function loadFromBrowser(){
+  const code=localStorage.getItem('wemakoshi-save');
+  if(!code)return false;
+  return loadSaveCode(code,true);
+}
+function copySaveCode(){
+  const code=generateSaveCode();
+  if(!code)return;
+  navigator.clipboard.writeText(code).then(()=>showToast('Save code copied! 📋')).catch(()=>showToast('Copy failed — check browser permissions.'));
+}
+function loadFromInput(){
+  const inp=document.getElementById('save-code-input');
+  const code=inp?.value.trim();
+  if(!code)return;
+  if(loadSaveCode(code)){inp.value='';closeDash();updateAllUI();updateCharSVG();}
+}
+function getSaveURL(){
+  const code=generateSaveCode();
+  return code?`${location.origin}${location.pathname}?save=${encodeURIComponent(code)}`:null;
+}
+function shareSaveURL(){
+  const url=getSaveURL();if(!url)return;
+  const text=`${G.charName} (Age ${G.age}) — Day ${G.day} in Wemakoshi! Follow their journey:`;
+  if(navigator.share){navigator.share({title:`${G.charName}'s Story – Wemakoshi`,text,url}).catch(()=>{});}
+  else{navigator.clipboard.writeText(url).then(()=>showToast('Share link copied! 🔗')).catch(()=>showToast('Copy failed.'));}
+}
+function shareStoryCard(){
+  const A=ANIMALS[G.animal]||ANIMALS.pig;
+  const score=G.history.interactions.length?Math.round(G.history.interactions.reduce((s,i)=>s+i.score,0)/G.history.interactions.length):0;
+  const text=`I'm raising ${G.charName} the ${A.name} in Wemakoshi!
+${A.emoji} Age ${G.age} · Day ${G.day} · Care ${score}/100
+Play now: ${location.origin}${location.pathname}`;
+  if(navigator.share){navigator.share({title:`${G.charName}'s Wemakoshi Story`,text}).catch(()=>{});}
+  else{navigator.clipboard.writeText(text).then(()=>showToast('Story card copied! 🪪')).catch(()=>showToast('Copy failed.'));}
+}
+let _pendingSaveCode=null;
+function checkURLLoad(){
+  const p=new URLSearchParams(location.search);
+  if(!p.has('save'))return;
+  _pendingSaveCode=p.get('save');
+  history.replaceState({},'',location.pathname);
+  try{
+    const raw=JSON.parse(decodeURIComponent(atob(_pendingSaveCode)));
+    const ok=confirm(`Load ${raw.cn||'this character'}'s save? (Age ${raw.ag||'?'}, Day ${raw.day||'?'})`);
+    if(ok&&loadSaveCode(_pendingSaveCode,true)){
+      document.getElementById('setup-screen').classList.remove('active');
+      document.getElementById('game-screen').classList.add('active');
+      updateAllUI();updateCharSVG();initMobileTabs();setVH();initAI();
+      showToast(`${G.charName}'s story loaded! 👋`);
+    }
+  }catch(e){}
+  _pendingSaveCode=null;
+}
+
+// ---- MILESTONES & LIFE ENDING ----
+function showMilestone(emoji,title,desc,isFinal){
+  const ov=document.getElementById('milestone-overlay');
+  document.getElementById('milestone-emoji').textContent=emoji;
+  document.getElementById('milestone-title').textContent=title;
+  document.getElementById('milestone-desc').textContent=desc;
+  if(isFinal){
+    const btn=ov.querySelector('.milestone-close');
+    btn.textContent='See Life Summary →';
+    btn.onclick=()=>{closeMilestone();};
+  } else {
+    const btn=ov.querySelector('.milestone-close');
+    btn.textContent='Continue →';
+    btn.onclick=closeMilestone;
+  }
+  ov.classList.add('show');
+}
+function closeMilestone(){document.getElementById('milestone-overlay').classList.remove('show');}
+function showLifeEnding(){
+  G._endingShown=true;
+  const ints=G.history.interactions;
+  const score=ints.length?Math.round(ints.reduce((s,i)=>s+i.score,0)/ints.length):0;
+  const A=ANIMALS[G.animal]||ANIMALS.pig;
+  const arch=detectCaregiverArchetype();
+  const legacy=score>=80?'extraordinary':score>=60?'meaningful':score>=40?'honest':'complicated';
+  const msgs={extraordinary:`You gave ${G.charName} something rare — someone who showed up, every time, and meant it. They lived a full life because of how you loved them.`,
+    meaningful:`${G.charName} grew in ways they couldn't have alone. You weren't perfect, but you were present. That mattered more than you know.`,
+    honest:`${G.charName}'s journey wasn't always easy, and neither was yours. But you stayed. That counts for more than a score ever could.`,
+    complicated:`Every caregiver has gaps. So does every story. ${G.charName} is who they are — complicated, resilient — partly because of the moments you tried.`};
+  document.getElementById('ending-title').textContent=`${G.charName}'s Story`;
+  document.getElementById('ending-sub').textContent=`${A.emoji} A ${A.name} · Lived ${G.age} years · ${G.day} days together`;
+  document.getElementById('ending-score').textContent=score;
+  document.getElementById('ending-msg').textContent=msgs[legacy];
+  document.getElementById('life-ending').classList.add('open');
+  addChat('sys',`<em>✨ ${G.charName} has reached the end of their story. Age ${G.age}.</em>`);
+}
+function startLegacy(){
+  // Pass personality nudges to next character via URL
+  document.getElementById('life-ending').classList.remove('open');
+  const nudges={o:Math.round(G.personality.openness),c:Math.round(G.personality.conscientiousness),
+    e:Math.round(G.personality.extraversion),a:Math.round(G.personality.agreeableness),n:Math.round(G.personality.neuroticism)};
+  const nudgeStr=btoa(JSON.stringify(nudges));
+  showToast('Starting a new chapter… 🌱');
+  setTimeout(()=>{
+    // Reset to setup with legacy nudges stored
+    localStorage.setItem('wemakoshi-legacy',nudgeStr);
+    location.reload();
+  },1500);
+}
 
 // ---- DASHBOARD ----
 function openDash(){renderDash();document.getElementById('dashboard').classList.add('open');}
@@ -2974,7 +3260,48 @@ if('serviceWorker' in navigator){
 }
 
 // Init
+checkURLLoad();
+// Offer to restore previous save if no URL save
+if(!_pendingSaveCode){
+  const prev=localStorage.getItem('wemakoshi-save');
+  if(prev){
+    try{
+      const raw=JSON.parse(decodeURIComponent(atob(prev)));
+      if(raw&&raw.v===1&&raw.cn){
+        const ok=confirm(`Resume ${raw.cn}'s story? (Age ${raw.ag}, Day ${raw.day})`);
+        if(ok&&loadSaveCode(prev,true)){
+          document.getElementById('setup-screen').classList.remove('active');
+          document.getElementById('game-screen').classList.add('active');
+          updateAllUI();updateCharSVG();initMobileTabs();setVH();initAI();
+          showToast(`Welcome back, ${G.charName}! 👋`);
+        }
+      }
+    }catch(e){}
+  }
+}
 initAnimalGrid();
 </script>
+<!-- Milestone overlay -->
+<div id="milestone-overlay">
+  <div class="milestone-card">
+    <div class="milestone-emoji" id="milestone-emoji">🎉</div>
+    <div class="milestone-title" id="milestone-title">A New Chapter</div>
+    <div class="milestone-desc" id="milestone-desc"></div>
+    <button class="milestone-close" onclick="closeMilestone()">Continue →</button>
+  </div>
+</div>
+
+<!-- Life ending screen -->
+<div id="life-ending">
+  <div class="ending-title" id="ending-title">A Life Well Lived</div>
+  <div class="ending-sub" id="ending-sub"></div>
+  <div class="ending-score" id="ending-score">—</div>
+  <div class="ending-label">Care Score</div>
+  <div class="ending-msg" id="ending-msg"></div>
+  <div class="ending-actions">
+    <button class="ending-btn" onclick="shareStoryCard()">🌐 Share Story</button>
+    <button class="ending-btn primary" onclick="startLegacy()">🌱 Begin Legacy</button>
+  </div>
+</div>
 </body>
 </html>

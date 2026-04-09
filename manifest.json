@@ -1,0 +1,34 @@
+{
+  "name": "Wemakoshi — Grow a Life",
+  "short_name": "Wemakoshi",
+  "description": "Care for an AI companion across their life journey. Grow their skills, shape their story.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#160d12",
+  "theme_color": "#f35c9a",
+  "categories": ["games", "lifestyle", "education"],
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

@@ -2353,9 +2353,14 @@ function beginDay(){
   if(G.day>1&&G.day%7===0){
     setTimeout(()=>{addChat('weekly',generateWeeklyReport());},600);
   }
-  addChat('sys',`— Day ${G.day} —`);
-  const autoLog=generateAutoLog();
-  if(autoLog)setTimeout(()=>addChat('narrator',autoLog),300);
+  // Day 1 gets a clean cinematic open — no day counter, no auto-log, just the event
+  if(G.day===1){
+    setTimeout(()=>addChat('sys',`✨ ${G.charName}'s story begins.`),200);
+  } else {
+    addChat('sys',`— Day ${G.day} —`);
+    const autoLog=generateAutoLog();
+    if(autoLog)setTimeout(()=>addChat('narrator',autoLog),300);
+  }
   // Collect available story pack events (40% chance if packs owned)
   let packPool=[];
   for(const packId of G.owned.packs){
@@ -3085,7 +3090,9 @@ async function checkProactiveMessage(){
 
 async function triggerGreeting(){
   showBubbleThinking(); // shows typing dots in inline chat
-  const reply=await callClaude([{role:'user',content:`[SYSTEM: Game just started. Say a warm, personality-filled first greeting as ${G.charName}. 1-2 sentences max.]`}],buildSystemPrompt());
+  const prompt=`[Your caregiver is back. Say something natural — a brief, in-character reaction to them returning. 1-2 sentences max.
+RULES: Do NOT say "welcome", do NOT mention Wemakoshi, do NOT call yourself anyone's companion or guide. Do NOT introduce yourself. Just react naturally as ${G.charName} — maybe reference what you were doing, how you're feeling, or something on your mind. Be warm but grounded.]`;
+  const reply=await callClaude([{role:'user',content:prompt}],buildSystemPrompt());
   if(reply){const clean=parseAgentActions(reply);G.chatHistory.push({role:'assistant',content:reply});showBubble(clean,true);}
   else{closeBubble();setInput(true);}
 }
@@ -3134,18 +3141,19 @@ function updateAIStatus(){
 }
 function initAI(){
   updateAIStatus();
-  // If Groq is configured, greet immediately
+  // On Day 1 the event opening line IS the introduction — no separate greeting needed.
+  // Only trigger a greeting when resuming a saved game (the player is coming back).
+  if(G.day===1)return;
   if(localStorage.getItem('wemakoshi-groq-key')){
-    setTimeout(()=>triggerGreeting(),1500);
+    setTimeout(()=>triggerGreeting(),1200);
     return;
   }
-  // Otherwise try WebLLM in background (if WebGPU available)
   if(navigator.gpu){
     setTimeout(async()=>{
       const ok=await _ensureWllm();
       updateAIStatus();
       if(ok)triggerGreeting();
-    },1500);
+    },1200);
   }
 }
 

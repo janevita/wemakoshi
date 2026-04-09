@@ -353,8 +353,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   .game-header{padding:6px 10px;gap:4px;flex-wrap:nowrap;}
   .header-center{display:none;}
   .game-title{font-size:20px;}
-  .hbtn{padding:5px 9px;font-size:11px;}
-  .header-right{gap:5px;}
+  .hbtn{padding:5px 9px;font-size:13px;}
+  .btn-lbl{display:none;}
+  .header-right{gap:5px;align-items:center;}
 
   /* Body: single panel at a time */
   .game-body{display:block;position:relative;overflow:hidden;height:100%;}
@@ -623,8 +624,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
         <span class="coin-disp">🪙 <span id="hdr-coins">150</span></span>
         <span class="gem-disp">💎 <span id="hdr-gems">0</span></span>
       </div>
-      <button class="hbtn" onclick="openShop()">🛍️ Shop</button>
-      <button class="hbtn dash" onclick="openDash()">📊 Dashboard</button>
+      <button class="hbtn" onclick="openShop()">🛍️<span class="btn-lbl"> Shop</span></button>
+      <button class="hbtn dash" onclick="openDash()">📊<span class="btn-lbl"> Dashboard</span></button>
       <button class="hbtn voice-hbtn" id="voice-btn" onclick="toggleVoice()" title="Character voice on/off">🔊</button>
       <button class="hbtn" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark">🌙</button>
       <div id="ai-chip" onclick="openAISettings()" title="AI settings">⚪ Scripted</div>

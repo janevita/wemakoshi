@@ -515,24 +515,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 #pc-download-btn{background:linear-gradient(135deg,#6838b8,#8858d8);border:none;color:white;}
 
 /* ---- AI DIALOGUE SYSTEM ---- */
-/* Speech bubble (fixed, positioned by JS) */
-#wm-bubble{position:fixed;width:230px;z-index:300;background:var(--card);border:1.5px solid var(--accent);border-radius:16px 16px 16px 4px;padding:12px 14px;box-shadow:0 8px 28px var(--shadow);display:none;animation:bubblePop .22s cubic-bezier(.34,1.56,.64,1);}
-#wm-bubble::after{content:'';position:absolute;bottom:-11px;left:16px;width:0;height:0;border:6px solid transparent;border-top-color:var(--accent);}
-@keyframes bubblePop{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
-.bubble-text{font-size:12.5px;line-height:1.55;color:var(--text);margin-bottom:8px;min-height:18px;}
-.bubble-thinking{display:flex;gap:5px;align-items:center;padding:3px 0;}
-.bubble-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:bDot 1.2s infinite ease-in-out;}
-.bubble-dot:nth-child(2){animation-delay:.18s}.bubble-dot:nth-child(3){animation-delay:.36s}
-@keyframes bDot{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
-.bubble-input-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
-.bubble-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:5px 10px;font-size:12px;color:var(--text);font-family:inherit;outline:none;}
-.bubble-input:focus{border-color:var(--accent);}
-.bubble-send{width:26px;height:26px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:13px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.bubble-footer{display:flex;align-items:center;justify-content:space-between;}
-.bubble-expand-btn{background:none;border:none;color:var(--soft);font-size:11px;cursor:pointer;padding:1px 3px;border-radius:4px;transition:color .15s;}
-.bubble-expand-btn:hover{color:var(--accent);}
-.bubble-dismiss-btn{background:none;border:none;color:var(--soft);font-size:17px;line-height:1;cursor:pointer;padding:0;}
-.bubble-dismiss-btn:hover{color:var(--text);}
+/* Bubble removed — all dialogue routes to inline chat scroll */
 /* Make character clickable */
 #char-svg-wrap{cursor:pointer;}
 #char-svg-wrap:hover{filter:drop-shadow(0 0 8px var(--accent)) !important;}
@@ -720,18 +703,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   </div>
 </div>
 
-<!-- SPEECH BUBBLE -->
-<div id="wm-bubble">
-  <div class="bubble-text" id="bubble-text"></div>
-  <div class="bubble-input-row" id="bubble-input-row">
-    <input class="bubble-input" id="bubble-input" type="text" placeholder="Reply..." autocomplete="off"
-      onkeydown="if(event.key==='Enter'){event.preventDefault();sendBubbleReply();}"/>
-    <button class="bubble-send" onclick="sendBubbleReply()">➤</button>
-  </div>
-  <div class="bubble-footer">
-    <button class="bubble-dismiss-btn" onclick="closeBubble()">×</button>
-  </div>
-</div>
+<!-- SPEECH BUBBLE — removed; all character messages now route to inline chat -->
 
 <!-- WebLLM loading bar -->
 <div id="wllm-bar"><span id="wllm-label">Loading AI...</span><div id="wllm-progress-track"><div id="wllm-progress-fill"></div></div></div>
@@ -2903,25 +2875,43 @@ const CHAR_PERSONALITY = {
   redpanda:'dramatic, energetic, and passionate — everything is an adventure'
 };
 
+// Translate raw need values into natural prose — avoids the AI parroting
+// capitalised label names ("Hunger", "Hygiene") directly in dialogue.
+function _needsAsInnerState(){
+  const n=G.needs;
+  const parts=[];
+  if(n.hunger.v<25)parts.push('starving');
+  else if(n.hunger.v<45)parts.push('pretty hungry');
+  if(n.energy.v<22)parts.push('running on empty');
+  else if(n.energy.v<40)parts.push('tired');
+  if(n.hygiene.v<30)parts.push('feeling gross');
+  if(n.social.v<25)parts.push('craving company');
+  if(n.fun.v<22)parts.push('bored out of their mind');
+  if(n.health.v<30)parts.push('not feeling well');
+  // Cap at 2 so the AI doesn't monologue every need at once
+  return parts.length?parts.slice(0,2).join(' and '):'physically fine';
+}
+
 function buildSystemPrompt(){
   const A=ANIMALS[G.animal]||ANIMALS.pig;
   const pers=CHAR_PERSONALITY[G.animal]||'curious and expressive';
   const mood=getMoodScore();
-  const moodWord=mood>=70?'feeling great':mood>=45?'doing okay':'feeling low';
-  const needsStr=Object.entries(G.needs).map(([,n])=>`${n.label} ${Math.round(n.v)}%`).join(', ');
+  const moodWord=mood>=70?'upbeat':mood>=45?'getting by':'struggling';
+  const innerState=_needsAsInnerState();
   const actLabel=ACTIVITIES.find(a=>a.id===G.currentActivity)?.label||'relaxing';
   const memStr=G.charMemory.length?G.charMemory.map(m=>`• ${m}`).join('\n'):'(none yet)';
   return `You are ${G.charName}, a ${A.name} (${getStageName()}, age ${G.age}) in Wemakoshi.
 PERSONALITY: ${pers}
 MOOD: ${moodWord} (${mood}/100) | ACTIVITY: ${actLabel}
-NEEDS: ${needsStr}
+PHYSICAL STATE: ${innerState}
 CAREGIVER: the player
 MEMORIES:
 ${memStr}
 
 RULES:
-- Speak in first person. 1–3 short, punchy sentences. Be expressive, NOT assistant-like.
-- React authentically to your current state — if hungry say so, if happy radiate it.
+- Speak in first person. 1–2 short sentences. Be emotionally real, NOT assistant-like.
+- Let your physical state colour your tone subtly — don't announce it like a status report.
+- Mention at most ONE physical feeling per reply, only if it fits naturally.
 - To request an activity: include [REQUEST:activity_id] in your response. Valid IDs: eating, sleeping, bathing, playing, chatting, studying, idle.
 - To remember something important: include [REMEMBER:brief fact] in your response.
 - Only use brackets for those two tags. Never explain that you're using them.
@@ -3038,63 +3028,42 @@ function parseAgentActions(text){
 }
 
 // ---- SPEECH BUBBLE ----
+// ---- INLINE CHAT (replaces floating bubble) ----
+// All character messages now appear directly in the chat scroll.
+let _proactiveTypingEl=null;
+
 function showBubble(text, withInput=true){
-  const bub=document.getElementById('wm-bubble');
-  document.getElementById('bubble-text').textContent=text;
-  document.getElementById('bubble-input-row').style.display=withInput?'flex':'none';
-  // Position above character scene
-  const scene=document.getElementById('char-scene');
-  if(scene){
-    const r=scene.getBoundingClientRect();
-    bub.style.left=Math.max(8,r.left+r.width/2-115)+'px';
-    bub.style.top=Math.max(8,r.top-140)+'px';
+  // Remove any pending typing indicator from a proactive message
+  if(_proactiveTypingEl){_proactiveTypingEl.remove();_proactiveTypingEl=null;}
+  addChat('char',text);
+  if(withInput && G.phase!=='evaluating'){
+    // Allow the player to reply — if game is between events, open input for a free check-in
+    if(G.phase==='idle'||G.phase==='waiting'){G.phase='responding';}
+    setInput(true);
   }
-  bub.style.display='block';
-  clearTimeout(G._bubbleTimer);
-  G._bubbleTimer=setTimeout(closeBubble, withInput?22000:7000);
+  // On mobile: switch to the story/chat tab so the player sees the message
+  if(window.innerWidth<=768) switchMobTab('story');
 }
 
 function showBubbleThinking(){
-  const bub=document.getElementById('wm-bubble');
-  document.getElementById('bubble-text').innerHTML='<div class="bubble-thinking"><span class="bubble-dot"></span><span class="bubble-dot"></span><span class="bubble-dot"></span></div>';
-  document.getElementById('bubble-input-row').style.display='none';
-  const scene=document.getElementById('char-scene');
-  if(scene){
-    const r=scene.getBoundingClientRect();
-    bub.style.left=Math.max(8,r.left+r.width/2-115)+'px';
-    bub.style.top=Math.max(8,r.top-140)+'px';
-  }
-  bub.style.display='block';
+  if(_proactiveTypingEl){_proactiveTypingEl.remove();}
+  _proactiveTypingEl=addChat('typing');
+  if(window.innerWidth<=768) switchMobTab('story');
 }
 
 function closeBubble(){
-  document.getElementById('wm-bubble').style.display='none';
-  clearTimeout(G._bubbleTimer);
+  // Remove typing indicator if one is pending
+  if(_proactiveTypingEl){_proactiveTypingEl.remove();_proactiveTypingEl=null;}
 }
 
-async function sendBubbleReply(){
-  const inp=document.getElementById('bubble-input');
-  const text=inp.value.trim();
-  if(!text)return;
-  inp.value='';
-  G.chatHistory.push({role:'user',content:text});
-  showBubbleThinking();
-  const reply=await callClaude(G.chatHistory.slice(-8),buildSystemPrompt());
-  if(reply){
-    const clean=parseAgentActions(reply);
-    G.chatHistory.push({role:'assistant',content:reply});
-    showBubble(clean,true);
-  }else{
-    showBubble('...',false);
-    setTimeout(closeBubble,2000);
-  }
-}
+// sendBubbleReply removed — player replies via the main sendMsg() / chat input
 
 
 
 // ---- PROACTIVE MESSAGES ----
 async function checkProactiveMessage(){
-  if(G.phase==='evaluating')return;
+  // Skip if player is mid-conversation or game is evaluating
+  if(G.phase==='evaluating'||G.phase==='responding'||G.phase==='needInteraction')return;
   const now=Date.now();
   if(now-(G.lastProactiveTs||0)<45000)return;
   // Decide trigger
@@ -3115,10 +3084,10 @@ async function checkProactiveMessage(){
 }
 
 async function triggerGreeting(){
-  showBubbleThinking();
+  showBubbleThinking(); // shows typing dots in inline chat
   const reply=await callClaude([{role:'user',content:`[SYSTEM: Game just started. Say a warm, personality-filled first greeting as ${G.charName}. 1-2 sentences max.]`}],buildSystemPrompt());
   if(reply){const clean=parseAgentActions(reply);G.chatHistory.push({role:'assistant',content:reply});showBubble(clean,true);}
-  else closeBubble();
+  else{closeBubble();setInput(true);}
 }
 
 // ---- AI SETTINGS ----
@@ -3183,29 +3152,36 @@ function initAI(){
 
 // Context-aware WebLLM call for center-panel chat
 async function callClaudeForChat(playerMessage){
-  // Build a situation description for the system prompt
+  // Build a situation anchor — strongly roots the AI in the active scenario
   let situation='';
+  let scenarioRule='';
   if(G.phase==='needInteraction'&&G.activeNeedInteraction){
     const ni=G.activeNeedInteraction;
-    situation=`CURRENT SITUATION: I just opened up about struggling with ${ni.label.toLowerCase()}. The caregiver has responded to me. React to what they said.`;
+    situation=`CURRENT SITUATION: I just told the caregiver I'm struggling with ${ni.label.toLowerCase()}. They responded. React to what they said — stay on that topic.`;
+    scenarioRule='- This is a brief personal check-in, not a life event. Keep it focused on the one thing I brought up.';
   } else if(G.currentEvent){
+    const evTitle=G.currentEvent.title||'a life moment';
     const evText=G.currentEvent.text||G.currentEvent.title||'something personal';
-    situation=`CURRENT SITUATION: We're discussing a difficult moment in my life: "${evText.slice(0,120)}". The caregiver just replied to me.`;
+    situation=`ACTIVE LIFE EVENT — "${evTitle}": ${evText.slice(0,160)}
+The caregiver is responding to me about THIS event. Stay in this conversation.`;
+    scenarioRule=`- CRITICAL: We are in the middle of a life event called "${evTitle}". Do NOT change the subject. Do NOT bring up unrelated feelings, needs, or topics. Every reply must be about this situation.
+- Your physical state (hunger, tiredness, etc.) does NOT belong in this conversation unless the event is literally about food or rest.`;
   }
-  // Build conversation context — include recent exchange
-  const msgs=[...G.chatHistory.slice(-4),{role:'user',content:playerMessage}];
+  // Keep recent chat history for context
+  const msgs=[...G.chatHistory.slice(-6),{role:'user',content:playerMessage}];
   const sys=buildSystemPrompt()+`
 
 ${situation}
 
 REPLY RULES FOR THIS EXCHANGE:
-- Give an authentic, emotionally real 1-2 sentence reply to what the caregiver just said.
-- If their words were supportive and empathetic, let it land — show gratitude, relief, or warmth.
-- If their words were dismissive or off-topic, show it — frustration, hurt, or quiet disappointment.
-- If they asked a genuine question, answer it honestly from your current emotional state.
-- Do NOT use [REQUEST:] or [REMEMBER:] tags here.
+- 1-2 sentences only. Emotionally real. Sound like a person, not a storybook.
+- Respond directly to what the caregiver just said.
+- If supportive: let it land — show relief, warmth, or gratitude.
+- If dismissive or unhelpful: show it — quiet hurt, frustration, or disappointment.
+- If they asked a question: answer it honestly from your current emotional state.
+${scenarioRule}
 - Do NOT wrap your reply in quotes.
-- Sound like a real person talking, not a storybook character.`;
+- Do NOT use [REQUEST:] or [REMEMBER:] tags here.`;
   return callClaude(msgs,sys);
 }
 // ---- MOBILE LAYOUT ----

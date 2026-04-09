@@ -1556,9 +1556,9 @@ function handleEventResp(text){
 const _NEED_GOOD={
   hunger:[
     ()=>`"Yeah, okay. You're right — I need to actually eat something."`,
-    ()=>G.personality.extraversion>60?`"YES. Food. Thank you for saying it out loud."`:G.personality.neuroticism>60?`"I kept ignoring it. I'll go eat now, I promise."`:'"Good call. I'll take care of it."',
+    ()=>G.personality.extraversion>60?`"YES. Food. Thank you for saying it out loud."`:G.personality.neuroticism>60?`"I kept ignoring it. I'll go eat now, I promise."`:`"Good call. I'll take care of it."`,
     ()=>`"Ugh. I forget this every time. Thanks for the nudge."`,
-    ()=>G.personality.agreeableness>60?`"You always notice. I'll go eat, for real."`:'"Fine. I'll eat. But only because you asked."',
+    ()=>G.personality.agreeableness>60?`"You always notice. I'll go eat, for real."`:`"Fine. I'll eat. But only because you asked."`,
     ()=>`"My brain's been foggy. That's probably why. I'll fix it."`,
     ()=>G.age<=13?`"Can we make something together?"`:G.age>=30?`"I've been running on coffee all day. Real food it is."`:'"Yeah yeah, I know. Going now."',
   ],
@@ -1566,7 +1566,7 @@ const _NEED_GOOD={
     ()=>`"You're right. I'm running on empty and it shows."`,
     ()=>G.personality.neuroticism>60?`"I feel guilty stopping but... yeah. Rest it is."`:'"I just need to shut my brain off for a bit."',
     ()=>`"I needed permission to stop. Thank you."`,
-    ()=>G.age<=13?`"Okay. Can you tell me a story while I fall asleep?"`:'"I'll try. No promises I'll actually sleep though."',
+    ()=>G.age<=13?`"Okay. Can you tell me a story while I fall asleep?"`:`"I'll try. No promises I'll actually sleep though."`,
     ()=>`"Everything's blurring together. Sleep probably would help."`,
     ()=>G.personality.conscientiousness>60?`"I'll set an alarm. One hour. Then I'm back."`:'"Yeah. I give up. Bed time."',
   ],
@@ -1580,7 +1580,7 @@ const _NEED_GOOD={
   ],
   social:[
     ()=>`"Yeah. Just talking helps. Thanks for checking in."`,
-    ()=>G.personality.extraversion>60?`"I've been going stir-crazy alone. Thanks for noticing."`:'"I didn't realize how disconnected I felt until you said something."',
+    ()=>G.personality.extraversion>60?`"I've been going stir-crazy alone. Thanks for noticing."`:`"I didn't realize how disconnected I felt until you said something."`,
     ()=>`"Even just this — someone asking — it matters."`,
     ()=>G.age<=13?`"Will you stay and talk for a bit?"`:'"I forget that reaching out is an option."',
     ()=>`"The loneliness kind of creeps up. I appreciate you seeing it."`,
@@ -1590,21 +1590,21 @@ const _NEED_GOOD={
     ()=>`"That sounds really nice. Maybe I'll try. I forgot I'm allowed to enjoy things."`,
     ()=>G.personality.openness>60?`"You know what, I've been wanting to try something new. Maybe now's the time."`:'"Yeah. I should do something just for me."',
     ()=>`"I think I forgot what fun even feels like. Let's change that."`,
-    ()=>G.age<=13?`"Okay! Let's do it!"`:G.age>=30?`"I used to make time for this. I should again."`:'"Okay, I'll take a real break. Not phone scrolling — an actual break."',
+    ()=>G.age<=13?`"Okay! Let's do it!"`:G.age>=30?`"I used to make time for this. I should again."`:`"Okay, I'll take a real break. Not phone scrolling — an actual break."`,
     ()=>`"Everything's been so serious. A little joy sounds good."`,
-    ()=>G.personality.extraversion>60?`"Yes! I need this. Let's go."`:'"Quietly. Something quiet. But yeah — I'll try."',
+    ()=>G.personality.extraversion>60?`"Yes! I need this. Let's go."`:`"Quietly. Something quiet. But yeah — I'll try."`,
   ],
   health:[
     ()=>`"You're right. I'll actually take care of myself this week."`,
     ()=>G.personality.conscientiousness>60?`"I've been meaning to. I'll book that appointment."`:'"Okay. Body first. I hear you."',
     ()=>`"I've been ignoring the signals. Time to actually listen."`,
-    ()=>G.age>=30?`"I can't keep running on fumes. You're right."`:'"I guess I should. I've been feeling off."',
+    ()=>G.age>=30?`"I can't keep running on fumes. You're right."`:`"I guess I should. I've been feeling off."`,
     ()=>`"Thanks for pushing me on this. I needed it."`,
-    ()=>G.personality.agreeableness>60?`"I appreciate you caring enough to say something."`:'"Fine. I'll deal with it properly."',
+    ()=>G.personality.agreeableness>60?`"I appreciate you caring enough to say something."`:`"Fine. I'll deal with it properly."`,
   ],
 };
 const _NEED_WEAK={
-  hunger:[`"I'm not that hungry. I'll get to it."`,`"Later."`,G.personality.agreeableness<40?`"I didn't ask."`:'"I'll handle it when I'm ready."',`"Not now."`],
+  hunger:[`"I'm not that hungry. I'll get to it."`,`"Later."`,G.personality.agreeableness<40?`"I didn't ask."`:`"I'll handle it when I'm ready."`,`"Not now."`],
   energy:[`"I'll sleep when I'm done."`,`"I'm fine."`,`"Just a little longer."`,G.personality.neuroticism>60?`"I can't stop yet."`:'"Still stuff to do."'],
   hygiene:[`"I'll deal with it later."`,`"Not a priority right now."`,`"Tomorrow."`,`"I know, I know."`],
   social:[`"I'm used to it."`,`"It's fine."`,`"I don't need people right now."`,`"Maybe later."`],
@@ -1643,7 +1643,7 @@ function genCharResp(score,event){
       `"I hadn't thought about it that way. You changed something."`,
       p.agreeableness>60?`"That's exactly what I needed. You get it."`:p.neuroticism>60?`"I was scared to tell you. I'm glad I did."`:'"That actually landed. Thank you."',
       mood<45?`"Even when things are this hard, hearing that makes a difference."`:'"I feel a little lighter now. Genuinely."',
-      p.openness>60?`"You made me think about this differently. I mean that."`:'"Yeah. That's what I needed."',
+      p.openness>60?`"You made me think about this differently. I mean that."`:`"Yeah. That's what I needed."`,
       e.trust>60?`"I trust you. So when you say that, I believe it."`:'"That matters coming from you."',
       p.extraversion>60?`"Okay WOW yes that's exactly it, thank you!"`:'"...Yeah. Thank you."',
     ];
@@ -1668,7 +1668,7 @@ function genCharResp(score,event){
       `"It's not that simple, but okay."`,
       p.agreeableness>60?`"I appreciate you trying."`:'"Right."',
       `"I don't think you fully get it, but I'll let it go."`,
-      e.stress>65?`"I'm too tired to explain. Just... okay."`:'"That's one way to look at it."',
+      e.stress>65?`"I'm too tired to explain. Just... okay."`:`"That's one way to look at it."`,
     ];
     return pick(pool);
   }

@@ -1,6 +1,6 @@
 # Wemakoshi — Game Design Document
 
-**Version:** 1.0  
+**Version:** 1.2  
 **Last Updated:** April 2026
 
 ---
@@ -15,12 +15,13 @@ The player's goal is not to "win" but to **grow as a caregiver** — developing 
 
 ## Core Design Principles
 
-1. **The character is not a puppet.** It has its own wants, fears, and reactions. It can resist advice, make mistakes, and surprise the player.
-2. **Growth is emergent.** The character's development arises from accumulated experiences, not scripted progression.
-3. **Every role matters.** Different life challenges require different caregiver perspectives. A therapist approach to a legal problem may comfort but not solve; a lawyer approach to an emotional crisis may miss the point.
-4. **Consequences compound.** Early experiences shape later reactions. A child who was taught resilience handles teenage setbacks differently than one who was sheltered.
-5. **The player grows too.** Players develop intuition about when to push, when to listen, when to advise, and when to step back.
-6. **A life has an arc.** Every character ages from childhood to 65+, passes through milestone moments, and leaves a legacy that shapes the next character.
+1. **The character is a person.** They think, speak, and feel as a human being at their age — not as an animal. Their appearance is the form the player chose; their identity is entirely their own.
+2. **The character is not a puppet.** It has its own wants, fears, and reactions. It can resist advice, make mistakes, and surprise the player.
+3. **Growth is emergent.** The character's development arises from accumulated experiences, not scripted progression.
+4. **Every role matters.** Different life challenges require different caregiver perspectives. A therapist approach to a legal problem may comfort but not solve; a lawyer approach to an emotional crisis may miss the point.
+5. **Consequences compound.** Early experiences shape later reactions. A child who was taught resilience handles teenage setbacks differently than one who was sheltered.
+6. **The player grows too.** Players develop intuition about when to push, when to listen, when to advise, and when to step back.
+7. **A life has an arc.** Every character ages from childhood to 65+, passes through milestone moments, and leaves a legacy that shapes the next character.
 
 ---
 
@@ -28,38 +29,64 @@ The player's goal is not to "win" but to **grow as a caregiver** — developing 
 
 ### Identity (Player-configured at start)
 - **Name** — chosen by player
-- **Animal** — chosen from 8 free animals (see Animal System below)
+- **Animal** — chosen from 8 free animals (see Animal System below); determines visual appearance and personality flavor, not identity
 - **Starting age** — 5 (childhood), 13 (teen), 18 (young adult), or 30 (adult)
 - **Background seed** — a brief origin that seeds the Big Five personality (e.g., "grew up in a large family," "only child of a single parent," "recently moved to a new city")
 
+### Human Identity Model
+
+A foundational design decision: **characters do not know or think of themselves as animals.** The animal selection shapes visual design and informs a personality flavor — it does not define the character's self-concept, speech patterns, or inner world.
+
+In practice this means:
+- The character never references fur, paws, tails, whiskers, or species traits
+- Their dialogue, vocabulary, and concerns are authentically human at their current age
+- The CHAR_PERSONALITY system defines human temperament archetypes (e.g., "self-sufficient and sharp, with a dry wit") that happen to be selected by the animal choice — not animal behaviors
+
 ### Animal System
 
-Wemakoshi features 13 animal characters rendered as expressive SVG illustrations. Each animal has a unique color palette and body shape. The active cosmetic outfit overrides the animal's natural color scheme; the Classic outfit preserves each animal's natural look.
+Wemakoshi features 13 animal characters rendered as expressive SVG illustrations. Each animal has a unique color palette and body shape, and maps to a human personality archetype. The active cosmetic outfit overrides the animal's natural color scheme on the body; the head always keeps the animal's native colors.
 
 **Free Animals (8) — available to all players at character creation:**
 
-| Animal | Emoji | Personality Flavour |
-|--------|-------|---------------------|
-| Pig | 🐷 | Cheerful & curious |
-| Cat | 🐱 | Independent & clever |
-| Dog | 🐶 | Loyal & energetic |
-| Rabbit | 🐰 | Gentle & imaginative |
-| Bear | 🐻 | Calm & dependable |
-| Cow | 🐮 | Gentle & steady |
-| Duck | 🦆 | Playful & social |
-| Sheep | 🐑 | Fluffy & calm |
+| Animal | Emoji | Personality Archetype |
+|--------|-------|-----------------------|
+| Pig | 🐷 | Naturally curious and upbeat — finds joy in small things, asks a lot of questions |
+| Cat | 🐱 | Self-sufficient and sharp with dry wit — seems unbothered but cares deeply |
+| Dog | 🐶 | Openly enthusiastic and loyal — wears emotions on their sleeve |
+| Rabbit | 🐰 | Gentle and sincere with an anxious streak — deeply empathetic, sometimes overthinks |
+| Bear | 🐻 | Warm and grounded, a quiet protector — speaks carefully, makes others feel safe |
+| Cow | 🐮 | Patient and steady with a nurturing presence — never in a rush, always listening |
+| Duck | 🦆 | Chatty and social — fills silences, quick to make jokes, always has an opinion |
+| Sheep | 🐑 | Soft-spoken and reflective — observes more than they speak, but lands it when they do |
 
 **Premium Exotic Animals (5) — unlocked with Gems:**
 
-| Animal | Emoji | Gem Cost | Personality Flavour |
-|--------|-------|----------|---------------------|
-| Fox | 🦊 | 15 💎 | Clever & mischievous |
-| Panda | 🐼 | 15 💎 | Gentle & thoughtful |
-| Capybara | 🦫 | 20 💎 | Chill & social |
-| Penguin | 🐧 | 15 💎 | Dapper & determined |
-| Red Panda | 🦝 | 20 💎 | Curious & creative |
+| Animal | Emoji | Gem Cost | Personality Archetype |
+|--------|-------|----------|-----------------------|
+| Fox | 🦊 | 15 💎 | Sharp and playful with a hint of mischief — thinks quickly, gets bored of the obvious |
+| Panda | 🐼 | 15 💎 | Easygoing and quietly philosophical — low-key surface, surprisingly thoughtful underneath |
+| Capybara | 🦫 | 20 💎 | Extraordinarily unhurried with zen-like perspective — stress slides off them |
+| Penguin | 🐧 | 15 💎 | Composed and somewhat formal, privately quite warm and a little awkward in an endearing way |
+| Red Panda | 🦝 | 20 💎 | Passionate and expressive — rides emotional highs and lows hard, treats everything like a big deal |
 
 Premium animals do not appear in the character creation screen — they are exclusively accessible through the Shop once purchased.
+
+### Age-Stage Voice Profiles
+
+The character's speech, vocabulary, emotional register, and concerns shift authentically as they age. This is not cosmetic — the AI system prompt injects a detailed behavioral voice profile tuned to the character's current age, divided into seven sub-stages:
+
+| Age Range | Voice Profile Summary |
+|-----------|-----------------------|
+| 5–7 | Short sentences, literal thinking, "it's not fair," magical, can't always find the right word |
+| 8–9 | Starting to reason but feelings lead, worried about inclusion, earnest to a fault |
+| 10–12 | Aware childhood is ending, caring what peers think, beginning to develop opinions |
+| 13–14 | Everything high-stakes, identity forming, easily embarrassed, pushing back |
+| 15–17 | Stronger opinions, articulate and dramatic in the same breath, relationships feel profound |
+| 18–21 | Newly free and overwhelmed, building identity through choices and mistakes |
+| 22–25 | More self-aware, thinking about what life will actually look like |
+| 26–32 | Complexity accepted, responsibilities real, measured but still feeling deeply |
+| 33–38 | Lived-in language, quiet battles, watching what you thought was permanent change |
+| 39+ | Earned perspective, thinks about legacy, hard-won warmth and occasional weariness |
 
 ### Personality (Big Five model, scale 0–100)
 - **Openness** — curiosity, creativity, willingness to try new things
@@ -102,20 +129,20 @@ Cosmetics are purely visual — they do not affect gameplay stats. All cosmetics
 
 ### Outfits (8 total)
 
-Outfits recolor the animal's body using an override palette (main color, light accent, dark accent). The Classic outfit preserves each animal's natural colors.
+Outfits recolor the animal's body using an override palette (main color, light accent, dark accent). The Classic Denim outfit applies a blue denim palette to the body. Head, ear, and facial colors are always the animal's native palette and are never recolored by outfits.
 
 | Outfit | Cost | Notes |
 |--------|------|-------|
-| Classic Denim | Free | Each animal's natural look |
+| Classic Denim | Free | Blue denim palette — each animal's default styled look |
 | Forest Green | 80 🪙 | Earthy, nature-inspired |
-| Sunset Orange | 80 🪙 | Warm autumn tones |
-| Ocean Blue | 80 🪙 | Cool, calming blues |
-| Rose Quartz | 100 🪙 | Soft pinks and creams |
-| Midnight | 100 🪙 | Deep navy and slate |
+| Royal Red | 80 🪙 | Bold and proud |
+| Pastel Rose | 100 🪙 | Sweet and soft |
+| Ocean Blue | 100 🪙 | Deep and cool |
+| Sunset Orange | 120 🪙 | Warm and bright |
 | Galaxy | 10 💎 | Deep purple starfield |
-| Golden Hour | 10 💎 | Rich warm golds |
+| Vintage Gold | 8 💎 | Classic warm golds |
 
-### Accessories (8 total)
+### Accessories (9 total)
 
 Accessories are SVG overlays rendered on top of the character. Only one can be equipped at a time.
 
@@ -123,12 +150,12 @@ Accessories are SVG overlays rendered on top of the character. Only one can be e
 |-----------|------|-------------|
 | None | Free | No accessory |
 | Top Hat | 120 🪙 | A dapper little top hat |
-| Flower Crown | 80 🪙 | A wreath of small flowers |
-| Bow Tie | 60 🪙 | A classic bow tie |
-| Glasses | 60 🪙 | Round reading glasses |
-| Cape | 100 🪙 | A small hero's cape |
+| Flower Crown | 100 🪙 | A wreath of small flowers |
+| Sunglasses | 80 🪙 | Cool vibes |
+| Bow Tie | 80 🪙 | Very dapper |
+| Backpack | 100 🪙 | Adventure ready |
 | Wizard Hat | 12 💎 | A tall starry wizard hat |
-| Halo | 8 💎 | A glowing golden ring |
+| Star Glasses | 10 💎 | Shine bright |
 
 ---
 
@@ -320,7 +347,7 @@ Character responses to player inputs use a three-tier AI system, selected automa
 ### Tier 1 — Groq Cloud (Primary)
 If the player enters a Groq API key (free tier, no credit card required), responses are generated by **Llama 3.1 8B Instant** via Groq's OpenAI-compatible endpoint. This delivers fast, high-quality dialogue (~150 tokens/sec) across all devices including mobile.
 
-The character's personality, emotional state, memories, age, and recent conversation history are injected as a system prompt. The LLM generates in-character responses with natural variation, personality-appropriate language, and contextual memory recall.
+The character's personality, emotional state, memories, age, stage-specific voice profile, and recent conversation history are injected as a system prompt. The LLM generates in-character responses with natural variation, personality-appropriate language, and contextual memory recall.
 
 Invalid or expired keys are detected silently — the system falls back to the next tier without disrupting gameplay.
 
@@ -338,15 +365,55 @@ When no AI is available (no key, no WebGPU, or offline), the game uses a **perso
 
 The scripted system uses function-wrapped response generators — not static strings — so personality values are evaluated at runtime, producing genuinely varied and contextually appropriate responses even without an LLM.
 
+### AI System Prompt Design
+
+The system prompt is carefully engineered to prevent common failure modes:
+
+- **Human identity rule** — character is explicitly told they are a person and must not reference animal traits
+- **Age voice injection** — a detailed behavioral voice profile matching the character's exact age is included, shaping vocabulary, sentence length, emotional register, and concerns
+- **Need state prose** — raw need values (e.g., "Hunger: 23%") are converted to natural inner state descriptions ("pretty hungry") before injection, preventing label parroting
+- **Event anchoring** — when a life event is active, a CRITICAL rule block prevents the AI from drifting off-topic mid-conversation
+- **Inline dialogue** — all character speech appears in the chat scroll; no floating popup overlay
+
 ### AI Status UI
 A header chip shows the current AI tier (🟢 Groq / 🔵 Local AI / ⚪ Scripted). Clicking it opens the AI settings modal where players can enter or remove a Groq key, see tier availability, and trigger WebLLM loading manually.
+
+---
+
+## Voice System
+
+Wemakoshi supports full two-way voice interaction using the Web Speech API, requiring no external service or API key.
+
+### Character Voice (Text-to-Speech)
+Every line the character speaks in the chat scroll is read aloud automatically using the browser's speech synthesis engine. Voice behavior is tuned by life stage:
+
+| Stage | Pitch | Rate | Tone |
+|-------|-------|------|------|
+| Child (5–12) | 1.35 | 1.05 | Light, energetic |
+| Teen (13–17) | 1.15 | 1.02 | Animated, slightly elevated |
+| Young Adult (18–25) | 1.00 | 1.00 | Natural default |
+| Adult (26+) | 0.90 | 0.93 | Lower, more measured |
+
+The system selects from available browser voices, preferring local (non-network) English voices. For younger characters it biases toward voices with names suggesting a lighter timbre (Samantha, Karen, Ava, etc.).
+
+**Voice toggle:** A 🔊/🔇 button in the game header lets the player mute character voice at any time. The preference is persisted to `localStorage`. Speech is cancelled immediately when the player begins typing or sends a message.
+
+### Player Voice (Speech-to-Text)
+A 🎤 mic button sits next to the send button in the chat input area. Tapping it activates the browser's speech recognition engine. As the player speaks, their words transcribe live into the text field. When speech ends, the input is ready to review and send normally.
+
+- The mic button pulses red while listening
+- Sending a message automatically stops any active recording
+- Character speech is cancelled when the player sends, preventing overlap
+- If the browser does not support `SpeechRecognition` (Firefox), a friendly toast notifies the player
+
+**Browser support:** TTS is available in all modern browsers. STT is available in Chrome, Edge, and Safari.
 
 ---
 
 ## Player System
 
 ### Free-Text Interaction
-The player does **not** choose a role or pick from multiple-choice options. Instead, the character approaches with a problem, and the player **responds naturally via free text**. The system then analyzes what the player wrote to detect which caregiver skills they demonstrated.
+The player does **not** choose a role or pick from multiple-choice options. Instead, the character approaches with a problem, and the player **responds naturally via free text or voice**. The system then analyzes what the player wrote to detect which caregiver skills they demonstrated.
 
 This is a core design decision: the game teaches caregiving by letting people practice it naturally, not by selecting from a menu.
 
@@ -418,8 +485,8 @@ Every 7 in-game days, a **Weekly Caregiver Report** is delivered in-chat coverin
 ### Daily Loop
 1. **Morning Report** — Autonomous events, mood drift, auto-log of personality-driven behavior
 2. **Character Approaches** — A life event (built-in or story pack) fires, or an idle check-in
-3. **Free Conversation** — Player types natural responses (up to 3 exchanges per event)
-4. **Character Reacts** — Response quality determines how the character receives help; AI or scripted response generated
+3. **Free Conversation** — Player types or speaks natural responses (up to 3 exchanges per event)
+4. **Character Reacts** — Response quality determines how the character receives help; AI or scripted response generated and spoken aloud
 5. **Evaluation** — Score, detected roles, coaching feedback, stat changes
 6. **Day Summary** — Stats update, memory formed, time advances, coins awarded, auto-save
 7. **Weekly Report** (every 7 days) — In-chat narrative report
@@ -450,17 +517,18 @@ Wemakoshi has a dedicated logo and app icon:
 ### Character Representation
 Characters are **procedural SVG illustrations** rendered in real-time. Each animal has a distinct body shape, facial structure, ear type, and color palette. The SVG updates based on: active outfit (recolors the body), active accessory (SVG overlay), current mood (posture and expression), and current activity (sleeping, eating, studying, playing, etc.).
 
-Head and ear colors are always the animal's native palette — outfit recoloring applies only to the body, never the face.
+Head and ear colors are always the animal's native palette — outfit recoloring applies only to the body, never the face. Every outfit including Classic Denim applies a real color palette to the body.
 
 ### UI Layout
-- **Left panel** — Character SVG with mood indicators, needs bars, activity badge
-- **Center panel** — Story/dialogue: narrative scene, conversation bubbles, evaluation feedback
+- **Left panel** — Character SVG with mood indicators, needs bars, activity badge, scene prop
+- **Center panel** — Story/dialogue: narrative scene, conversation bubbles, evaluation feedback, chat input with mic button
 - **Right panel** — Skills, emotions, player stats, wallet
+- **Header** — Logo, day/age/stage info, wallet HUD, shop, dashboard, voice toggle, theme toggle, AI status chip
 - **Shop tab** — Cosmetics browser and gem store
 - **Dashboard** — Character Growth, Your Performance, Life Journal, Premium Insights, Save & Share tabs
 
 ### Mobile Layout
-On screens ≤ 767px, the three panels collapse into a bottom tab bar (🐾 Character / 💬 Story / 📊 Stats) with swipe-between-tab gesture support. The character tab shows a badge when new activity happens while browsing other tabs. iOS viewport height is handled via `--vh` CSS custom property updated on resize.
+On screens ≤ 767px, the three panels collapse into a bottom tab bar (🐾 Character / 💬 Story / 📊 Stats) with swipe-between-tab gesture support. The character tab shows a badge when new activity happens while browsing other tabs. iOS viewport height is handled via `--vh` CSS custom property updated on resize. Voice input and TTS work on mobile browsers that support the Web Speech API.
 
 ### Color & Tone
 Warm, rounded aesthetic with soft pastels and gentle gradients. Full dark/light theme support via CSS custom properties, switchable from both the welcome screen and the game header.
@@ -470,7 +538,7 @@ Warm, rounded aesthetic with soft pastels and gentle gradients. Full dark/light 
 ## Platform & Distribution
 
 ### PWA
-Wemakoshi is installable as a Progressive Web App on any platform. The service worker pre-caches the game shell, logo, and icon for fully offline gameplay. Auto-save ensures no progress is lost between sessions.
+Wemakoshi is installable as a Progressive Web App on any platform. The service worker pre-caches the game shell, logo, and icon for fully offline gameplay. Cache versioning ensures players always receive the latest build on update. Auto-save ensures no progress is lost between sessions.
 
 ### App Stores (via PWABuilder / Capacitor)
 - **Google Play** and **Microsoft Store** — via PWABuilder, wrapping the PWA in a Trusted Web Activity
@@ -484,7 +552,7 @@ Current live version: GitHub Pages (zero infrastructure, free, instant deploys v
 ## Technical Implementation
 
 ### Single-File Architecture
-The game is a single HTML file with embedded CSS and JavaScript — no build system, no external libraries, no server. Runs in any modern browser. The file is ~245KB.
+The game is a single HTML file with embedded CSS and JavaScript — no build system, no external libraries, no server. Runs in any modern browser.
 
 ### State Object (G)
 All game state lives in a single JavaScript object `G`:
@@ -512,16 +580,29 @@ G = {
 Game state is serialized via `_serializeState()` → `JSON.stringify()` → `encodeURIComponent()` → `btoa()`. The resulting base64 string is compact enough to embed in a URL query parameter. Deserialization reverses the chain with full validation (schema version check, safe defaults for missing keys). Schema version is `v:1`.
 
 ### SVG Character Rendering
-`buildCharSVG(animalKey, activityId, moodScore)` constructs the character SVG dynamically. Outfit colors override the animal's natural body palette via `ov/ovLt/ovDk` variables. Head, ear, and facial colors always use the animal's native `tc/tl/td` values, never overridden by outfits.
+`buildCharSVG(animalKey, activityId, moodScore)` constructs the character SVG dynamically. All outfits (including Classic Denim) define `ov/ovLt/ovDk` color values that override the animal's natural body palette. Head, ear, and facial colors always use the animal's native `tc/tl/td` values and are never overridden.
+
+### AI Prompt Architecture
+`buildSystemPrompt()` composes the full character context sent on every AI call:
+- Human identity and age (no species reference)
+- `CHAR_PERSONALITY` archetype — human temperament descriptor mapped from animal choice
+- `_getStageVoice()` — 10-level age-specific behavioral voice profile
+- `_needsAsInnerState()` — need values translated to natural prose (e.g., "pretty hungry and tired"), preventing AI label parroting
+- Character memories, mood, and current activity
+- Core rules including explicit prohibition on animal self-reference
+
+`callClaudeForChat()` appends a per-exchange situational block. When a life event is active, a `CRITICAL` event-anchoring rule prevents the AI from drifting off-topic mid-conversation.
+
+### Voice System
+`speakCharLine(text)` strips HTML and bracket tags from character dialogue, then calls `SpeechSynthesisUtterance` with age-tuned pitch and rate values. Voice selection prefers local English voices and biases toward lighter-timbre voices for younger characters. Voices are pre-loaded via `speechSynthesis.getVoices()` on init.
+
+`SpeechRecognition` (or `webkitSpeechRecognition`) powers player voice input. Interim results update the textarea live; final results close the mic automatically.
 
 ### NLP Role Detection
 Player responses are analyzed using a keyword + regex pattern matching engine. Each of the 6 roles has a weighted signal list. Scores are normalized and thresholded into strong/moderate/light detection. The overall quality score is computed from positive signals minus negative signals, with length and specificity bonuses.
 
 ### Canvas Charts
 All analytics charts (radar, line, bar) are rendered using the Canvas 2D API — no external charting library.
-
-### AI Integration
-Groq API calls use the OpenAI-compatible endpoint (`https://api.groq.com/openai/v1/chat/completions`, model `llama-3.1-8b-instant`). WebLLM uses `@mlc-ai/web-llm` via dynamic import from `esm.run`, loading `Llama-3.2-1B-Instruct-q4f32_1-MLC`. Both are gated: Groq by key presence, WebLLM by `navigator.gpu` availability.
 
 ---
 
@@ -539,9 +620,11 @@ Groq API calls use the OpenAI-compatible endpoint (`https://api.groq.com/openai/
 | v0.8 | ✅ Complete | Mobile-first layout, bottom tab bar, swipe gestures, PWA packaging, service worker |
 | v0.9 | ✅ Complete | Tiered AI dialogue (Groq → WebLLM → enriched scripted), AI settings UI |
 | v1.0 | ✅ Complete | Save code system, social sharing, 28-event life arc, milestone celebrations, life ending + legacy, branding assets |
-| v1.1 | 🔜 Planned | NPC relationship system (named friends, family, romantic interests with quality scores) |
-| v1.2 | 🔜 Planned | Character photo mode (download/share character SVG as styled card) |
-| v1.3 | 🔜 Planned | App store release (Google Play via PWABuilder, Apple App Store via Capacitor) |
+| v1.1 | ✅ Complete | Human identity model — characters think and speak as people, not animals; age-stage voice profiles; AI prompt overhaul (event anchoring, need prose, no label parroting, Day 1 entrance) |
+| v1.2 | ✅ Complete | Voice system — character TTS with age-tuned pitch/rate, player STT via mic button, voice toggle; outfit fix (Classic Denim now renders correctly) |
+| v1.3 | 🔜 Planned | NPC relationship system (named friends, family, romantic interests with quality scores) |
+| v1.4 | 🔜 Planned | Character photo mode (download/share character SVG as styled card) |
+| v1.5 | 🔜 Planned | App store release (Google Play via PWABuilder, Apple App Store via Capacitor) |
 | v2.0 | 🔜 Planned | Multiplayer care — two players raising the same character, seeing each other's responses |
 
 ---

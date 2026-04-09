@@ -2043,76 +2043,116 @@ function generateCharacterMessage(arch,avg){
   return`I can tell you're trying. Some of our conversations have really landed. I'd love more of those — the moments when you really see me.`;
 }
 
-function openProfileCard(){
+// Load logo as base64 data URL so downloaded SVGs also embed the logo
+async function _getLogoDataUrl(){
+  try{
+    const r=await fetch('./logo.png');
+    if(!r.ok)return null;
+    const blob=await r.blob();
+    return new Promise(res=>{const fr=new FileReader();fr.onload=e=>res(e.target.result);fr.readAsDataURL(blob);});
+  }catch(e){return null;}
+}
+
+async function openProfileCard(){
   const arch=detectCaregiverArchetype();
   const wrap=document.getElementById('profile-card-svg-wrap');
-  if(wrap)wrap.innerHTML=generateProfileCardSVG(arch);
+  const logo=await _getLogoDataUrl();
+  if(wrap)wrap.innerHTML=generateProfileCardSVG(arch,logo);
   document.getElementById('profile-card-modal').classList.add('open');
 }
 function closeProfileCard(){document.getElementById('profile-card-modal').classList.remove('open');}
 
-function generateProfileCardSVG(arch){
+// Wrap text into lines of at most maxChars, splitting on spaces
+function _svgLines(str,maxChars){
+  if(!str)return[''];
+  const words=str.split(' ');const lines=[];let cur='';
+  for(const w of words){
+    if((cur?cur+' '+w:w).length<=maxChars){cur=cur?cur+' '+w:w;}
+    else{if(cur)lines.push(cur);cur=w;}
+  }
+  if(cur)lines.push(cur);
+  return lines;
+}
+
+function generateProfileCardSVG(arch,logoDataUrl){
   const A=ANIMALS[G.animal]||ANIMALS.pig;
   const avg=G.history.interactions.length?Math.round(G.history.interactions.reduce((s,i)=>s+i.score,0)/G.history.interactions.length):0;
   const ru=G.history.roleUsage;const totalRU=Object.values(ru).reduce((s,v)=>s+v,0)||1;
   const topRoles=Object.entries(ru).sort((a,b)=>b[1]-a[1]).slice(0,3);
   const c=arch.color;
-  return`<svg viewBox="0 0 380 540" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;border-radius:14px">
+  // Title: split onto up to 2 lines (max 22 chars per line)
+  const titleFull=`${arch.emoji} ${arch.title}`;
+  const titleLines=_svgLines(titleFull,22);
+  const titleY=titleLines.length>1?82:92;
+  // Growth edge: up to 2 lines × 46 chars
+  const growLines=_svgLines(arch.grow,46).slice(0,2);
+  // Logo: use passed data URL or fall back to file ref
+  const logoHref=logoDataUrl||'./logo.png';
+  return`<svg viewBox="0 0 380 560" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;height:auto;display:block;border-radius:14px">
   <defs>
-    <linearGradient id="pcBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e0f18"/><stop offset="100%" stop-color="#2d1520"/></linearGradient>
-    <linearGradient id="pcHdr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c}"/><stop offset="100%" stop-color="${c}bb"/></linearGradient>
-    <filter id="pcs"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#00000018"/></filter>
+    <linearGradient id="pcBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a0d16"/><stop offset="100%" stop-color="#2a1320"/></linearGradient>
+    <linearGradient id="pcHdr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c}"/><stop offset="100%" stop-color="${c}cc"/></linearGradient>
+    <filter id="pcs"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#00000028"/></filter>
+    <clipPath id="logoClip"><rect x="20" y="14" width="130" height="26" rx="3"/></clipPath>
   </defs>
   <!-- Card background -->
-  <rect width="380" height="540" rx="20" fill="url(#pcBg)" filter="url(#pcs)"/>
-  <rect width="378" height="538" x="1" y="1" rx="19" fill="none" stroke="${c}33" stroke-width="1.5"/>
-  <!-- Header -->
-  <rect width="380" height="170" rx="20" fill="url(#pcHdr)"/>
-  <rect x="0" y="150" width="380" height="20" fill="${c}"/>
-  <!-- Wemakoshi title -->
-  <text x="26" y="36" font-size="11" font-weight="700" fill="rgba(255,255,255,.65)" font-family="sans-serif" letter-spacing="2.5">WEMAKOSHI</text>
-  <text x="354" y="36" font-size="11" font-weight="700" fill="rgba(255,255,255,.65)" font-family="sans-serif" text-anchor="end">✨ PREMIUM</text>
-  <!-- Animal emoji circle -->
-  <circle cx="62" cy="106" r="44" fill="rgba(255,255,255,.18)"/>
-  <text x="62" y="122" text-anchor="middle" font-size="48">${A.emoji}</text>
-  <!-- Archetype info -->
-  <text x="120" y="76" font-size="24" font-weight="700" fill="white" font-family="sans-serif">${arch.emoji} ${arch.title}</text>
-  <text x="120" y="98" font-size="12" fill="rgba(255,255,255,.75)" font-family="sans-serif" font-weight="600" letter-spacing=".5">${arch.subtitle.toUpperCase()}</text>
-  <text x="120" y="120" font-size="13" fill="rgba(255,255,255,.9)" font-family="sans-serif">Caring for ${G.charName||'—'} · Age ${G.age}</text>
-  <text x="120" y="140" font-size="11" fill="rgba(255,255,255,.7)" font-family="sans-serif">Day ${G.day} together</text>
+  <rect width="380" height="560" rx="20" fill="url(#pcBg)"/>
+  <rect width="378" height="558" x="1" y="1" rx="19" fill="none" stroke="${c}44" stroke-width="1.5"/>
+  <!-- Header gradient block -->
+  <rect width="380" height="180" rx="20" fill="url(#pcHdr)"/>
+  <rect x="0" y="162" width="380" height="18" fill="${c}"/>
+  <!-- Logo image (top-left) -->
+  <image href="${logoHref}" x="20" y="14" width="130" height="26" preserveAspectRatio="xMinYMid meet" clip-path="url(#logoClip)" style="filter:brightness(0) invert(1)"/>
+  <!-- PREMIUM badge (top-right) -->
+  <rect x="270" y="12" width="92" height="22" rx="11" fill="rgba(255,255,255,.18)"/>
+  <text x="316" y="27" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="sans-serif" letter-spacing=".5">✨ PREMIUM</text>
+  <!-- Animal circle -->
+  <circle cx="60" cy="118" r="42" fill="rgba(255,255,255,.2)"/>
+  <circle cx="60" cy="118" r="40" fill="rgba(255,255,255,.1)"/>
+  <text x="60" y="136" text-anchor="middle" font-size="44">${A.emoji}</text>
+  <!-- Archetype title (wrapped) -->
+  ${titleLines.map((ln,i)=>`<text x="116" y="${titleY+i*22}" font-size="17" font-weight="800" fill="white" font-family="sans-serif">${ln}</text>`).join('')}
+  <!-- Subtitle -->
+  <text x="116" y="${titleY+titleLines.length*22+6}" font-size="11" fill="rgba(255,255,255,.75)" font-family="sans-serif" font-weight="600" letter-spacing=".5">${arch.subtitle.toUpperCase()}</text>
+  <!-- Character info -->
+  <text x="116" y="${titleY+titleLines.length*22+26}" font-size="12" fill="rgba(255,255,255,.92)" font-family="sans-serif">Caring for ${G.charName||'—'} · Age ${G.age}</text>
+  <text x="116" y="${titleY+titleLines.length*22+43}" font-size="11" fill="rgba(255,255,255,.65)" font-family="sans-serif">Day ${G.day} together</text>
   <!-- Stats row -->
-  <rect x="20" y="182" width="100" height="62" rx="10" fill="white" opacity=".9"/>
-  <text x="70" y="208" text-anchor="middle" font-size="26" font-weight="800" fill="${c}" font-family="sans-serif">${avg}</text>
-  <text x="70" y="226" text-anchor="middle" font-size="9" fill="#a08090" font-family="sans-serif" font-weight="700">AVG SCORE</text>
-  <rect x="140" y="182" width="100" height="62" rx="10" fill="white" opacity=".9"/>
-  <text x="190" y="208" text-anchor="middle" font-size="26" font-weight="800" fill="${c}" font-family="sans-serif">${G.history.interactions.length}</text>
-  <text x="190" y="226" text-anchor="middle" font-size="9" fill="#a08090" font-family="sans-serif" font-weight="700">INTERACTIONS</text>
-  <rect x="260" y="182" width="100" height="62" rx="10" fill="white" opacity=".9"/>
-  <text x="310" y="208" text-anchor="middle" font-size="26" font-weight="800" fill="${c}" font-family="sans-serif">${G.day}</text>
-  <text x="310" y="226" text-anchor="middle" font-size="9" fill="#a08090" font-family="sans-serif" font-weight="700">DAYS</text>
-  <!-- Role bars -->
-  <text x="20" y="270" font-size="10" font-weight="700" fill="#a08090" font-family="sans-serif" letter-spacing="1">TOP ROLES</text>
+  <rect x="18" y="194" width="106" height="64" rx="11" fill="white" opacity=".93"/>
+  <text x="71" y="222" text-anchor="middle" font-size="28" font-weight="800" fill="${c}" font-family="sans-serif">${avg}</text>
+  <text x="71" y="242" text-anchor="middle" font-size="9" fill="#907080" font-family="sans-serif" font-weight="700" letter-spacing=".5">AVG SCORE</text>
+  <rect x="138" y="194" width="106" height="64" rx="11" fill="white" opacity=".93"/>
+  <text x="191" y="222" text-anchor="middle" font-size="28" font-weight="800" fill="${c}" font-family="sans-serif">${G.history.interactions.length}</text>
+  <text x="191" y="242" text-anchor="middle" font-size="9" fill="#907080" font-family="sans-serif" font-weight="700" letter-spacing=".5">INTERACTIONS</text>
+  <rect x="258" y="194" width="106" height="64" rx="11" fill="white" opacity=".93"/>
+  <text x="311" y="222" text-anchor="middle" font-size="28" font-weight="800" fill="${c}" font-family="sans-serif">${G.day}</text>
+  <text x="311" y="242" text-anchor="middle" font-size="9" fill="#907080" font-family="sans-serif" font-weight="700" letter-spacing=".5">DAYS</text>
+  <!-- Role bars section -->
+  <text x="20" y="284" font-size="10" font-weight="700" fill="#907080" font-family="sans-serif" letter-spacing="1.5">TOP ROLES</text>
   ${topRoles.map(([role,count],i)=>{const pct=Math.round((count/totalRU)*100);return`
-  <text x="20" y="${298+i*30}" font-size="12" font-weight="600" fill="#f5e0ec" font-family="sans-serif">${ROLES[role].icon} ${ROLES[role].label}</text>
-  <rect x="150" y="${285+i*30}" width="190" height="9" rx="4.5" fill="#4b2130"/>
-  <rect x="150" y="${285+i*30}" width="${Math.round(190*pct/100)}" height="9" rx="4.5" fill="${ROLES[role].color}"/>
-  <text x="348" y="${296+i*30}" font-size="10" font-weight="700" fill="#a08090" font-family="sans-serif">${pct}%</text>`}).join('')}
-  <!-- Archetype desc -->
-  <rect x="20" y="376" width="340" height="2" rx="1" fill="${c}33"/>
-  <text x="20" y="400" font-size="11" fill="#a08090" font-family="sans-serif" font-style="italic">"${arch.strength}"</text>
+  <text x="20" y="${310+i*32}" font-size="12" font-weight="600" fill="#f0d8e8" font-family="sans-serif">${ROLES[role].icon} ${ROLES[role].label}</text>
+  <rect x="148" y="${298+i*32}" width="192" height="10" rx="5" fill="#3a1828"/>
+  <rect x="148" y="${298+i*32}" width="${Math.max(4,Math.round(192*pct/100))}" height="10" rx="5" fill="${ROLES[role].color}"/>
+  <text x="348" y="${310+i*32}" font-size="10" font-weight="700" fill="#907080" font-family="sans-serif">${pct}%</text>`}).join('')}
+  <!-- Divider -->
+  <rect x="20" y="396" width="340" height="1.5" rx="1" fill="${c}44"/>
+  <!-- Strength quote -->
+  <text x="20" y="420" font-size="12" fill="#b090a0" font-family="sans-serif" font-style="italic">"${arch.strength}"</text>
   <!-- Growth edge -->
-  <text x="20" y="428" font-size="10" font-weight="700" fill="#a08090" font-family="sans-serif" letter-spacing="1">GROWTH EDGE</text>
-  <text x="20" y="446" font-size="11" fill="#f5e0ec" font-family="sans-serif">${arch.grow.slice(0,58)}${arch.grow.length>58?'...':''}</text>
+  <text x="20" y="450" font-size="10" font-weight="700" fill="#907080" font-family="sans-serif" letter-spacing="1.5">GROWTH EDGE</text>
+  ${growLines.map((ln,i)=>`<text x="20" y="${468+i*17}" font-size="12" fill="#f0d8e8" font-family="sans-serif">${ln}</text>`).join('')}
   <!-- Footer -->
-  <rect x="0" y="496" width="380" height="44" rx="20" fill="${c}18"/>
-  <rect x="0" y="476" width="380" height="20" fill="${c}18"/>
-  <text x="190" y="523" text-anchor="middle" font-size="10" fill="${c}" font-family="sans-serif" font-weight="700">wemakoshi.game · Grow a life. Learn to care.</text>
+  <rect x="0" y="514" width="380" height="46" rx="0" fill="${c}1a"/>
+  <rect x="0" y="534" width="380" height="26" rx="20" fill="${c}1a"/>
+  <rect x="0" y="514" width="380" height="12" fill="${c}1a"/>
+  <text x="190" y="542" text-anchor="middle" font-size="11" fill="${c}" font-family="sans-serif" font-weight="700">wemakoshi.game · Grow a life. Learn to care.</text>
 </svg>`;
 }
 
-function downloadProfileCard(){
+async function downloadProfileCard(){
   const arch=detectCaregiverArchetype();
-  const svgStr=generateProfileCardSVG(arch);
+  const logo=await _getLogoDataUrl();
+  const svgStr=generateProfileCardSVG(arch,logo);
   const blob=new Blob([svgStr],{type:'image/svg+xml'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');

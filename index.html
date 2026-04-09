@@ -2,7 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f35c9a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wemakoshi">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
 <title>Wemakoshi — Grow a Life</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;700&display=swap');
@@ -56,7 +63,7 @@
   --modal-overlay:rgba(30,10,20,.6);
   --coin-bg:rgba(212,144,10,.1);--gem-bg:rgba(96,48,168,.1);
 }
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:calc(var(--vh,1vh)*100);overflow-x:hidden;}
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;}
 
@@ -97,7 +104,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
 /* ===== GAME LAYOUT ===== */
-#game-screen{flex-direction:column;height:100vh;}
+#game-screen{flex-direction:column;height:100vh;height:calc(var(--vh,1vh)*100);}
 .game-header{display:flex;align-items:center;justify-content:space-between;padding:10px 22px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);z-index:20;}
 .game-title{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--accent);}
 .header-center{display:flex;gap:14px;font-size:13px;font-weight:600;color:var(--soft);}
@@ -277,7 +284,67 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-@media(max-width:960px){.game-body{grid-template-columns:1fr;}.panel-left,.panel-right{display:none;}}
+/* ===== MOBILE TAB BAR ===== */
+#mobile-tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1.5px solid var(--border);z-index:50;display:none;padding-bottom:env(safe-area-inset-bottom,0px);}
+#mobile-tabs.show{display:flex;}
+.mob-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;color:var(--soft);font-size:10px;font-weight:700;cursor:pointer;padding:8px 0 6px;transition:color .2s;position:relative;font-family:inherit;}
+.mob-tab .tab-icon{font-size:22px;line-height:1.1;}
+.mob-tab.active{color:var(--accent);}
+.mob-tab-badge{position:absolute;top:5px;right:calc(50% - 18px);width:9px;height:9px;background:var(--red);border-radius:50%;border:2px solid var(--card);display:none;}
+.mob-tab-badge.show{display:block;}
+
+/* ===== TABLET (768-1023px) ===== */
+@media(min-width:768px) and (max-width:1023px){
+  .game-body{grid-template-columns:210px 1fr;}
+  .panel-right{display:none;}
+}
+
+/* ===== MOBILE (<768px) ===== */
+@media(max-width:767px){
+  /* Header compact */
+  .game-header{padding:6px 10px;gap:4px;flex-wrap:nowrap;}
+  .header-center{display:none;}
+  .game-title{font-size:20px;}
+  .hbtn{padding:5px 9px;font-size:11px;}
+  .header-right{gap:5px;}
+
+  /* Body: single panel at a time */
+  .game-body{display:block;position:relative;overflow:hidden;height:100%;}
+  .panel-left,.panel-center,.panel-right{
+    position:absolute;inset:0;
+    display:none;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .panel-left.mob-show,.panel-center.mob-show,.panel-right.mob-show{display:flex;}
+
+  /* Center panel needs flex-column for chat layout */
+  .panel-center{flex-direction:column;}
+
+  /* Taller character scene on mobile */
+  .char-scene{height:260px;}
+  .char-svg-wrap{width:130px;height:190px;}
+
+  /* Bigger touch targets */
+  .need-track{height:10px;}
+  .alert-chip{padding:10px 12px;min-height:44px;}
+  .hbtn{min-height:36px;}
+
+  /* Chat textarea: prevent iOS auto-zoom (16px min) */
+  .chat-ta{font-size:16px;}
+  .chat-input-area{padding:10px 12px 12px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));}
+
+  /* Setup screen adjustments */
+  .setup-card{padding:20px 16px;}
+  .animal-grid{grid-template-columns:repeat(3,1fr)!important;}
+
+  /* Space for bottom tab bar */
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px));}
+
+  /* Shop/dashboard on mobile */
+  .shop-grid{grid-template-columns:repeat(2,1fr);}
+  .dash-modal{border-radius:14px;}
+}
 
 /* ===== WALLET HUD ===== */
 .wallet-hud{display:flex;align-items:center;gap:7px;}
@@ -305,7 +372,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .shop-tab.active{border-color:var(--accent);color:var(--accent);}
 .shop-body{padding:22px;min-height:320px;}
 .shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-@media(max-width:700px){.shop-grid{grid-template-columns:repeat(2,1fr);}}
+
 .shop-item{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 10px 12px;text-align:center;position:relative;transition:all .2s;}
 .shop-item:hover{border-color:var(--accent-l);transform:translateY(-2px);box-shadow:0 6px 18px var(--shadow);}
 .shop-item.owned{border-color:var(--green);}
@@ -426,42 +493,38 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 /* Make character clickable */
 #char-svg-wrap{cursor:pointer;}
 #char-svg-wrap:hover{filter:drop-shadow(0 0 8px var(--accent)) !important;}
-/* Full chat modal */
-#wm-chat-modal{position:fixed;inset:0;background:var(--modal-overlay);z-index:200;display:none;align-items:flex-end;justify-content:center;}
-#wm-chat-modal.open{display:flex;}
-.wm-chat-panel{background:var(--bg);border-radius:22px 22px 0 0;width:100%;max-width:560px;height:78vh;display:flex;flex-direction:column;box-shadow:0 -12px 48px var(--shadow);}
-.cp-header{display:flex;align-items:center;gap:10px;padding:14px 18px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.cp-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-glow);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;}
-.cp-name{font-weight:700;font-size:15px;color:var(--text);flex:1;}
-.cp-subtext{font-size:11px;color:var(--soft);}
-.cp-close-btn{background:none;border:none;color:var(--soft);font-size:22px;line-height:1;cursor:pointer;padding:0 2px;}
-.cp-close-btn:hover{color:var(--text);}
-.cp-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth;}
-.cp-msg{max-width:80%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.5;word-wrap:break-word;}
-.cp-msg.char{background:var(--accent-glow);border:1px solid var(--accent);color:var(--text);border-radius:4px 14px 14px 14px;align-self:flex-start;}
-.cp-msg.user{background:var(--accent);color:#fff;border-radius:14px 14px 4px 14px;align-self:flex-end;}
-.cp-msg.sys{background:none;color:var(--soft);font-size:11px;font-style:italic;align-self:center;padding:2px 8px;border:none;}
-.cp-msg.thinking{background:var(--accent-glow);border:1px solid var(--border);align-self:flex-start;padding:10px 16px;}
-.cp-input-area{display:flex;gap:8px;padding:12px 16px 16px;border-top:1px solid var(--border);flex-shrink:0;}
-.cp-textarea{flex:1;background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:8px 14px;font-size:13px;color:var(--text);font-family:inherit;outline:none;resize:none;line-height:1.45;max-height:90px;}
-.cp-textarea:focus{border-color:var(--accent);}
-.cp-send-btn{width:40px;height:40px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:opacity .15s;align-self:flex-end;}
-.cp-send-btn:disabled{opacity:.4;cursor:default;}
-/* API key modal */
-#api-key-modal{position:fixed;inset:0;background:var(--modal-overlay);z-index:250;display:none;align-items:center;justify-content:center;padding:24px;}
-#api-key-modal.open{display:flex;}
-.ak-panel{background:var(--card);border-radius:18px;padding:22px 24px;max-width:380px;width:100%;box-shadow:0 20px 60px var(--shadow);}
-.ak-panel h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:5px;}
-.ak-panel p{font-size:12px;color:var(--soft);margin-bottom:14px;line-height:1.55;}
-.ak-input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--text);font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:12px;letter-spacing:.5px;}
-.ak-input:focus{border-color:var(--accent);}
-.ak-actions{display:flex;gap:8px;}
+/* AI Settings modal */
+#ai-settings-modal{position:fixed;inset:0;background:var(--modal-overlay);z-index:260;display:none;align-items:center;justify-content:center;padding:24px;}
+#ai-settings-modal.open{display:flex;}
+.ais-panel{background:var(--card);border-radius:18px;padding:22px 24px;max-width:400px;width:100%;box-shadow:0 20px 60px var(--shadow);border:1px solid var(--border);}
+.ais-panel h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.ais-tiers{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;padding:10px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);}
+.ais-tier{font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;}
+.ais-tier .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.dot-on{background:var(--green);} .dot-off{background:var(--border);} .dot-loading{background:var(--yellow);}
+.ais-panel p{font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.55;}
+.ais-panel a{color:var(--accent);}
+.ais-input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--text);font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:12px;}
+.ais-input:focus{border-color:var(--accent);}
+.ais-actions{display:flex;gap:8px;}
+.ais-actions button{flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;}
+.ais-actions button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+/* AI status chip in header */
+#ai-chip{font-size:11px;font-weight:700;padding:4px 9px;border-radius:12px;background:var(--accent-glow);border:1px solid var(--border);color:var(--soft);cursor:pointer;white-space:nowrap;transition:all .2s;}
+#ai-chip.groq{border-color:var(--green);color:var(--green);}
+#ai-chip.wllm{border-color:var(--yellow);color:var(--yellow);}
+/* WebLLM loading bar */
+#wllm-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:10px 18px;display:none;align-items:center;gap:12px;z-index:300;font-size:12px;color:var(--soft);}
+#wllm-bar.show{display:flex;}
+#wllm-progress-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+#wllm-progress-fill{height:100%;background:var(--accent);border-radius:3px;width:0%;transition:width .3s;}
+#wllm-status-chip{position:fixed;top:60px;right:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:4px 10px;font-size:11px;color:var(--soft);z-index:50;display:none;}
+#wllm-status-chip.show{display:block;}
 .ak-actions button{flex:1;padding:9px;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:opacity .15s;}
 .ak-actions button:hover{opacity:.85;}
 #ak-save-btn{background:var(--accent);color:#fff;}
 #ak-cancel-btn{background:var(--border);color:var(--text);}
-.hbtn-ai{font-size:11px;padding:4px 8px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--soft);cursor:pointer;font-family:inherit;transition:all .15s;}
-.hbtn-ai.active{border-color:var(--green);color:var(--green);background:rgba(92,160,110,.1);}
+
 </style>
 </head>
 <body>
@@ -515,7 +578,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <button class="hbtn" onclick="openShop()">🛍️ Shop</button>
       <button class="hbtn dash" onclick="openDash()">📊 Dashboard</button>
       <button class="hbtn" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark">🌙</button>
-      <button class="hbtn-ai" id="ai-btn" onclick="openApiKeyModal()" title="Configure AI">🤖</button>
+      <div id="ai-chip" onclick="openAISettings()" title="AI settings">⚪ Scripted</div>
       <button class="hbtn" onclick="nextDay()" id="skip-btn" style="display:none">⏭ Next Day</button>
     </div>
   </div>
@@ -526,7 +589,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <div class="char-scene" id="char-scene">
         <div class="scene-bg bedroom" id="scene-bg"></div>
         <div class="scene-prop" id="scene-prop">🌱</div>
-        <div class="char-svg-wrap state-idle" id="char-svg-wrap" onclick="openChatModal()" title="Talk to your character"><!-- SVG injected here --></div>
+        <div class="char-svg-wrap state-idle" id="char-svg-wrap"><!-- SVG injected here --></div>
         <div class="zzz-wrap" id="zzz-wrap">
           <span class="zzz-item">z</span><span class="zzz-item">Z</span><span class="zzz-item">Z</span>
         </div>
@@ -560,6 +623,42 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       </div>
     </div>
   </div>
+  <!-- MOBILE TAB BAR -->
+  <div id="mobile-tabs">
+    <button class="mob-tab active" data-tab="char" onclick="switchMobTab('char')">
+      <span class="tab-icon">🐾</span>
+      <span>Character</span>
+      <span class="mob-tab-badge" id="char-tab-badge"></span>
+    </button>
+    <button class="mob-tab" data-tab="story" onclick="switchMobTab('story')">
+      <span class="tab-icon">💬</span>
+      <span>Story</span>
+    </button>
+    <button class="mob-tab" data-tab="stats" onclick="switchMobTab('stats')">
+      <span class="tab-icon">📊</span>
+      <span>Stats</span>
+    </button>
+  </div>
+</div>
+
+<!-- AI SETTINGS MODAL -->
+<div id="ai-settings-modal" onclick="if(event.target===this)closeAISettings()">
+  <div class="ais-panel">
+    <h3>🤖 AI Companion Settings</h3>
+    <div class="ais-tiers">
+      <div class="ais-tier"><span class="dot dot-off" id="dot-groq"></span><span id="lbl-groq">Groq AI — not configured</span></div>
+      <div class="ais-tier"><span class="dot dot-off" id="dot-wllm"></span><span id="lbl-wllm">Local AI (WebLLM) — standby</span></div>
+      <div class="ais-tier"><span class="dot dot-on"></span><span>Scripted responses — always available</span></div>
+    </div>
+    <p><strong>Best quality:</strong> Add a free Groq key — sign up (no credit card) at <a href="https://console.groq.com" target="_blank">console.groq.com</a> → API Keys → Create.</p>
+    <input class="ais-input" id="groq-key-input" type="password" placeholder="gsk_..." autocomplete="off"
+      onkeydown="if(event.key==='Enter')saveGroqKey()"/>
+    <div class="ais-actions">
+      <button class="primary" onclick="saveGroqKey()">Save Key</button>
+      <button onclick="clearGroqKey()">Remove Key</button>
+      <button onclick="closeAISettings()">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- SPEECH BUBBLE -->
@@ -571,45 +670,15 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     <button class="bubble-send" onclick="sendBubbleReply()">➤</button>
   </div>
   <div class="bubble-footer">
-    <button class="bubble-expand-btn" onclick="openChatModal()">💬 Open full chat</button>
     <button class="bubble-dismiss-btn" onclick="closeBubble()">×</button>
   </div>
 </div>
 
-<!-- AI FULL CHAT MODAL -->
-<div id="wm-chat-modal">
-  <div class="wm-chat-panel">
-    <div class="cp-header">
-      <div class="cp-avatar" id="cp-avatar">🐾</div>
-      <div>
-        <div class="cp-name" id="cp-name">—</div>
-        <div class="cp-subtext" id="cp-subtext">Your companion</div>
-      </div>
-      <button class="cp-close-btn" onclick="closeChatModal()">×</button>
-    </div>
-    <div class="cp-messages" id="cp-messages"></div>
-    <div class="cp-input-area">
-      <textarea class="cp-textarea" id="cp-textarea" rows="1" placeholder="Say something..."
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"></textarea>
-      <button class="cp-send-btn" id="cp-send-btn" onclick="sendChatMsg()">➤</button>
-    </div>
-  </div>
-</div>
+<!-- WebLLM loading bar -->
+<div id="wllm-bar"><span id="wllm-label">Loading AI...</span><div id="wllm-progress-track"><div id="wllm-progress-fill"></div></div></div>
+<div id="wllm-status-chip">AI ready ✓</div>
 
-<!-- API KEY MODAL -->
-<div id="api-key-modal">
-  <div class="ak-panel">
-    <h3>🤖 AI Companion Setup</h3>
-    <p>Enter your <strong>Anthropic API key</strong> to enable dynamic AI dialogue for your character.<br>
-    Your key is stored locally and never sent anywhere except the Anthropic API.</p>
-    <input class="ak-input" id="ak-input" type="password" placeholder="sk-ant-..." autocomplete="off"
-      onkeydown="if(event.key==='Enter')saveApiKey()"/>
-    <div class="ak-actions">
-      <button id="ak-save-btn" onclick="saveApiKey()">Save & Enable</button>
-      <button id="ak-cancel-btn" onclick="closeApiKeyModal()">Cancel</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- PROFILE CARD MODAL -->
 <div id="profile-card-modal">
@@ -1100,6 +1169,7 @@ function startGame(){
   document.getElementById('game-screen').classList.add('active');
   updateCharSVG();updateAllUI();
   startTick();startBlink();
+  initMobileTabs();
   beginDay();
   initAI();
 }
@@ -1236,6 +1306,7 @@ function updateAlertsUI(){
       <span class="a-text">${ni.alertMsg}</span>
       <span class="a-cta">→ Respond</span>
     </div>`).join('');
+  if(alerts.length>0&&window.innerWidth<=767)showCharBadge();
 }
 function updateAllUI(){
   document.getElementById('hdr-day').textContent=`Day ${G.day}`;
@@ -1339,29 +1410,19 @@ function sendMsg(){
   ta.value='';setInput(false);
   addChat('player',text);G.responseCount++;
   const typing=addChat('typing');
-  if(localStorage.getItem('wemakoshi-api-key')){
-    callClaudeForChat(text).then(reply=>{
-      typing.remove();
-      if(!reply){
-        // No reply or API error — fall back to scripted
-        if(G.phase==='needInteraction')handleNeedResp(text);
-        else handleEventResp(text);
-        return;
-      }
-      // Push to shared chat history so bubble/modal stays in sync
-      G.chatHistory.push({role:'user',content:text});
-      G.chatHistory.push({role:'assistant',content:reply});
-      if(G.phase==='needInteraction')handleNeedRespAI(text,reply);
-      else handleEventRespAI(text,reply);
-    });
-  } else {
-    // No API key — scripted system
-    setTimeout(()=>{
-      typing.remove();
+  callClaudeForChat(text).then(reply=>{
+    typing.remove();
+    if(!reply){
+      // WebLLM unavailable — scripted fallback
       if(G.phase==='needInteraction')handleNeedResp(text);
       else handleEventResp(text);
-    },900+Math.random()*700);
-  }
+      return;
+    }
+    G.chatHistory.push({role:'user',content:text});
+    G.chatHistory.push({role:'assistant',content:reply});
+    if(G.phase==='needInteraction')handleNeedRespAI(text,reply);
+    else handleEventRespAI(text,reply);
+  });
 }
 
 // AI response handler for event/story dialogue
@@ -1401,22 +1462,141 @@ function handleEventResp(text){
     } else {G.phase='responding';setInput(true);}
   }
 }
+// Rich scripted need responses — personality & mood driven
+const _NEED_GOOD={
+  hunger:[
+    ()=>`"Yeah, okay. You're right — I need to actually eat something."`,
+    ()=>G.personality.extraversion>60?`"YES. Food. Thank you for saying it out loud."`:G.personality.neuroticism>60?`"I kept ignoring it. I'll go eat now, I promise."`:'"Good call. I'll take care of it."',
+    ()=>`"Ugh. I forget this every time. Thanks for the nudge."`,
+    ()=>G.personality.agreeableness>60?`"You always notice. I'll go eat, for real."`:'"Fine. I'll eat. But only because you asked."',
+    ()=>`"My brain's been foggy. That's probably why. I'll fix it."`,
+    ()=>G.age<=13?`"Can we make something together?"`:G.age>=30?`"I've been running on coffee all day. Real food it is."`:'"Yeah yeah, I know. Going now."',
+  ],
+  energy:[
+    ()=>`"You're right. I'm running on empty and it shows."`,
+    ()=>G.personality.neuroticism>60?`"I feel guilty stopping but... yeah. Rest it is."`:'"I just need to shut my brain off for a bit."',
+    ()=>`"I needed permission to stop. Thank you."`,
+    ()=>G.age<=13?`"Okay. Can you tell me a story while I fall asleep?"`:'"I'll try. No promises I'll actually sleep though."',
+    ()=>`"Everything's blurring together. Sleep probably would help."`,
+    ()=>G.personality.conscientiousness>60?`"I'll set an alarm. One hour. Then I'm back."`:'"Yeah. I give up. Bed time."',
+  ],
+  hygiene:[
+    ()=>`"Ha. Yeah. I'll go get cleaned up. Sometimes you just need someone to say it."`,
+    ()=>`"Self-care has been... not happening. I hear you."`,
+    ()=>G.personality.agreeableness>60?`"You're so patient with me. Okay. Shower time."`:'"I was going to, eventually."',
+    ()=>`"Okay. I'll do it. It'll probably make me feel more human."`,
+    ()=>G.age>=18?`"You're right, I've been neglecting myself. Time to fix that."`:'"Do I have to? Ugh. Fine."',
+    ()=>`"I know I've been letting things slide. Going now."`,
+  ],
+  social:[
+    ()=>`"Yeah. Just talking helps. Thanks for checking in."`,
+    ()=>G.personality.extraversion>60?`"I've been going stir-crazy alone. Thanks for noticing."`:'"I didn't realize how disconnected I felt until you said something."',
+    ()=>`"Even just this — someone asking — it matters."`,
+    ()=>G.age<=13?`"Will you stay and talk for a bit?"`:'"I forget that reaching out is an option."',
+    ()=>`"The loneliness kind of creeps up. I appreciate you seeing it."`,
+    ()=>G.personality.agreeableness>60?`"I didn't want to bother anyone. But I'm glad you noticed."`:'"Okay. Maybe I do need some company."',
+  ],
+  fun:[
+    ()=>`"That sounds really nice. Maybe I'll try. I forgot I'm allowed to enjoy things."`,
+    ()=>G.personality.openness>60?`"You know what, I've been wanting to try something new. Maybe now's the time."`:'"Yeah. I should do something just for me."',
+    ()=>`"I think I forgot what fun even feels like. Let's change that."`,
+    ()=>G.age<=13?`"Okay! Let's do it!"`:G.age>=30?`"I used to make time for this. I should again."`:'"Okay, I'll take a real break. Not phone scrolling — an actual break."',
+    ()=>`"Everything's been so serious. A little joy sounds good."`,
+    ()=>G.personality.extraversion>60?`"Yes! I need this. Let's go."`:'"Quietly. Something quiet. But yeah — I'll try."',
+  ],
+  health:[
+    ()=>`"You're right. I'll actually take care of myself this week."`,
+    ()=>G.personality.conscientiousness>60?`"I've been meaning to. I'll book that appointment."`:'"Okay. Body first. I hear you."',
+    ()=>`"I've been ignoring the signals. Time to actually listen."`,
+    ()=>G.age>=30?`"I can't keep running on fumes. You're right."`:'"I guess I should. I've been feeling off."',
+    ()=>`"Thanks for pushing me on this. I needed it."`,
+    ()=>G.personality.agreeableness>60?`"I appreciate you caring enough to say something."`:'"Fine. I'll deal with it properly."',
+  ],
+};
+const _NEED_WEAK={
+  hunger:[`"I'm not that hungry. I'll get to it."`,`"Later."`,G.personality.agreeableness<40?`"I didn't ask."`:'"I'll handle it when I'm ready."',`"Not now."`],
+  energy:[`"I'll sleep when I'm done."`,`"I'm fine."`,`"Just a little longer."`,G.personality.neuroticism>60?`"I can't stop yet."`:'"Still stuff to do."'],
+  hygiene:[`"I'll deal with it later."`,`"Not a priority right now."`,`"Tomorrow."`,`"I know, I know."`],
+  social:[`"I'm used to it."`,`"It's fine."`,`"I don't need people right now."`,`"Maybe later."`],
+  fun:[`"Nothing sounds good."`,`"I don't have the energy."`,`"Maybe another time."`,`"I'm fine like this."`],
+  health:[`"I'll get over it."`,`"It's not that bad."`,`"Not now."`,`"I'll deal."`],
+};
+
 function handleNeedResp(text){
   const ni=G.activeNeedInteraction;
   const lo=text.toLowerCase();
   const isGood=ni.goodSignals.some(s=>lo.includes(s))||text.includes('?')||text.length>60;
-  if(isGood){addChat('char',ni.goodResp);ni.resolve(G);setTimeout(()=>showNeedEval(rand(65,85),ni),700);}
-  else{addChat('char',ni.weakResp);setTimeout(()=>showNeedEval(rand(28,48),ni),700);}
+  const needKey=Object.entries(G.needs).find(([k])=>ni===NEED_INTERACTIONS[k])?.[0]||'hunger';
+  const pool=isGood?_NEED_GOOD[needKey]:_NEED_WEAK[needKey];
+  const raw=pool?pick(pool):isGood?ni.goodResp:ni.weakResp;
+  const resp=typeof raw==='function'?raw():raw;
+  if(isGood){addChat('char',resp);ni.resolve(G);setTimeout(()=>showNeedEval(rand(65,85),ni),700);}
+  else{addChat('char',resp);setTimeout(()=>showNeedEval(rand(28,48),ni),700);}
   G.activeNeedInteraction=null;
 }
 function genCharResp(score,event){
-  const good=event?.goodResponses||[`"...Thank you. I really needed to hear that."`,`"That helps. More than you know."`,`"I hadn't thought about it that way."`];
-  const ok=event?.okResponses||[`"Yeah... I guess you're right."`,`"Maybe. I'll think about it."`,`"Thanks for listening."`];
-  const weak=event?.weakResponses||[`"...Okay."`,`"Sure. I'll figure it out."`,`"It's not that simple, but okay."`];
-  if(score>=75)return pick(good);
-  if(score>=55)return pick(ok);
-  if(score>=35)return pick(weak);
-  return G.emotions.trust>50?pick([`"That's not what I needed to hear."`,`"I opened up and that's all you have?"`]):pick([`"...Fine."`,`"Forget I said anything."`]);
+  const p=G.personality;const e=G.emotions;
+  const mood=getMoodScore();
+  // Event-specific responses take priority
+  const good=event?.goodResponses||null;
+  const ok=event?.okResponses||null;
+  const weak=event?.weakResponses||null;
+  if(score>=75&&good)return pick(good);
+  if(score>=55&&ok)return pick(ok);
+  if(score>=35&&weak)return pick(weak);
+  // Personality + mood driven generic pools
+  const name=G.charName;
+  if(score>=75){
+    const pool=[
+      `"...Thank you. I really needed to hear that."`,
+      `"That helps. More than you know."`,
+      `"I hadn't thought about it that way. You changed something."`,
+      p.agreeableness>60?`"That's exactly what I needed. You get it."`:p.neuroticism>60?`"I was scared to tell you. I'm glad I did."`:'"That actually landed. Thank you."',
+      mood<45?`"Even when things are this hard, hearing that makes a difference."`:'"I feel a little lighter now. Genuinely."',
+      p.openness>60?`"You made me think about this differently. I mean that."`:'"Yeah. That's what I needed."',
+      e.trust>60?`"I trust you. So when you say that, I believe it."`:'"That matters coming from you."',
+      p.extraversion>60?`"Okay WOW yes that's exactly it, thank you!"`:'"...Yeah. Thank you."',
+    ];
+    return pick(pool);
+  }
+  if(score>=55){
+    const pool=[
+      `"Yeah... I guess you're right."`,
+      `"Maybe. I'll think about it."`,
+      `"Thanks for listening. It helps a bit."`,
+      p.conscientiousness>60?`"I'll take that on board. Really."`:'"Okay. I hear you."',
+      mood<40?`"I'm not all the way there yet, but that helps."`:'"That gives me something to work with."',
+      `"I needed someone to say something. Even if I'm not ready yet."`,
+      p.neuroticism>60?`"Part of me pushes back, but I know you're trying."`:'"Fair point."',
+    ];
+    return pick(pool);
+  }
+  if(score>=35){
+    const pool=[
+      `"...Okay."`,
+      `"Sure. I'll figure it out."`,
+      `"It's not that simple, but okay."`,
+      p.agreeableness>60?`"I appreciate you trying."`:'"Right."',
+      `"I don't think you fully get it, but I'll let it go."`,
+      e.stress>65?`"I'm too tired to explain. Just... okay."`:'"That's one way to look at it."',
+    ];
+    return pick(pool);
+  }
+  // Score < 35 — dismissive / hurt
+  if(e.trust>55){
+    return pick([
+      `"That's not what I needed to hear."`,
+      `"I opened up and that's all you have?"`,
+      `"I thought you'd understand."`,
+      p.neuroticism>60?`"That actually stings a little."`:'"Not helpful."',
+    ]);
+  }
+  return pick([
+    `"...Fine."`,
+    `"Forget I said anything."`,
+    `"I knew you wouldn't get it."`,
+    p.extraversion<40?`"*silence*"`:'"Whatever."',
+  ]);
 }
 
 function showNeedEval(score,ni){
@@ -1464,6 +1644,7 @@ function startNeedInteraction(needKey){
   const ni=NEED_INTERACTIONS[needKey];if(!ni)return;
   G.activeNeedInteraction=ni;G.phase='needInteraction';G.responseCount=0;
   restoreInput();document.getElementById('skip-btn').style.display='none';
+  if(window.innerWidth<=767)switchMobTab('story');
   addChat('sys',`<em>You check in on ${G.charName}...</em>`);
   setTimeout(()=>{addChat('char',pick(ni.openings));setInput(true);document.getElementById('chat-ta').placeholder=`How do you respond about their ${ni.label.toLowerCase()}?`;},400);
 }
@@ -2430,18 +2611,95 @@ RULES:
 - You have your own personality and opinions. Don't be overly helpful or sycophantic.`;
 }
 
-async function callClaude(messages, system){
-  const key=localStorage.getItem('wemakoshi-api-key');
+// ---- WEBLLM ENGINE ----
+let _wllmEngine=null;
+let _wllmLoading=false;
+let _wllmReady=false;
+
+function _wllmSetProgress(pct,label){
+  const bar=document.getElementById('wllm-bar');
+  const fill=document.getElementById('wllm-progress-fill');
+  const lbl=document.getElementById('wllm-label');
+  if(bar)bar.classList.add('show');
+  if(fill)fill.style.width=pct+'%';
+  if(lbl)lbl.textContent=label||'Loading AI model...';
+}
+function _wllmHideBar(){
+  const bar=document.getElementById('wllm-bar');
+  if(bar)bar.classList.remove('show');
+  const chip=document.getElementById('wllm-status-chip');
+  if(chip){chip.classList.add('show');setTimeout(()=>chip.classList.remove('show'),4000);}
+}
+
+async function _ensureWllm(){
+  if(_wllmReady&&_wllmEngine)return true;
+  if(_wllmLoading){
+    // Wait for ongoing init
+    while(_wllmLoading)await new Promise(r=>setTimeout(r,300));
+    return _wllmReady;
+  }
+  _wllmLoading=true;
+  try{
+    _wllmSetProgress(2,'Importing AI runtime...');
+    const {CreateMLCEngine}=await import('https://esm.run/@mlc-ai/web-llm');
+    _wllmEngine=await CreateMLCEngine('Llama-3.2-1B-Instruct-q4f32_1-MLC',{
+      initProgressCallback:(p)=>{
+        const pct=Math.round((p.progress||0)*100);
+        _wllmSetProgress(pct,'Loading AI model '+pct+'% (cached after first run)');
+      }
+    });
+    _wllmReady=true;
+    _wllmHideBar();
+    updateAIStatus();
+    showToast('Local AI ready! 🤖');
+  }catch(e){
+    console.error('WebLLM init failed:',e);
+    _wllmEngine=null;_wllmReady=false;
+    _wllmSetProgress(0,'AI unavailable — using scripted responses');
+    setTimeout(()=>{const bar=document.getElementById('wllm-bar');if(bar)bar.classList.remove('show');},3500);
+  }
+  _wllmLoading=false;
+  return _wllmReady;
+}
+
+// ---- GROQ API (Tier 1) ----
+async function _callGroq(messages,system){
+  const key=localStorage.getItem('wemakoshi-groq-key');
   if(!key)return null;
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
+    const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:180,system,messages})
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({model:'llama-3.1-8b-instant',messages:[{role:'system',content:system},...messages],max_tokens:200,temperature:0.85})
     });
-    if(!r.ok){const e=await r.json();console.error('Claude API err',e);return null;}
-    return (await r.json()).content[0].text;
-  }catch(e){console.error('Claude fetch failed',e);return null;}
+    if(!r.ok){
+      const e=await r.json();
+      console.error('Groq err:',e);
+      if(r.status===401||r.status===403){showToast('Groq key invalid — check AI settings');localStorage.removeItem('wemakoshi-groq-key');updateAIStatus();}
+      return null;
+    }
+    return(await r.json()).choices[0].message.content||null;
+  }catch(e){console.error('Groq fetch failed:',e);return null;}
+}
+
+// ---- MASTER LLM CALL — Groq → WebLLM → null (scripted fallback) ----
+async function callClaude(messages,system){
+  // Tier 1: Groq
+  const groqReply=await _callGroq(messages,system);
+  if(groqReply!==null)return groqReply;
+  // Tier 2: WebLLM (only attempt if WebGPU is available)
+  if(navigator.gpu){
+    const ok=await _ensureWllm();
+    if(ok){
+      try{
+        const msgs=[{role:'system',content:system},...messages];
+        const r=await _wllmEngine.chat.completions.create({messages:msgs,max_tokens:180,temperature:0.82});
+        return r.choices[0].message.content||null;
+      }catch(e){console.error('WebLLM call failed:',e);}
+    }
+  }
+  // Tier 3: scripted (caller handles null)
+  return null;
 }
 
 function parseAgentActions(text){
@@ -2509,78 +2767,16 @@ async function sendBubbleReply(){
     const clean=parseAgentActions(reply);
     G.chatHistory.push({role:'assistant',content:reply});
     showBubble(clean,true);
-    if(document.getElementById('wm-chat-modal').classList.contains('open'))appendCpMsg('char',clean);
   }else{
     showBubble('...',false);
     setTimeout(closeBubble,2000);
   }
 }
 
-// ---- FULL CHAT MODAL ----
-function openChatModal(){
-  closeBubble();
-  const modal=document.getElementById('wm-chat-modal');
-  modal.classList.add('open');
-  const A=ANIMALS[G.animal]||ANIMALS.pig;
-  document.getElementById('cp-avatar').textContent=A.emoji||'🐾';
-  document.getElementById('cp-name').textContent=G.charName||'Your character';
-  document.getElementById('cp-subtext').textContent=`${A.name} · ${getStageName()} · Day ${G.day}`;
-  renderChatPanel();
-  if(G.chatHistory.length===0)triggerGreeting(true);
-  setTimeout(()=>document.getElementById('cp-textarea')?.focus(),100);
-}
 
-function closeChatModal(){document.getElementById('wm-chat-modal').classList.remove('open');}
-
-function renderChatPanel(){
-  const el=document.getElementById('cp-messages');
-  el.innerHTML=G.chatHistory.map(m=>{
-    const clean=m.content.replace(/\[REQUEST:\w+\]/g,'').replace(/\[REMEMBER:[^\]]+\]/g,'').trim();
-    if(m.role==='system')return`<div class="cp-msg sys">${clean}</div>`;
-    return`<div class="cp-msg ${m.role==='user'?'user':'char'}">${clean}</div>`;
-  }).join('');
-  el.scrollTop=el.scrollHeight;
-}
-
-function appendCpMsg(role,text){
-  const el=document.getElementById('cp-messages');
-  if(!el)return;
-  const d=document.createElement('div');
-  d.className=`cp-msg ${role}`;
-  d.textContent=text;
-  el.appendChild(d);
-  el.scrollTop=el.scrollHeight;
-}
-
-async function sendChatMsg(){
-  const inp=document.getElementById('cp-textarea');
-  const text=inp.value.trim();
-  if(!text)return;
-  inp.value='';inp.style.height='';
-  appendCpMsg('user',text);
-  G.chatHistory.push({role:'user',content:text});
-  // Thinking indicator
-  const think=document.createElement('div');
-  think.className='cp-msg thinking';
-  think.innerHTML='<div class="bubble-thinking"><span class="bubble-dot"></span><span class="bubble-dot"></span><span class="bubble-dot"></span></div>';
-  const msgs=document.getElementById('cp-messages');
-  msgs.appendChild(think);msgs.scrollTop=msgs.scrollHeight;
-  const btn=document.getElementById('cp-send-btn');
-  if(btn)btn.disabled=true;
-  const reply=await callClaude(G.chatHistory.slice(-10),buildSystemPrompt());
-  think.remove();if(btn)btn.disabled=false;
-  if(reply){
-    const clean=parseAgentActions(reply);
-    G.chatHistory.push({role:'assistant',content:reply});
-    appendCpMsg('char',clean);
-  }else{
-    appendCpMsg('sys','(No API key configured — tap 🤖 in the header to add your key)');
-  }
-}
 
 // ---- PROACTIVE MESSAGES ----
 async function checkProactiveMessage(){
-  if(!localStorage.getItem('wemakoshi-api-key'))return;
   if(G.phase==='evaluating')return;
   const now=Date.now();
   if(now-(G.lastProactiveTs||0)<45000)return;
@@ -2598,63 +2794,77 @@ async function checkProactiveMessage(){
     const clean=parseAgentActions(reply);
     G.chatHistory.push({role:'assistant',content:reply});
     showBubble(clean,true);
-    if(document.getElementById('wm-chat-modal').classList.contains('open'))appendCpMsg('char',clean);
   }
 }
 
-async function triggerGreeting(inModal=false){
-  if(!localStorage.getItem('wemakoshi-api-key')){
-    if(inModal)appendCpMsg('sys','(Add your Anthropic API key via 🤖 to enable AI dialogue)');
-    return;
-  }
-  if(inModal){
-    const think=document.createElement('div');
-    think.className='cp-msg thinking';
-    think.innerHTML='<div class="bubble-thinking"><span class="bubble-dot"></span><span class="bubble-dot"></span><span class="bubble-dot"></span></div>';
-    document.getElementById('cp-messages').appendChild(think);
-    const reply=await callClaude([{role:'user',content:`[SYSTEM: First greeting of the session. Say a warm, personality-filled hello as ${G.charName}. 1-2 sentences max.]`}],buildSystemPrompt());
-    think.remove();
-    if(reply){const clean=parseAgentActions(reply);G.chatHistory.push({role:'assistant',content:reply});appendCpMsg('char',clean);}
-  } else {
-    showBubbleThinking();
-    const reply=await callClaude([{role:'user',content:`[SYSTEM: Game just started. Say a warm, personality-filled first greeting as ${G.charName}. 1-2 sentences max.]`}],buildSystemPrompt());
-    if(reply){const clean=parseAgentActions(reply);G.chatHistory.push({role:'assistant',content:reply});showBubble(clean,true);}
-    else closeBubble();
-  }
+async function triggerGreeting(){
+  showBubbleThinking();
+  const reply=await callClaude([{role:'user',content:`[SYSTEM: Game just started. Say a warm, personality-filled first greeting as ${G.charName}. 1-2 sentences max.]`}],buildSystemPrompt());
+  if(reply){const clean=parseAgentActions(reply);G.chatHistory.push({role:'assistant',content:reply});showBubble(clean,true);}
+  else closeBubble();
 }
 
-// ---- API KEY MODAL ----
-function openApiKeyModal(){
-  document.getElementById('api-key-modal').classList.add('open');
-  const inp=document.getElementById('ak-input');
-  inp.value=localStorage.getItem('wemakoshi-api-key')||'';
+// ---- AI SETTINGS ----
+function openAISettings(){
+  const modal=document.getElementById('ai-settings-modal');
+  modal.classList.add('open');
+  const inp=document.getElementById('groq-key-input');
+  const key=localStorage.getItem('wemakoshi-groq-key')||'';
+  inp.value=key?'●'.repeat(Math.min(key.length,20)):'';
+  updateAIStatus();
   setTimeout(()=>inp.focus(),100);
 }
-function closeApiKeyModal(){document.getElementById('api-key-modal').classList.remove('open');}
-function saveApiKey(){
-  const val=document.getElementById('ak-input').value.trim();
-  if(val)localStorage.setItem('wemakoshi-api-key',val);
-  else localStorage.removeItem('wemakoshi-api-key');
-  updateAIBtn();closeApiKeyModal();
+function closeAISettings(){document.getElementById('ai-settings-modal').classList.remove('open');}
+function saveGroqKey(){
+  let val=document.getElementById('groq-key-input').value.trim();
+  if(!val||/^●+$/.test(val)){closeAISettings();return;}
+  if(!val.startsWith('gsk_')){showToast('Groq keys start with gsk_ — check your key');return;}
+  localStorage.setItem('wemakoshi-groq-key',val);
+  showToast('Groq key saved! AI now uses Groq 🤖');
+  updateAIStatus();
+  closeAISettings();
 }
-function updateAIBtn(){
-  const btn=document.getElementById('ai-btn');
-  if(!btn)return;
-  const has=!!localStorage.getItem('wemakoshi-api-key');
-  btn.className=`hbtn-ai${has?' active':''}`;
-  btn.textContent=has?'🤖 On':'🤖';
-  btn.title=has?'AI enabled — click to change key':'Configure AI companion';
+function clearGroqKey(){
+  localStorage.removeItem('wemakoshi-groq-key');
+  document.getElementById('groq-key-input').value='';
+  showToast('Groq key removed');
+  updateAIStatus();
 }
-
+function updateAIStatus(){
+  const hasGroq=!!localStorage.getItem('wemakoshi-groq-key');
+  const hasWllm=_wllmReady;
+  // Header chip
+  const chip=document.getElementById('ai-chip');
+  if(chip){
+    if(hasGroq){chip.textContent='🟢 Groq';chip.className='hbtn';chip.style.color='var(--green)';chip.style.borderColor='var(--green)';}
+    else if(hasWllm){chip.textContent='🟡 Local AI';chip.className='hbtn';chip.style.color='';chip.style.borderColor='';}
+    else{chip.textContent='⚪ Scripted';chip.className='hbtn';chip.style.color='var(--soft)';chip.style.borderColor='';}
+  }
+  // Modal tier dots
+  const dg=document.getElementById('dot-groq');const lg=document.getElementById('lbl-groq');
+  if(dg&&lg){dg.className='dot '+(hasGroq?'dot-on':'dot-off');lg.textContent=hasGroq?'Groq AI (llama-3.1-8b-instant) — active ✓':'Groq AI — not configured';}
+  const dw=document.getElementById('dot-wllm');const lw=document.getElementById('lbl-wllm');
+  if(dw&&lw){dw.className='dot '+(hasWllm?'dot-on':_wllmLoading?'dot-loading':'dot-off');lw.textContent=hasWllm?'Local AI (WebLLM) — ready ✓':_wllmLoading?'Local AI — loading...':'Local AI — standby';}
+}
 function initAI(){
-  updateAIBtn();
-  if(localStorage.getItem('wemakoshi-api-key')){
-    setTimeout(()=>triggerGreeting(false),2000);
+  updateAIStatus();
+  // If Groq is configured, greet immediately
+  if(localStorage.getItem('wemakoshi-groq-key')){
+    setTimeout(()=>triggerGreeting(),1500);
+    return;
+  }
+  // Otherwise try WebLLM in background (if WebGPU available)
+  if(navigator.gpu){
+    setTimeout(async()=>{
+      const ok=await _ensureWllm();
+      updateAIStatus();
+      if(ok)triggerGreeting();
+    },1500);
   }
 }
 
 
-// Context-aware Claude call for center-panel chat
+// Context-aware WebLLM call for center-panel chat
 async function callClaudeForChat(playerMessage){
   // Build a situation description for the system prompt
   let situation='';
@@ -2681,6 +2891,88 @@ REPLY RULES FOR THIS EXCHANGE:
 - Sound like a real person talking, not a storybook character.`;
   return callClaude(msgs,sys);
 }
+// ---- MOBILE LAYOUT ----
+let _mobTab='story';
+
+function switchMobTab(tab){
+  _mobTab=tab;
+  // Show/hide panels
+  document.querySelectorAll('.panel-left,.panel-center,.panel-right').forEach(p=>p.classList.remove('mob-show'));
+  const map={char:'panel-left',story:'panel-center',stats:'panel-right'};
+  document.querySelector('.'+map[tab])?.classList.add('mob-show');
+  // Update tab active state
+  document.querySelectorAll('.mob-tab').forEach(t=>{
+    t.classList.toggle('active',t.dataset.tab===tab);
+  });
+  // Clear char tab badge when switching to character
+  if(tab==='char'){
+    const b=document.getElementById('char-tab-badge');
+    if(b)b.classList.remove('show');
+  }
+  // Scroll chat to bottom when switching to story
+  if(tab==='story'){
+    const cs=document.getElementById('chat-scroll');
+    if(cs)setTimeout(()=>cs.scrollTop=cs.scrollHeight,50);
+  }
+}
+
+function showCharBadge(){
+  if(_mobTab==='char')return;
+  const b=document.getElementById('char-tab-badge');
+  if(b)b.classList.add('show');
+}
+
+function setVH(){
+  document.documentElement.style.setProperty('--vh',`${window.innerHeight*0.01}px`);
+}
+
+function initMobileTabs(){
+  setVH();
+  if(window.innerWidth<=767){
+    document.getElementById('mobile-tabs')?.classList.add('show');
+    switchMobTab('story'); // default to story on mobile
+  }
+}
+
+// Swipe gesture detection
+let _swX=null,_swY=null;
+document.addEventListener('touchstart',e=>{
+  _swX=e.touches[0].clientX;
+  _swY=e.touches[0].clientY;
+},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(_swX===null||window.innerWidth>767)return;
+  const dx=e.changedTouches[0].clientX-_swX;
+  const dy=e.changedTouches[0].clientY-_swY;
+  _swX=null;_swY=null;
+  if(Math.abs(dx)<55||Math.abs(dy)>Math.abs(dx)*.75)return;
+  const tabs=['char','story','stats'];
+  const ci=tabs.indexOf(_mobTab);
+  if(dx<0&&ci<2)switchMobTab(tabs[ci+1]);
+  else if(dx>0&&ci>0)switchMobTab(tabs[ci-1]);
+},{passive:true});
+
+window.addEventListener('resize',()=>{
+  setVH();
+  if(window.innerWidth>767){
+    // Desktop: remove any mob-show classes so CSS grid takes over
+    document.querySelectorAll('.mob-show').forEach(el=>el.classList.remove('mob-show'));
+    document.getElementById('mobile-tabs')?.classList.remove('show');
+  } else {
+    document.getElementById('mobile-tabs')?.classList.add('show');
+    if(!document.querySelector('.mob-show'))switchMobTab(_mobTab);
+  }
+});
+
+// ---- PWA SERVICE WORKER ----
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      console.log('SW registered, scope:',reg.scope);
+    }).catch(err=>console.warn('SW registration failed:',err));
+  });
+}
+
 // Init
 initAnimalGrid();
 </script>

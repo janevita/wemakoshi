@@ -157,7 +157,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 /* ===== LEFT PANEL ===== */
 .panel-left{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
-.char-scene{position:relative;height:210px;overflow:hidden;flex-shrink:0;}
+.char-scene{position:relative;height:240px;overflow:hidden;flex-shrink:0;}
 .scene-bg{position:absolute;inset:0;transition:background 1.2s ease;}
 .scene-bg.bedroom{background:var(--scene-bedroom);}
 .scene-bg.kitchen{background:var(--scene-kitchen);}
@@ -165,10 +165,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .scene-bg.study{background:var(--scene-study);}
 .scene-bg.outside{background:var(--scene-outside);}
 .scene-bg.living{background:var(--scene-living);}
-.scene-prop{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);font-size:26px;pointer-events:none;transition:opacity .5s;}
+/* Scene prop: bottom-left corner so it's visible next to the character */
+.scene-prop{position:absolute;bottom:28px;left:16px;font-size:24px;pointer-events:none;transition:opacity .5s;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3));}
 
-/* SVG character wrapper */
-.char-svg-wrap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:110px;height:160px;}
+/* SVG character wrapper — extra top room for accessories (hats, crowns) */
+.char-svg-wrap{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);width:120px;height:175px;overflow:visible;}
 .char-svg-wrap svg{width:100%;height:100%;overflow:visible;}
 
 /* Activity state animations on the SVG wrapper */
@@ -189,7 +190,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .zzz-item:nth-child(3){font-size:18px;animation-delay:1.6s;}
 @keyframes zzzFly{0%{opacity:0;transform:translate(0,0) scale(.5);}40%{opacity:1;}100%{opacity:0;transform:translate(16px,-28px) scale(1.1);}}
 
-.activity-badge{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);background:var(--activity-badge-bg);color:var(--text);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;white-space:nowrap;border:1px solid var(--border);box-shadow:0 2px 6px var(--shadow);}
+.activity-badge{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:var(--activity-badge-bg);color:var(--text);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;white-space:nowrap;border:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);z-index:5;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
 
 /* Needs */
 .needs-section{padding:10px 13px;flex:1;}
@@ -363,8 +364,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   .panel-center{flex-direction:column;}
 
   /* Taller character scene on mobile */
-  .char-scene{height:260px;}
-  .char-svg-wrap{width:130px;height:190px;}
+  .char-scene{height:290px;}
+  .char-svg-wrap{width:140px;height:205px;}
+  .scene-prop{font-size:26px;left:18px;bottom:30px;}
 
   /* Bigger touch targets */
   .need-track{height:10px;}
@@ -1033,7 +1035,9 @@ function buildCharSVG(animalKey,actId,moodScore){
   const lAng=actId==='playing'?-35:actId==='studying'?20:12;
   const rAng=actId==='eating'?-55:actId==='playing'?35:actId==='studying'?-25:-12;
   const xCol=(animalKey==='panda'||animalKey==='penguin')?'white':'#1a1a1a';
-  return`<svg viewBox="0 0 120 158" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;overflow:visible">
+  /* viewBox extended 22px upward so accessories (top hat y=-10, wizard hat y=-16)
+     are fully inside the viewBox and always visible regardless of overflow setting */
+  return`<svg viewBox="0 -22 120 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;overflow:visible" preserveAspectRatio="xMidYMax meet">
   <defs>
     <radialGradient id="hg" cx="34%" cy="28%" r="72%">
       <stop offset="0%" stop-color="${hl}"/>
@@ -1043,7 +1047,7 @@ function buildCharSVG(animalKey,actId,moodScore){
       <stop offset="0%" stop-color="${tl}"/>
       <stop offset="100%" stop-color="${td}"/>
     </radialGradient>
-    <filter id="shadow" x="-20%" y="-10%" width="140%" height="140%">
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
       <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#00000022"/>
     </filter>
   </defs>
@@ -2757,7 +2761,8 @@ function renderAccessoryShop(){
     else if(cost.coins===0){btn=`<button class="si-buy-btn equip-btn" onclick="equipAccessory('${k}')">Select</button>`;}
     else{btn=`<button class="si-buy-btn buy-coin" onclick="buyAccessory('${k}')">🪙 ${cost.coins} Buy</button>`;}
     const cls=equipped?'equipped':owned?'owned':cost.gems?'premium-locked':'';
-    const preview=k==='none'?`<div style="font-size:36px;line-height:82px">✨</div>`:`<svg viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:44px">${a.svg}<circle cx="60" cy="40" r="24" fill="#f0c870" opacity=".55"/><ellipse cx="43" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="43" cy="38.5" r="3.5" fill="#1a1a1a"/><ellipse cx="77" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="77" cy="38.5" r="3.5" fill="#1a1a1a"/><path d="M51,51 Q60,58 69,51" stroke="#b05030" stroke-width="2" fill="none"/></svg>`;
+    /* viewBox extended upward so top hat (y=-10) and wizard hat (y=-16) show in preview */
+    const preview=k==='none'?`<div style="font-size:36px;line-height:82px">✨</div>`:`<svg viewBox="0 -20 120 88" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:51px">${a.svg}<circle cx="60" cy="40" r="24" fill="#f0c870" opacity=".55"/><ellipse cx="43" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="43" cy="38.5" r="3.5" fill="#1a1a1a"/><ellipse cx="77" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="77" cy="38.5" r="3.5" fill="#1a1a1a"/><path d="M51,51 Q60,58 69,51" stroke="#b05030" stroke-width="2" fill="none"/></svg>`;
     return`<div class="shop-item ${cls}">${badge}<div class="si-preview">${preview}</div><div class="si-name">${a.name}</div><div class="si-desc">${a.desc}</div>${!owned||cost.coins===0?`<div class="si-price ${cost.gems?'gem':cost.coins===0?'free':'coin'}">${cost.gems?'💎 '+cost.gems+' gems':cost.coins===0?'Free':'🪙 '+cost.coins}</div>`:''} ${btn}</div>`;
   }).join('')}</div>`;
 }
@@ -3277,11 +3282,10 @@ window.addEventListener('resize',()=>{
 });
 
 // ---- PWA SERVICE WORKER ----
-if('serviceWorker' in navigator){
+// Only register SW when running as a proper top-level page over HTTPS (not in previews/iframes)
+if('serviceWorker' in navigator && window.self===window.top && location.protocol==='https:'){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js').then(reg=>{
-      console.log('SW registered, scope:',reg.scope);
-    }).catch(err=>console.warn('SW registration failed:',err));
+    navigator.serviceWorker.register('./sw.js').catch(()=>{/* SW optional — no-op if unavailable */});
   });
 }
 

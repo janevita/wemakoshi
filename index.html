@@ -1473,6 +1473,14 @@ function restoreInput(){
 }
 
 // ---- ANALYSIS ----
+const POSITIVE_EVENT_IDS=new Set(['gold_star','bike_triumph','new_best_friend','art_on_wall','team_victory','surprise_gift','school_play','nature_wonder','helping_younger','book_clicked','wonder_day','first_sleepover','made_the_team','noticed','aced_it','creative_recognition','first_concert','teacher_belief','found_my_people','first_earnings','stood_up','hidden_talent','independence_taste','standing_ovation','graduation','dream_job_offer','falling_in_love','creative_breakthrough','solo_travel','first_apartment_own','mentor_changes_everything','deep_friendship','health_win','unexpected_recognition','life_clarity','family_breakthrough','promotion_earned','published_work','home_milestone','relationship_milestone','parenting_win','health_comeback','old_friends_reunion','mentoring_moment','dream_trip','financial_milestone','gratitude_moment','seen_by_community']);
+
+function _getScenarioCtx(){
+  if(G.phase==='needInteraction')return'need';
+  if(G.currentEvent&&POSITIVE_EVENT_IDS.has(G.currentEvent.id))return'positive';
+  return'challenge';
+}
+
 function analyzeText(text){
   const lo=text.toLowerCase();
   const roles={};
@@ -1483,6 +1491,11 @@ function analyzeText(text){
     if(text.length>100)sc+=1;if(text.length>200)sc+=1;
     roles[role]=Math.min(sc,30);
   }
+  // Scenario-aware weighting: scale roles up/down based on what kind of moment this is
+  const _ctx=_getScenarioCtx();
+  const _cm={positive:{champion:1.6,friend:1.3,parent:1.2,therapist:1.0,teacher:1.0,doctor:0.6,lawyer:0.6},challenge:{therapist:1.4,lawyer:1.3,doctor:1.3,parent:1.2,teacher:1.2,champion:0.6,friend:1.0},need:{doctor:1.5,parent:1.3,therapist:1.3,teacher:1.1,champion:0.4,friend:0.9,lawyer:0.8}};
+  const _mults=_cm[_ctx]||{};
+  for(const role of Object.keys(roles)){if(roles[role]>0)roles[role]=clamp(Math.round(roles[role]*(_mults[role]||1.0)),0,30);}
   let best=null,bestV=0;
   for(const[r,v]of Object.entries(roles))if(v>bestV){bestV=v;best=r;}
   let q=0;
@@ -1504,16 +1517,26 @@ function computeEval(analysis){
   else if(score>=35){grade='Okay';gCls='okay';gEmoji='🤔';}
   else{grade='Needs Work';gCls='poor';gEmoji='💭';}
   const posMap={teacher:'Guiding through both challenges and discoveries helps them trust their own thinking.',parent:'Unconditional warmth — in hard times and joyful ones — builds a lasting foundation of safety.',doctor:'Caring for the whole person, body and spirit, shows up in struggle and in celebration.',lawyer:'Standing up for their worth — whether fighting injustice or claiming a victory — builds real self-belief.',therapist:'Making space for all feelings, including joy, develops deep emotional awareness and resilience.',friend:'Showing up with genuine energy — commiserating or celebrating — creates trust that lasts.',champion:'Amplifying someone\'s wins with full heart makes joy feel witnessed, earned, and real.'};
+  const _evalCtx=_getScenarioCtx();
   let fb='';
   if(activeRoles.length===0){
     if(analysis.quality<-5){
-      fb='Some of that may have come across as dismissive — try acknowledging their experience before offering your perspective.';
+      fb=_evalCtx==='positive'
+        ?'Something in your response may have dampened their excitement — try matching their energy and sharing in the moment.'
+        :'Some of that may have come across as dismissive — try acknowledging their experience before offering your perspective.';
+    } else if(_evalCtx==='positive'){
+      const noRoleFbPos=[
+        `They're sharing something great — try jumping in with genuine excitement and asking to hear more.`,
+        `Match their energy! A simple "tell me everything" can mean the world in a happy moment.`,
+        `Try celebrating with them specifically — name what they did and why it matters.`,
+        `Show you're excited for them: use their name, react to the details, ask what it felt like.`
+      ];
+      fb=noRoleFbPos[Math.floor(Math.random()*noRoleFbPos.length)];
     } else {
       const noRoleFb=[
         `Try asking a question — even "how are you feeling about that?" can open a real conversation.`,
         `Let them know you heard them. A simple reflection of what they shared goes a long way.`,
         `Show you're present: use their name, reference what they said, or ask what they need right now.`,
-        `Try sharing in their moment — whether that's celebrating a win or sitting with a struggle.`,
         `Responses that name feelings — even briefly — connect much more deeply. What emotion are they carrying?`,
         `What would it look like to fully show up for this? Lead with them, not your advice.`
       ];
@@ -1523,18 +1546,28 @@ function computeEval(analysis){
     fb=`Strong ${ROLES[activeRoles[0].role].label} approach. ${posMap[activeRoles[0].role]||''}`;
     if(activeRoles.length>1)fb+=` You also brought ${ROLES[activeRoles[1].role].label} energy.`;
   } else if(score>=35){
-    const okayMap={
+    const okayMapChallenge={
       teacher:'Good guiding instinct — try also asking what they already think or feel before offering direction.',
-      parent:'Warmth came through. A specific question or moment of checking in can deepen the connection.',
+      parent:'Warmth came through. Try also asking a direct question to show you want to understand more.',
       doctor:'You noticed the physical side — try also acknowledging the emotional weight behind it.',
-      lawyer:'You stood up for them. Try also validating how unfair or hard this must feel.',
+      lawyer:'You stood up for them — try also naming how unfair or hard this situation actually feels.',
       therapist:'You were emotionally present. Try asking a more specific question to go one layer deeper.',
       friend:'Good energy! Make sure they feel truly heard, not just responded to.',
-      champion:'The enthusiasm is there — make sure they feel seen and specific, not just hyped up.'
+      champion:'Solid support — try naming something specific about what they\'re going through.'
     };
+    const okayMapPositive={
+      teacher:'You offered some direction — in a fun moment, try matching their energy first before guiding.',
+      parent:'The warmth is there! Try leaning into the excitement — ask them to tell you everything about it.',
+      doctor:'You checked in on them, which is sweet. In a happy moment, joining the fun is caring too.',
+      lawyer:'Good instinct to affirm — try also amplifying the specific win and why they deserve it.',
+      therapist:'Nice attunement. In a joyful moment, try matching the energy rather than just holding space.',
+      friend:'Good energy! Bring a little more excitement — let them feel how happy you are for them.',
+      champion:'The enthusiasm is almost there — make it specific to what they actually did or said.'
+    };
+    const okayMap=_evalCtx==='positive'?okayMapPositive:okayMapChallenge;
     fb=okayMap[activeRoles[0].role]||'Good instincts — try referencing something specific they said to make it feel more personal.';
   } else {
-    const poorMap={
+    const poorMapChallenge={
       teacher:'You offered direction, but they may need to feel heard first before they can receive guidance.',
       parent:'A loving instinct is there — try leading with presence before moving to comfort or advice.',
       doctor:'You spotted a real need. Try sitting with them in it for a moment before suggesting solutions.',
@@ -1543,6 +1576,16 @@ function computeEval(analysis){
       friend:'The casualness felt distant here. Try making it clear you actually care about this specific thing.',
       champion:'Big energy, but did it land? Make sure the celebration feels personal to what they went through.'
     };
+    const poorMapPositive={
+      teacher:'They\'re sharing something exciting — try celebrating with them before shifting into advice mode.',
+      parent:'They want to share something good! Try matching their excitement and asking to hear more.',
+      doctor:'This is a joyful moment — try joining in the fun rather than checking up on their wellbeing.',
+      lawyer:'They\'re proud of something — try affirming the achievement with real enthusiasm first.',
+      therapist:'They\'re in a great place — try celebrating with them rather than processing with them.',
+      friend:'A bit too low-key for this moment. Try bringing more genuine energy to their excitement.',
+      champion:'The energy didn\'t quite land — make the celebration feel real and specific to them.'
+    };
+    const poorMap=_evalCtx==='positive'?poorMapPositive:poorMapChallenge;
     fb=poorMap[activeRoles[0].role]||'Consider listening first — what does this person actually need in this moment?';
   }
   const fx={};

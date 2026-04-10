@@ -244,6 +244,31 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .eval-chg.pos{color:var(--green);background:rgba(92,160,110,.1);}
 .eval-chg.neg{color:var(--red);background:rgba(205,46,60,.12);}
 .eval-fb{font-size:12px;line-height:1.5;color:var(--soft);font-style:italic;}
+/* Season Card */
+.season-card{background:var(--card);border-radius:14px;padding:14px 16px;border:2px solid var(--accent-l);box-shadow:0 4px 18px var(--shadow);max-width:92%;margin:0 auto;}
+.sc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid var(--border);}
+.sc-season{font-size:13px;font-weight:800;color:var(--accent);letter-spacing:.3px;}
+.sc-score-badge{font-size:13px;font-weight:800;padding:3px 11px;border-radius:20px;color:#fff;}
+.sc-score-badge.great{background:var(--green);}
+.sc-score-badge.good{background:var(--blue);}
+.sc-score-badge.okay{background:var(--yellow);}
+.sc-score-badge.poor{background:var(--red);}
+.sc-feedback{font-size:12px;line-height:1.5;color:var(--soft);font-style:italic;margin-top:6px;}
+/* Year Review */
+.year-review{background:linear-gradient(135deg,var(--card) 0%,rgba(161,104,176,.12) 100%);border-radius:16px;padding:16px 18px;border:2px solid var(--accent);box-shadow:0 6px 22px var(--shadow);max-width:92%;margin:0 auto;}
+.yr-header{font-size:13px;font-weight:800;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+.yr-avg-row{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.yr-avg{font-size:36px;font-weight:900;color:var(--text);}
+.yr-avg-lbl{font-size:12px;color:var(--soft);}
+.yr-seasons{display:flex;flex-direction:column;gap:6px;}
+.yr-row{display:flex;align-items:center;gap:8px;font-size:12px;}
+.yr-sname{font-weight:700;width:80px;flex-shrink:0;color:var(--accent-l);}
+.yr-stitle{flex:1;color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.yr-sgrade{flex-shrink:0;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+/* Wrap-up button */
+.wrapup-hint{text-align:center;margin:4px 0 2px;padding:0 8px;}
+.wrapup-btn{background:transparent;border:1px dashed var(--border);border-radius:20px;padding:5px 14px;font-family:inherit;font-size:11px;color:var(--soft);cursor:pointer;transition:all .2s;}
+.wrapup-btn:hover{border-color:var(--accent-l);color:var(--accent);background:var(--accent-glow);}
 .chat-input-area{border-top:1px solid var(--border);background:var(--card);padding:12px 24px 16px;}
 .chat-row{display:flex;gap:8px;align-items:flex-end;}
 .chat-ta{flex:1;padding:10px 14px;border:2px solid var(--border);border-radius:13px;font-family:inherit;font-size:14px;line-height:1.5;resize:none;min-height:42px;max-height:110px;transition:border-color .2s;background:var(--bg);color:var(--text);}
@@ -615,7 +640,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   <div class="game-header">
     <img src="logo.png" alt="Wemakoshi" class="logo-img-hdr" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="game-title" style="display:none">Wemakoshi</div>
     <div class="header-center">
-      <span id="hdr-day">Day 1</span><span>|</span>
+      <span id="hdr-season">🌸 Spring</span><span>|</span>
       <span id="hdr-age">Age 5</span><span>|</span>
       <span id="hdr-stage">Childhood</span>
     </div>
@@ -629,7 +654,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <button class="hbtn voice-hbtn" id="voice-btn" onclick="toggleVoice()" title="Character voice on/off">🔊</button>
       <button class="hbtn" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark">🌙</button>
       <div id="ai-chip" onclick="openAISettings()" title="AI settings">⚪ Scripted</div>
-      <button class="hbtn" onclick="nextDay()" id="skip-btn" style="display:none">⏭ Next Day</button>
+      <button class="hbtn" onclick="nextSeason()" id="skip-btn" style="display:none">⏭ Next Season</button>
     </div>
   </div>
   <div class="game-body">
@@ -1159,6 +1184,21 @@ const POS_Q={kw:['listen','hear you','understand','tell me more','what do you th
 const NEG_Q={kw:["just get over","stop crying","man up","grow up","it's not a big deal","overreacting","toughen up","deal with it","suck it up"],pat:[/stop (being|acting|feeling)/i,/get over (it|yourself)/i,/it'?s (not|no) (big|a big) deal/i,/just (deal|cope|move on|forget)/i]};
 
 // ---- GAME STATE ----
+// ---- SEASON HELPERS ----
+const SEASONS=[
+  {name:'Spring',emoji:'🌸'},
+  {name:'Summer',emoji:'☀️'},
+  {name:'Autumn',emoji:'🍂'},
+  {name:'Winter',emoji:'❄️'}
+];
+function getSeasonIdxForDay(d){return(d-1)%4;}
+function getSeasonLabelForDay(d){const s=SEASONS[getSeasonIdxForDay(d)];return`${s.emoji} ${s.name}`;}
+function getSeasonIdx(){return getSeasonIdxForDay(G.day);}
+function getSeasonName(){return SEASONS[getSeasonIdx()].name;}
+function getSeasonEmoji(){return SEASONS[getSeasonIdx()].emoji;}
+function getSeasonLabel(){return getSeasonLabelForDay(G.day);}
+function getSeasonYear(){return Math.ceil(G.day/4);}
+
 let G={
   charName:'',animal:'pig',age:5,startAge:5,day:1,background:'',
   personality:{openness:50,conscientiousness:50,extraversion:50,agreeableness:50,neuroticism:50},
@@ -1180,7 +1220,8 @@ let G={
   packProgress:{},
   currentActivity:'idle',currentEvent:null,phase:'waiting',
   eventHistory:[],activeNeedInteraction:null,
-  responseCount:0,maxResponses:3,memories:[],
+  responseCount:0,maxResponses:8,memories:[],
+  yearSeasons:[],_lastEval:null,_wrapupShown:false,_endingShown:false,
   history:{snapshots:[],interactions:[],roleUsage:{teacher:0,parent:0,doctor:0,lawyer:0,therapist:0,friend:0}},
   blinkTimer:null,tickTimer:null,
   chatHistory:[],charMemory:[],lastProactiveTs:0,_bubbleTimer:null
@@ -1383,7 +1424,7 @@ function updateAlertsUI(){
   if(alerts.length>0&&window.innerWidth<=767)showCharBadge();
 }
 function updateAllUI(){
-  document.getElementById('hdr-day').textContent=`Day ${G.day}`;
+  document.getElementById('hdr-season').textContent=getSeasonLabel();
   document.getElementById('hdr-age').textContent=`Age ${G.age}`;
   document.getElementById('hdr-stage').textContent=getStageName();
   const hc=document.getElementById('hdr-coins');if(hc)hc.textContent=G.wallet.coins;
@@ -1508,11 +1549,32 @@ function handleEventRespAI(text,reply){
   const evaluation=computeEval(analysis);
   addChat('char',`"${reply}"`);
   for(const{role}of evaluation.activeRoles)G.history.roleUsage[role]=(G.history.roleUsage[role]||0)+1;
-  if(G.responseCount>=G.maxResponses||evaluation.score>=80){
-    setTimeout(()=>showEval(evaluation,analysis),700);
+  G._lastEval={evaluation,analysis};
+  const resolved=_detectResolution(reply);
+  if(G.responseCount>=G.maxResponses||evaluation.score>=80||resolved){
+    setTimeout(()=>showSeasonCard(evaluation,analysis),700);
   } else {
     G.phase='responding';setInput(true);
+    _maybeShowWrapup(); // offer close-season escape hatch after 2nd exchange
   }
+}
+
+function _detectResolution(reply){
+  if(!reply)return false;
+  const lo=reply.toLowerCase();
+  const signals=['thank you','feel better','needed that','makes sense now','glad we talked',
+    'appreciate you','understand now','that helps','feeling better','i feel less','i feel more',
+    'you always know','you really get','i needed to hear','thank you for','thanks for listening',
+    'thanks for being','that means a lot','you helped me'];
+  return signals.some(s=>lo.includes(s));
+}
+
+function forceCloseSeason(){
+  const hint=document.getElementById('wrapup-hint');if(hint)hint.remove();
+  window.speechSynthesis?.cancel();
+  setInput(false);
+  if(G._lastEval)showSeasonCard(G._lastEval.evaluation,G._lastEval.analysis);
+  else showNextSeasonBtn();
 }
 
 // AI response handler for need-check interactions
@@ -1532,11 +1594,24 @@ function handleEventResp(text){
   const evaluation=computeEval(analysis);
   addChat('char',genCharResp(evaluation.score,G.currentEvent));
   for(const{role}of evaluation.activeRoles)G.history.roleUsage[role]=(G.history.roleUsage[role]||0)+1;
-  if(G.responseCount>=G.maxResponses||evaluation.score>=80){setTimeout(()=>showEval(evaluation,analysis),700);}
+  G._lastEval={evaluation,analysis};
+  if(G.responseCount>=G.maxResponses||evaluation.score>=80){setTimeout(()=>showSeasonCard(evaluation,analysis),700);}
   else{
     if(evaluation.score<50&&G.currentEvent?.id!=='idle'){
-      setTimeout(()=>{addChat('char',pick([`"But what I really need is for you to understand what I'm going through."`,`"Can you tell me more? I need more than that."`,`"Let me try to explain what's actually bothering me..."`]));G.phase='responding';setInput(true);},500);
-    } else {G.phase='responding';setInput(true);}
+      setTimeout(()=>{addChat('char',pick([`"But what I really need is for you to understand what I'm going through."`,`"Can you tell me more? I need more than that."`,`"Let me try to explain what's actually bothering me..."`]));G.phase='responding';setInput(true);_maybeShowWrapup();},500);
+    } else {G.phase='responding';setInput(true);_maybeShowWrapup();}
+  }
+}
+function _maybeShowWrapup(){
+  if(G.responseCount>=2&&!G._wrapupShown){
+    G._wrapupShown=true;
+    setTimeout(()=>{
+      const log=document.getElementById('chat-log');
+      const hint=document.createElement('div');
+      hint.id='wrapup-hint';hint.className='wrapup-hint';
+      hint.innerHTML=`<button class="wrapup-btn" onclick="forceCloseSeason()">↩ Feel like you've said enough? Close this season</button>`;
+      log.appendChild(hint);log.scrollTop=99999;
+    },300);
   }
 }
 // Rich scripted need responses — personality & mood driven
@@ -1687,34 +1762,55 @@ function showNeedEval(score,ni){
   setTimeout(showNextDayBtn,400);
 }
 
-function showEval(evaluation,analysis){
+// Legacy alias
+function showEval(evaluation,analysis){showSeasonCard(evaluation,analysis);}
+
+function showSeasonCard(evaluation,analysis){
   G.phase='evaluating';
+  const hint=document.getElementById('wrapup-hint');if(hint)hint.remove();
   const fx=evaluation.effects;const changes={};
   for(const[k,v]of Object.entries(fx)){
     if(k in G.emotions){const old=G.emotions[k];G.emotions[k]=clamp(G.emotions[k]+v,0,100);changes[k]=G.emotions[k]-old;}
     else if(k in G.skills){const old=G.skills[k];G.skills[k]=clamp(G.skills[k]+v,0,100);changes[k]=G.skills[k]-old;}
   }
   for(const{role,strength}of evaluation.activeRoles){const bonus=strength==='strong'?rand(4,8):strength==='moderate'?rand(2,4):rand(1,2);G.playerRoles[role]=clamp(G.playerRoles[role]+bonus,0,100);}
-  G.history.interactions.push({day:G.day,score:evaluation.score,roles:evaluation.activeRoles.map(r=>r.role),title:G.currentEvent?.title||'Check-in',grade:evaluation.grade});
   const roleNames=evaluation.activeRoles.slice(0,2).map(r=>ROLES[r.role].label).join(' & ')||'—';
+  // Record to yearSeasons + history
+  const seasonData={season:getSeasonLabel(),score:evaluation.score,grade:evaluation.grade,roles:evaluation.activeRoles.map(r=>r.role),title:G.currentEvent?.title||'Check-in',feedback:evaluation.feedback};
+  G.yearSeasons.push(seasonData);
+  G.history.interactions.push({day:G.day,score:evaluation.score,roles:evaluation.activeRoles.map(r=>r.role),title:G.currentEvent?.title||'Check-in',grade:evaluation.grade});
   G.memories.push({age:G.age,summary:`${G.currentEvent?.title||'Check-in'} — ${roleNames} (${evaluation.grade})`});
+  // Coin reward
+  const coinReward=evaluation.score>=75?50:evaluation.score>=55?30:evaluation.score>=35?15:5;
+  G.wallet.coins+=coinReward;setTimeout(()=>spawnCoinPop(coinReward),300);
+  // Build card HTML
   let rolesHTML=evaluation.activeRoles.map(r=>`<span class="eval-role ${r.strength}">${ROLES[r.role].icon} ${ROLES[r.role].label}</span>`).join('');
   if(!rolesHTML)rolesHTML=`<span class="eval-role light">No clear role</span>`;
-  let changesHTML=Object.entries(changes).filter(([_,v])=>v!==0).map(([k,v])=>`<span class="eval-chg ${v>0?'pos':'neg'}">${k} ${v>0?'+':''}${v}</span>`).join('');
-  addChat('eval',`<div class="eval-card"><h4>Interaction Evaluation</h4><div class="eval-top"><div class="eval-score ${evaluation.gCls}">${evaluation.score}</div><div><div class="eval-grade">${evaluation.gEmoji} ${evaluation.grade}</div></div></div><div class="eval-roles">${rolesHTML}</div>${changesHTML?`<div class="eval-changes">${changesHTML}</div>`:''}<div class="eval-fb">${evaluation.feedback}</div></div>`);
+  let changesHTML=Object.entries(changes).filter(([_,v])=>v!==0).map(([k,v])=>`<span class="eval-chg ${v>0?'pos':'neg'}">${k} ${v>0?'+':''}${Math.round(v)}</span>`).join('');
+  addChat('eval',`<div class="season-card"><div class="sc-header"><span class="sc-season">${getSeasonLabel()}</span><span class="sc-score-badge ${evaluation.gCls}">${evaluation.gEmoji} ${evaluation.score}</span></div><div class="eval-roles">${rolesHTML}</div>${changesHTML?`<div class="eval-changes">${changesHTML}</div>`:''}<div class="sc-feedback">${evaluation.feedback}</div></div>`);
   G.currentEvent=null;updateAllUI();updateCharSVG();
-  // Award coins for interaction
-  const coinReward=evaluation.score>=75?50:evaluation.score>=55?30:evaluation.score>=35?15:5;
-  G.wallet.coins+=coinReward;
-  setTimeout(()=>spawnCoinPop(coinReward),300);
-  setTimeout(showNextDayBtn,400);
+  setTimeout(showNextSeasonBtn,400);
 }
 
-function showNextDayBtn(){
+function showYearReview(){
+  const seasons=G.yearSeasons.slice(-4);
+  if(!seasons.length)return;
+  const avgScore=Math.round(seasons.reduce((s,ss)=>s+ss.score,0)/seasons.length);
+  const gEmoji=avgScore>=80?'🌟':avgScore>=65?'✨':avgScore>=50?'💛':avgScore>=35?'🌱':'🤍';
+  const gTitle=avgScore>=80?'A wonderful year':avgScore>=65?'A strong year':avgScore>=50?'A steady year':avgScore>=35?'A challenging year':'A tough year';
+  const seasonRows=seasons.map(s=>`<div class="yr-row"><span class="yr-sname">${s.season}</span><span class="yr-stitle">${s.title}</span><span class="yr-sgrade eval-chg ${s.score>=65?'pos':s.score<40?'neg':''}">${s.grade}</span></div>`).join('');
+  addChat('eval',`<div class="year-review"><div class="yr-header">${gEmoji} Year in Review · Age ${G.age}</div><div class="yr-avg-row"><span class="yr-avg">${avgScore}</span><span class="yr-avg-lbl">avg · ${gTitle}</span></div><div class="yr-seasons">${seasonRows}</div></div>`);
+  G.yearSeasons=[];
+}
+
+function showNextSeasonBtn(){
   G.phase='idle';
   document.getElementById('skip-btn').style.display='inline-flex';
-  document.getElementById('chat-input-area').innerHTML=`<button class="next-day-btn" onclick="nextDay()">Let time pass... → Day ${G.day+1}</button>`;
+  const nextLabel=getSeasonLabelForDay(G.day+1);
+  document.getElementById('chat-input-area').innerHTML=`<button class="next-day-btn" onclick="nextSeason()">Let time pass... → ${nextLabel}</button>`;
 }
+// Legacy alias
+function showNextDayBtn(){showNextSeasonBtn();}
 
 function startNeedInteraction(needKey){
   if(G.phase!=='idle'&&G.phase!=='waiting')return;
@@ -1938,7 +2034,7 @@ function renderPremiumTab(){
     c.innerHTML=`<div class="premium-lock-box">
       <div class="premium-lock-icon">✨</div>
       <div class="premium-lock-title">Premium Insights</div>
-      <div class="premium-lock-desc">Unlock your full caregiving profile — your archetype, your impact on ${G.charName||'your character'}, strength zones, growth gaps, a downloadable profile card, and weekly growth reports.</div>
+      <div class="premium-lock-desc">Unlock your full caregiving profile — your archetype, your impact on ${G.charName||'your character'}, strength zones, growth gaps, a downloadable profile card, and seasonal year reviews.</div>
       <button class="premium-unlock-btn" onclick="purchasePremium()">💎 Unlock for 30 Gems</button>
       <div style="font-size:11px;color:var(--soft)">One-time unlock · Includes all future insights</div>
     </div>`;
@@ -2117,7 +2213,7 @@ function generateProfileCardSVG(arch,logoDataUrl){
   <text x="116" y="${titleY+titleLines.length*22+6}" font-size="11" fill="rgba(255,255,255,.75)" font-family="sans-serif" font-weight="600" letter-spacing=".5">${arch.subtitle.toUpperCase()}</text>
   <!-- Character info -->
   <text x="116" y="${titleY+titleLines.length*22+26}" font-size="12" fill="rgba(255,255,255,.92)" font-family="sans-serif">Caring for ${G.charName||'—'} · Age ${G.age}</text>
-  <text x="116" y="${titleY+titleLines.length*22+43}" font-size="11" fill="rgba(255,255,255,.65)" font-family="sans-serif">Day ${G.day} together</text>
+  <text x="116" y="${titleY+titleLines.length*22+43}" font-size="11" fill="rgba(255,255,255,.65)" font-family="sans-serif">${getSeasonYear()} year${getSeasonYear()!==1?'s':''} together</text>
   <!-- Stats row -->
   <rect x="18" y="194" width="106" height="64" rx="11" fill="white" opacity=".93"/>
   <text x="71" y="222" text-anchor="middle" font-size="28" font-weight="800" fill="${c}" font-family="sans-serif">${avg}</text>
@@ -2127,7 +2223,7 @@ function generateProfileCardSVG(arch,logoDataUrl){
   <text x="191" y="242" text-anchor="middle" font-size="9" fill="#907080" font-family="sans-serif" font-weight="700" letter-spacing=".5">INTERACTIONS</text>
   <rect x="258" y="194" width="106" height="64" rx="11" fill="white" opacity=".93"/>
   <text x="311" y="222" text-anchor="middle" font-size="28" font-weight="800" fill="${c}" font-family="sans-serif">${G.day}</text>
-  <text x="311" y="242" text-anchor="middle" font-size="9" fill="#907080" font-family="sans-serif" font-weight="700" letter-spacing=".5">DAYS</text>
+  <text x="311" y="242" text-anchor="middle" font-size="9" fill="#907080" font-family="sans-serif" font-weight="700" letter-spacing=".5">SEASONS</text>
   <!-- Role bars section -->
   <text x="20" y="284" font-size="10" font-weight="700" fill="#907080" font-family="sans-serif" letter-spacing="1.5">TOP ROLES</text>
   ${topRoles.map(([role,count],i)=>{const pct=Math.round((count/totalRU)*100);return`
@@ -2162,19 +2258,21 @@ async function downloadProfileCard(){
   showToast('Profile card downloaded! ⬇');
 }
 
-// ---- WEEKLY REPORT ----
+// ---- SEASON REPORT (shown on demand from dashboard) ----
 function generateWeeklyReport(){
-  const weekNum=Math.floor(G.day/7);
-  const weekStart=G.day-7;
-  const weekInts=G.history.interactions.filter(i=>i.day>weekStart);
+  const yearNum=getSeasonYear();
+  const weekNum=yearNum; // kept for template compatibility
+  const seasonStart=Math.max(0,G.day-4);
+  const weekStart=seasonStart; // kept for template compatibility
+  const weekInts=G.history.interactions.filter(i=>i.day>seasonStart);
   const weekAvg=weekInts.length?Math.round(weekInts.reduce((s,i)=>s+i.score,0)/weekInts.length):0;
   // Role usage this week
   const weekRoles={};
   weekInts.forEach(i=>(i.roles||[]).forEach(r=>{weekRoles[r]=(weekRoles[r]||0)+1;}));
   const topWeekRole=Object.entries(weekRoles).sort((a,b)=>b[1]-a[1])[0]?.[0];
-  // Skill growth (compare last two snapshots, at least 7 days apart)
+  // Skill growth (compare snapshots across the last year)
   const snaps=G.history.snapshots;
-  const recent=snaps[snaps.length-1];const prior=snaps.length>7?snaps[snaps.length-8]:snaps[0];
+  const recent=snaps[snaps.length-1];const prior=snaps.length>4?snaps[snaps.length-5]:snaps[0];
   const skillGrowth=recent&&prior?Object.entries(recent.skills).map(([k,v])=>({k,delta:v-(prior.skills[k]||0)})).filter(x=>x.delta>0).sort((a,b)=>b.delta-a.delta).slice(0,3):[];
   const wellbeing=getMoodScore();
   const arch=detectCaregiverArchetype();
@@ -2184,17 +2282,17 @@ function generateWeeklyReport(){
   const gradeEmoji=weekAvg>=75?'🌟':weekAvg>=55?'👍':weekAvg>=35?'🤔':'💭';
   return`<div class="wk-header">
     <div class="wk-emoji">${wkEmoji}</div>
-    <div><div class="wk-title">Week ${weekNum} Together</div><div class="wk-sub">${G.charName} · Age ${G.age} · Day ${G.day}</div></div>
+    <div><div class="wk-title">Year ${weekNum} Together</div><div class="wk-sub">${G.charName} · Age ${G.age} · ${getSeasonLabel()}</div></div>
   </div>
   <div class="wk-grid">
-    <div class="wk-stat"><div class="wk-stat-val">${gradeEmoji} ${weekAvg||'—'}</div><div class="wk-stat-lbl">This week's avg score</div></div>
-    <div class="wk-stat"><div class="wk-stat-val">${weekInts.length}</div><div class="wk-stat-lbl">Interactions this week</div></div>
+    <div class="wk-stat"><div class="wk-stat-val">${gradeEmoji} ${weekAvg||'—'}</div><div class="wk-stat-lbl">This year's avg score</div></div>
+    <div class="wk-stat"><div class="wk-stat-val">${weekInts.length}</div><div class="wk-stat-lbl">Interactions this year</div></div>
   </div>
   ${skillGrowth.length?`<div class="wk-growth">
     <div style="font-size:10px;font-weight:700;color:var(--soft);letter-spacing:1px;margin-bottom:6px">BECAUSE OF YOU, ${G.charName.toUpperCase()||'THEY'} GREW</div>
     ${skillGrowth.map(({k,delta})=>`<div class="wk-growth-row"><span class="wgr-name">${k[0].toUpperCase()+k.slice(1)}</span><div class="wgr-bar"><div class="wgr-fill" style="width:${Math.min(100,delta*8)}%"></div></div><span style="font-size:11px;font-weight:700;color:var(--green)">+${delta}</span></div>`).join('')}
   </div>`:''}
-  <div class="wk-insight">${topWeekRole?`This week you leaned into your ${ROLES[topWeekRole].label} role. ${weekAvg>=65?`It shows — ${G.charName} responded well.`:`Keep developing it — consistency builds trust.`}`:`${G.charName}'s wellbeing is at ${wellbeing}/100 this week. ${wellbeing>=65?'Things are going well.':'They could use a little more support.'}`}</div>
+  <div class="wk-insight">${topWeekRole?`This year you leaned into your ${ROLES[topWeekRole].label} role. ${weekAvg>=65?`It shows — ${G.charName} responded well.`:`Keep developing it — consistency builds trust.`}`:`${G.charName}'s wellbeing is at ${wellbeing}/100. ${wellbeing>=65?'Things are going well.':'They could use a little more support.'}`}</div>
   ${!G.owned.premium?`<div class="premium-upsell">✨ <a onclick="openDash();switchTab('premium')">Unlock Premium Insights</a> for your full archetype profile and downloadable caregiver card.</div>`:''}`;
 }
 
@@ -2378,13 +2476,15 @@ function generateAutoLog(){
   if(G.emotions.stress>70&&Math.random()<.3)evts.push(`${G.charName} had trouble sleeping and seemed tired.`);
   return evts.length?evts.join(' '):null;
 }
-function beginDay(){
-  G.phase='waiting';G.responseCount=0;
+function beginSeason(){
+  G.phase='waiting';G.responseCount=0;G._lastEval=null;G._wrapupShown=false;
   document.getElementById('skip-btn').style.display='none';
   restoreInput();setInput(false);
-  if(G.day>1&&G.day%10===0){
+  // Age-up: every 4 seasons (at season 5, 9, 13, ...)
+  if(G.day>1&&(G.day-1)%4===0){
+    if(G.yearSeasons.length>0){showYearReview();}
     G.age++;
-    addChat('sys',`<em>Time passes... ${G.charName} is now ${G.age} years old.</em>`);
+    addChat('sys',`<em>A new year begins... ${G.charName} is now ${G.age} years old.</em>`);
     saveToBrowser();
     const milestones={13:{emoji:'🌿',title:'The Teen Years Begin',desc:`${G.charName} is now a teenager — navigating identity, pressure, and the start of who they'll become.`},
       18:{emoji:'🎓',title:'Into Adulthood',desc:`${G.charName} turns 18. The world opens up, and so does responsibility.`},
@@ -2395,20 +2495,16 @@ function beginDay(){
       65:{emoji:'🌸',title:'A Life Fully Lived',desc:`${G.charName} reaches 65 — a milestone worth celebrating before the final chapter closes.`}};
     if(milestones[G.age]){
       const m=milestones[G.age];
-      setTimeout(()=>showMilestone(m.emoji,m.title,m.desc,G.age===65),800);
+      setTimeout(()=>showMilestone(m.emoji,m.title,m.desc,G.age===65),1200);
     }
-    if(G.age>=65&&!G._endingShown){setTimeout(()=>showLifeEnding(),4000);}
+    if(G.age>=65&&!G._endingShown){setTimeout(()=>showLifeEnding(),5000);}
   }
   saveSnapshot();driftEmotions();updateAllUI();updateCharSVG();
-  // Weekly report on every 7th day
-  if(G.day>1&&G.day%7===0){
-    setTimeout(()=>{addChat('weekly',generateWeeklyReport());},600);
-  }
-  // Day 1 gets a clean cinematic open — no day counter, no auto-log, just the event
+  const seasonLabel=getSeasonLabel();
   if(G.day===1){
-    setTimeout(()=>addChat('sys',`✨ ${G.charName}'s story begins.`),200);
+    setTimeout(()=>addChat('sys',`✨ ${G.charName}'s story begins in ${seasonLabel}.`),200);
   } else {
-    addChat('sys',`— Day ${G.day} —`);
+    addChat('sys',`— ${seasonLabel} —`);
     const autoLog=generateAutoLog();
     if(autoLog)setTimeout(()=>addChat('narrator',autoLog),300);
   }
@@ -2428,15 +2524,14 @@ function beginDay(){
   const pool=EVENTS[stage]||EVENTS.child;
   const avail=pool.filter(e=>!G.eventHistory.includes(e.id)&&e.trigger(G));
   const chooseFrom=usePackEvent?packPool:avail;
-  if(chooseFrom.length>0&&(G.day<=3||Math.random()<.65)){
+  // Every season gets a scenario — pick from available pool (always)
+  if(chooseFrom.length>0){
     const tw=chooseFrom.reduce((s,e)=>s+e.weight,0);let r=Math.random()*tw,chosen=chooseFrom[0];
     for(const e of chooseFrom){r-=e.weight;if(r<=0){chosen=e;break;}}
     G.currentEvent=chosen;G.eventHistory.push(chosen.id);
-    // Track pack progress
     if(chosen._packId){
       if(!G.packProgress[chosen._packId])G.packProgress[chosen._packId]=[];
       G.packProgress[chosen._packId].push(chosen.id);
-      // Check pack completion
       const pack=STORY_PACKS[chosen._packId];
       if(G.packProgress[chosen._packId].length>=pack.events.length){
         setTimeout(()=>completePack(chosen._packId),3000);
@@ -2457,7 +2552,10 @@ function beginDay(){
     setTimeout(()=>{addChat('char',getIdleLine());G.phase='responding';restoreInput();setInput(true);document.getElementById('chat-ta').placeholder=`How do you respond to ${G.charName}?`;},500);
   }
 }
-function nextDay(){driftEmotions();G.day++;document.getElementById('skip-btn').style.display='none';beginDay();if(G.day%3===0)saveToBrowser();}
+function nextSeason(){driftEmotions();G.day++;document.getElementById('skip-btn').style.display='none';beginSeason();if(G.day%4===0)saveToBrowser();}
+// Legacy aliases for resume/load paths
+function beginDay(){beginSeason();}
+function nextDay(){nextSeason();}
 
 // ---- SAVE & SHARE ----
 function _serializeState(){
@@ -2467,7 +2565,7 @@ function _serializeState(){
     wl:{c:G.wallet.coins,g:G.wallet.gems},cos:{o:G.cosmetics.outfit,a:G.cosmetics.accessory},
     own:{o:[...G.owned.outfits],a:[...G.owned.accessories],pk:[...G.owned.packs],prem:G.owned.premium},
     pp:{...G.packProgress},ev:[...G.eventHistory],mem:[...G.memories],cm:[...G.charMemory],
-    day:G.day,ru:{...G.history.roleUsage}};
+    day:G.day,ru:{...G.history.roleUsage},ys:[...G.yearSeasons]};
 }
 function generateSaveCode(){try{return btoa(encodeURIComponent(JSON.stringify(_serializeState())));}catch(e){return null;}}
 function loadSaveCode(code,silent){
@@ -2486,6 +2584,7 @@ function loadSaveCode(code,silent){
     G.owned.packs=raw.own?.pk||[];G.owned.premium=!!raw.own?.prem;
     G.packProgress={...raw.pp};G.eventHistory=[...raw.ev];G.memories=[...raw.mem];G.charMemory=[...raw.cm];
     G.day=raw.day||1;for(const k in raw.ru)G.history.roleUsage[k]=raw.ru[k]||0;
+    G.yearSeasons=Array.isArray(raw.ys)?raw.ys:[];
     if(!silent)showToast(`Welcome back, ${G.charName}! 👋`);
     return true;
   }catch(e){if(!silent)showToast('Invalid save code — check and try again.');return false;}
@@ -2516,7 +2615,7 @@ function getSaveURL(){
 }
 function shareSaveURL(){
   const url=getSaveURL();if(!url)return;
-  const text=`${G.charName} (Age ${G.age}) — Day ${G.day} in Wemakoshi! Follow their journey:`;
+  const text=`${G.charName} (Age ${G.age}) — ${getSeasonLabel()} in Wemakoshi! Follow their journey:`;
   if(navigator.share){navigator.share({title:`${G.charName}'s Story – Wemakoshi`,text,url}).catch(()=>{});}
   else{navigator.clipboard.writeText(url).then(()=>showToast('Share link copied! 🔗')).catch(()=>showToast('Copy failed.'));}
 }
@@ -2524,7 +2623,7 @@ function shareStoryCard(){
   const A=ANIMALS[G.animal]||ANIMALS.pig;
   const score=G.history.interactions.length?Math.round(G.history.interactions.reduce((s,i)=>s+i.score,0)/G.history.interactions.length):0;
   const text=`I'm raising ${G.charName} the ${A.name} in Wemakoshi!
-${A.emoji} Age ${G.age} · Day ${G.day} · Care ${score}/100
+${A.emoji} Age ${G.age} · ${getSeasonLabel()} · Care ${score}/100
 Play now: ${location.origin}${location.pathname}`;
   if(navigator.share){navigator.share({title:`${G.charName}'s Wemakoshi Story`,text}).catch(()=>{});}
   else{navigator.clipboard.writeText(text).then(()=>showToast('Story card copied! 🪪')).catch(()=>showToast('Copy failed.'));}
@@ -2579,7 +2678,7 @@ function showLifeEnding(){
     honest:`${G.charName}'s journey wasn't always easy, and neither was yours. But you stayed. That counts for more than a score ever could.`,
     complicated:`Every caregiver has gaps. So does every story. ${G.charName} is who they are — complicated, resilient — partly because of the moments you tried.`};
   document.getElementById('ending-title').textContent=`${G.charName}'s Story`;
-  document.getElementById('ending-sub').textContent=`${A.emoji} A ${A.name} · Lived ${G.age} years · ${G.day} days together`;
+  document.getElementById('ending-sub').textContent=`${A.emoji} A ${A.name} · Lived ${G.age} years · ${G.day} seasons together`;
   document.getElementById('ending-score').textContent=score;
   document.getElementById('ending-msg').textContent=msgs[legacy];
   document.getElementById('life-ending').classList.add('open');

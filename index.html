@@ -1139,7 +1139,8 @@ const ROLES={
   doctor:{icon:'🩺',label:'Doctor',color:'#cd2e3c'},
   lawyer:{icon:'⚖️',label:'Lawyer',color:'#4d3461'},
   therapist:{icon:'💜',label:'Therapist',color:'#e19c34'},
-  friend:{icon:'🤝',label:'Friend',color:'#f35c9a'}
+  friend:{icon:'🤝',label:'Friend',color:'#f35c9a'},
+  champion:{icon:'🎉',label:'Champion',color:'#f0952a'}
 };
 const STAGES={
   child:{label:'Childhood',min:5,max:12},
@@ -1178,10 +1179,11 @@ const ROLE_SIGNALS={
   doctor:{kw:['sleep','eat','exercise','health','body','rest','tired','energy','breathe','breathing','calm','relax','water','hydrate','nutrition','routine','physical','self-care','break','burnout','deep breaths'],pat:[/how (are you|have you been) (sleeping|eating|feeling)/i,/take (a break|care|deep|some time)/i,/your (body|health|brain) (needs|is)/i,/(get|need) (some )?(rest|sleep)/i,/deep breath/i]},
   lawyer:{kw:['right','rights','fair','unfair','rule','law','boundary','boundaries','deserve','owe','responsibility','accountable','consequence','justice','stand up','speak up','advocate','reasonable','entitled','report','policy','allowed'],pat:[/you (have the right|deserve|are entitled|don'?t have to)/i,/that'?s (not fair|not okay|wrong)/i,/set (a )?boundar/i,/stand (up|your ground)/i,/you('re| are) (allowed|within your rights)/i]},
   therapist:{kw:['feel','feeling','feelings','emotion','valid','validate','acknowledge','process','anxiety','cope','coping','pattern','aware','reflect','express','okay to feel','normal to','it makes sense','sit with','heal','pain','underneath'],pat:[/how (does|did) (that|this|it) (make you )?feel/i,/it('s| is) (okay|normal|valid) to (feel|be)/i,/what (are you|do you) (feeling|feel)/i,/tell me (more|about)/i,/that (sounds|must be) (really )?(hard|difficult|painful)/i,/i (hear|see|understand|notice) (you|that)/i]},
-  friend:{kw:['fun','cool','awesome','hang out','together','laugh','chill','dude','buddy','hey','honestly','been there','get it','wanna','sucks','crazy'],pat:[/i('ve| have) been there/i,/that (sucks|blows|is rough)/i,/want to (hang|chill|talk|do something)/i,/let'?s (go|do|get|hang|just)/i,/i get (it|that|you)/i]}
+  friend:{kw:['fun','cool','awesome','hang out','together','laugh','chill','dude','buddy','hey','honestly','been there','get it','wanna','sucks','crazy','omg','no way','seriously','that is so','we should celebrate','tell me everything','so happy for you','need to hear','spill'],pat:[/i('ve| have) been there/i,/that (sucks|blows|is rough)/i,/want to (hang|chill|talk|do something)/i,/let'?s (go|do|get|hang|just)/i,/i get (it|that|you)/i,/no (way|freaking way)/i,/oh my (god|gosh)/i,/we (need to |should )?(celebrate|go out)/i]},
+  champion:{kw:['amazing','incredible','unbelievable','you did it','you did this','you earned','you deserve','worked so hard','so proud','congrats','congratulations','well done','celebrate','that is huge','that\'s huge','proud of you','proud of what','achievement','milestone','legendary','crushing it','crushed it','nailed it','you made it','cheering for you','rooting for you','i believe in you','you proved'],pat:[/that'?s (so |absolutely |truly )?(amazing|incredible|wonderful|fantastic|awesome)/i,/i('m| am) (so )?(proud|happy|excited|thrilled) (of|for) you/i,/you (did it|did this|earned this|deserve this|made it|worked so hard|should be proud)/i,/what an? (achievement|accomplishment|milestone|moment)/i,/let'?s celebrate/i,/this is (huge|such a big deal|a big deal)/i,/i('m| am) (cheering|rooting|here) for you/i]}
 };
-const POS_Q={kw:['listen','hear you','understand','tell me more','what do you think','how do you feel','your choice','take your time','you matter'],pat:[/you (don'?t|do not) have to/i,/what (do|would) you (think|want|need)/i,/i('m| am) (listening|here for you)/i]};
-const NEG_Q={kw:["just get over","stop crying","man up","grow up","it's not a big deal","overreacting","toughen up","deal with it","suck it up"],pat:[/stop (being|acting|feeling)/i,/get over (it|yourself)/i,/it'?s (not|no) (big|a big) deal/i,/just (deal|cope|move on|forget)/i]};
+const POS_Q={kw:['listen','hear you','understand','tell me more','what do you think','how do you feel','your choice','take your time','you matter','so happy for you','so proud of you','you did it','you earned','you deserve this','congratulations','let\'s celebrate','that is amazing','that is incredible','cheering for you','rooting for you','tell me everything','that\'s huge'],pat:[/you (don'?t|do not) have to/i,/what (do|would) you (think|want|need)/i,/i('m| am) (listening|here for you)/i,/that'?s (so |absolutely )?(amazing|incredible|wonderful|huge)/i,/i('m| am) (so )?(excited|proud|happy|thrilled) (for|of) you/i,/you (deserve|earned) (this|it)/i]};
+const NEG_Q={kw:["just get over","stop crying","man up","grow up","it's not a big deal","overreacting","toughen up","deal with it","suck it up","don't get too excited","calm down","it's not that special","just got lucky","don't brag","not that impressive","everyone does that","it was nothing"],pat:[/stop (being|acting|feeling)/i,/get over (it|yourself)/i,/it'?s (not|no) (big|a big) deal/i,/just (deal|cope|move on|forget)/i,/calm (down|yourself)/i,/don'?t (get too|be) (excited|cocky|full of yourself)/i,/just (got lucky|luck|a coincidence)/i,/it'?s not (that|very|really|so) (special|impressive|great)/i,/everyone (does|can do|gets) (that|this)/i]};
 
 // ---- GAME STATE ----
 // ---- SEASON HELPERS ----
@@ -1204,7 +1206,7 @@ let G={
   personality:{openness:50,conscientiousness:50,extraversion:50,agreeableness:50,neuroticism:50},
   emotions:{happiness:60,stress:30,confidence:50,trust:50},
   skills:{academic:20,social:20,emotional:15,physical:30,creative:20,practical:10},
-  playerRoles:{teacher:5,parent:5,doctor:5,lawyer:5,therapist:5,friend:5},
+  playerRoles:{teacher:5,parent:5,doctor:5,lawyer:5,therapist:5,friend:5,champion:5},
   needs:{
     hunger:{v:80,icon:'🍎',label:'Hunger',rate:.35,color:'#e19c34'},
     energy:{v:90,icon:'⚡',label:'Energy',rate:.22,color:'#a168b0'},
@@ -1222,7 +1224,7 @@ let G={
   eventHistory:[],activeNeedInteraction:null,
   responseCount:0,maxResponses:8,memories:[],
   yearSeasons:[],_lastEval:null,_wrapupShown:false,_endingShown:false,
-  history:{snapshots:[],interactions:[],roleUsage:{teacher:0,parent:0,doctor:0,lawyer:0,therapist:0,friend:0}},
+  history:{snapshots:[],interactions:[],roleUsage:{teacher:0,parent:0,doctor:0,lawyer:0,therapist:0,friend:0,champion:0}},
   blinkTimer:null,tickTimer:null,
   chatHistory:[],charMemory:[],lastProactiveTs:0,_bubbleTimer:null
 };
@@ -1501,18 +1503,54 @@ function computeEval(analysis){
   else if(score>=55){grade='Good';gCls='good';gEmoji='👍';}
   else if(score>=35){grade='Okay';gCls='okay';gEmoji='🤔';}
   else{grade='Needs Work';gCls='poor';gEmoji='💭';}
-  const posMap={teacher:'Guiding without lecturing builds independent thinking.',parent:'Unconditional warmth creates a foundation of safety.',doctor:'Attending to physical wellbeing shows care for the whole person.',lawyer:'Advocating for rights builds self-worth and agency.',therapist:'Creating space for feelings develops emotional intelligence.',friend:'Being genuine and relatable builds real trust.'};
+  const posMap={teacher:'Guiding through both challenges and discoveries helps them trust their own thinking.',parent:'Unconditional warmth — in hard times and joyful ones — builds a lasting foundation of safety.',doctor:'Caring for the whole person, body and spirit, shows up in struggle and in celebration.',lawyer:'Standing up for their worth — whether fighting injustice or claiming a victory — builds real self-belief.',therapist:'Making space for all feelings, including joy, develops deep emotional awareness and resilience.',friend:'Showing up with genuine energy — commiserating or celebrating — creates trust that lasts.',champion:'Amplifying someone\'s wins with full heart makes joy feel witnessed, earned, and real.'};
   let fb='';
-  if(activeRoles.length===0)fb='Try engaging more — ask a question, acknowledge feelings, or simply show you\'re present.';
-  else if(score>=75){fb=`Strong ${ROLES[activeRoles[0].role].label} approach. ${posMap[activeRoles[0].role]||''}`;if(activeRoles.length>1)fb+=` You also brought ${ROLES[activeRoles[1].role].label} skills.`;}
-  else if(score>=35)fb='Good instincts. Try also acknowledging feelings before jumping to solutions.';
-  else fb='Consider listening first. What does this person actually need right now?';
+  if(activeRoles.length===0){
+    if(analysis.quality<-5){
+      fb='Some of that may have come across as dismissive — try acknowledging their experience before offering your perspective.';
+    } else {
+      const noRoleFb=[
+        `Try asking a question — even "how are you feeling about that?" can open a real conversation.`,
+        `Let them know you heard them. A simple reflection of what they shared goes a long way.`,
+        `Show you're present: use their name, reference what they said, or ask what they need right now.`,
+        `Try sharing in their moment — whether that's celebrating a win or sitting with a struggle.`,
+        `Responses that name feelings — even briefly — connect much more deeply. What emotion are they carrying?`,
+        `What would it look like to fully show up for this? Lead with them, not your advice.`
+      ];
+      fb=noRoleFb[Math.floor(Math.random()*noRoleFb.length)];
+    }
+  } else if(score>=75){
+    fb=`Strong ${ROLES[activeRoles[0].role].label} approach. ${posMap[activeRoles[0].role]||''}`;
+    if(activeRoles.length>1)fb+=` You also brought ${ROLES[activeRoles[1].role].label} energy.`;
+  } else if(score>=35){
+    const okayMap={
+      teacher:'Good guiding instinct — try also asking what they already think or feel before offering direction.',
+      parent:'Warmth came through. A specific question or moment of checking in can deepen the connection.',
+      doctor:'You noticed the physical side — try also acknowledging the emotional weight behind it.',
+      lawyer:'You stood up for them. Try also validating how unfair or hard this must feel.',
+      therapist:'You were emotionally present. Try asking a more specific question to go one layer deeper.',
+      friend:'Good energy! Make sure they feel truly heard, not just responded to.',
+      champion:'The enthusiasm is there — make sure they feel seen and specific, not just hyped up.'
+    };
+    fb=okayMap[activeRoles[0].role]||'Good instincts — try referencing something specific they said to make it feel more personal.';
+  } else {
+    const poorMap={
+      teacher:'You offered direction, but they may need to feel heard first before they can receive guidance.',
+      parent:'A loving instinct is there — try leading with presence before moving to comfort or advice.',
+      doctor:'You spotted a real need. Try sitting with them in it for a moment before suggesting solutions.',
+      lawyer:'You advocated for them — try also naming how hard the situation itself is before the action steps.',
+      therapist:'You opened the door emotionally — try following through with a question that invites more.',
+      friend:'The casualness felt distant here. Try making it clear you actually care about this specific thing.',
+      champion:'Big energy, but did it land? Make sure the celebration feels personal to what they went through.'
+    };
+    fb=poorMap[activeRoles[0].role]||'Consider listening first — what does this person actually need in this moment?';
+  }
   const fx={};
   if(score>=75){fx.happiness=rand(5,10);fx.stress=rand(-10,-5);fx.confidence=rand(4,8);fx.trust=rand(5,10);}
   else if(score>=55){fx.happiness=rand(2,6);fx.stress=rand(-6,-2);fx.confidence=rand(2,5);fx.trust=rand(2,5);}
   else if(score>=35){fx.happiness=rand(0,3);fx.stress=rand(-3,0);fx.confidence=rand(0,2);fx.trust=rand(0,2);}
   else{fx.happiness=rand(-5,-1);fx.stress=rand(2,6);fx.confidence=rand(-4,-1);fx.trust=rand(-6,-2);}
-  const rSkills={teacher:['academic','practical'],parent:['emotional','social'],doctor:['physical','emotional'],lawyer:['practical','social'],therapist:['emotional','social'],friend:['social','creative']};
+  const rSkills={teacher:['academic','practical'],parent:['emotional','social'],doctor:['physical','emotional'],lawyer:['practical','social'],therapist:['emotional','social'],friend:['social','creative'],champion:['confidence','social']};
   for(const{role,strength}of activeRoles){const bonus=strength==='strong'?rand(3,6):strength==='moderate'?rand(1,3):1;for(const sk of(rSkills[role]||[])){fx[sk]=(fx[sk]||0)+bonus;}}
   return{score,grade,gCls,gEmoji,activeRoles,feedback:fb,effects:fx};
 }
@@ -1859,7 +1897,67 @@ const EVENTS={
      narration:(g)=>`The school talent show is coming. ${g.charName} desperately wants to perform but is terrified of forgetting everything in front of everyone.`,
      opening:(g)=>g.personality.neuroticism>60?`"What if I freeze on stage? Everyone will be staring at me."`:g.personality.openness>60?`"I want to do it SO BADLY but... what if I'm just not good enough?"`: `"Is it embarrassing to want to try? Everyone might laugh."`,
      thought:()=>"Doing it scared is still doing it. But what if I fail?",
-     goodResponses:[`"Practicing so much it becomes automatic — that I can do."`,`"Even if it goes wrong it's not the end? That's actually... calming."`,`"You think I could be proud of myself just for trying? That's new."`]}
+     goodResponses:[`"Practicing so much it becomes automatic — that I can do."`,`"Even if it goes wrong it's not the end? That's actually... calming."`,`"You think I could be proud of myself just for trying? That's new."`]},
+    {id:'gold_star',title:'The Gold Star',weight:7,trigger:(g)=>g.day>1,
+     narration:(g)=>`${g.charName} came home today clutching a paper with a gold star sticker at the top — the first one all year. The teacher read it out loud to the class.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I did it! I worked SO hard on that and it actually worked!"`:g.emotions.confidence<40?`"The teacher said it was the best one she'd seen from our class. I don't know if I believe it but... she said it."`: `"Look! LOOK! Gold star! I got a gold star!"`,
+     thought:()=>"Maybe I am good at some things. Maybe I can be good at more.",
+     goodResponses:[`"Saying it out loud to you makes it feel even more real. I got a gold star!"`,`"You're more excited than me! That's making me MORE excited!"`,`"I want to put it somewhere I can see it every day."`]},
+    {id:'bike_triumph',title:'Two Wheels',weight:7,trigger:(g)=>g.day>2&&g.skills.physical>20,
+     narration:(g)=>`After a week of scraped knees and frustration, ${g.charName} rode their bike — really rode it — all the way to the end of the street without wobbling once.`,
+     opening:(g)=>g.personality.extraversion>60?`"I DID IT! I did it I did it I DID IT! Did you see? Did you SEE?"`:g.personality.conscientiousness>60?`"I kept falling but I didn't stop. And then... it just happened. I just balanced."`: `"My legs went the right way and I just... kept going."`,
+     thought:()=>"I kept trying even when it hurt. That means something.",
+     goodResponses:[`"I'm shaking! My legs are actually shaking! Is that normal?"`,`"The moment it clicked — I'll remember that forever."`,`"Can we go again? I want to go farther this time."`]},
+    {id:'new_best_friend',title:'A Real Friend',weight:6,trigger:(g)=>g.day>3&&g.skills.social>25,
+     narration:(g)=>`${g.charName} found them — a kid who likes the same things, laughs at the same moments. After school today, they didn't want to stop talking.`,
+     opening:(g)=>g.personality.extraversion>60?`"I found my person! They like EVERYTHING I like!"`:g.personality.neuroticism>60?`"I don't want to say it too fast but... I think we might be actual best friends."`: `"We talked for so long we missed the second bus. It didn't even feel like time."`,
+     thought:()=>"Being known feels different from just being liked.",
+     goodResponses:[`"I can be completely myself and they don't go weird about it. That's new."`,`"I was starting to think maybe I was too much. Turns out they like exactly how much I am."`,`"Tell me more about them — I want to remember this."`]},
+    {id:'art_on_wall',title:'On the Wall',weight:5,trigger:(g)=>g.skills.creative>25,
+     narration:(g)=>`The teacher chose ${g.charName}'s drawing to be displayed in the school hallway. It'll hang there all week for everyone to see.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I actually spent a long time on it. I didn't think anyone else would notice."`:g.emotions.confidence<40?`"She picked MINE. Out of the whole class. I keep walking by it to make sure it's still there."`: `"It's just hanging there. With my name on it. Kind of amazing."`,
+     thought:()=>"I made something real. Something that existed because of me.",
+     goodResponses:[`"Everyone walking by will see something I made. That thought is wild."`,`"I want to make another one. Better than this one."`,`"You're proud of me? That lands differently than I thought it would."`]},
+    {id:'team_victory',title:'We Won',weight:7,trigger:(g)=>g.day>4&&g.skills.physical>25,
+     narration:(g)=>`${g.charName}'s team won their biggest game of the season. The moment the final point landed, the whole team screamed and piled on.`,
+     opening:(g)=>g.personality.extraversion>60?`"WE WON! WE WON! I can still feel how loud it was!"`:g.personality.conscientiousness>60?`"We trained so hard for this. And it actually worked."`: `"There was this moment when we were behind and then we just... turned it around."`,
+     thought:()=>"When everyone pulled together it felt like we could do anything.",
+     goodResponses:[`"I want to hold on to this feeling. Is that weird?"`,`"We did it TOGETHER. That part feels better than the win itself."`,`"I want to remember every detail of that moment."`]},
+    {id:'surprise_gift',title:'Something Just For Me',weight:5,trigger:(g)=>g.day>5,
+     narration:(g)=>`For no reason at all, ${g.charName} received a gift today — something small, but exactly right. Something that showed someone was paying attention.`,
+     opening:(g)=>g.personality.agreeableness>60?`"They remembered. I mentioned it once and they actually remembered."`:g.emotions.happiness<50?`"Today was not going well and then this happened and I don't know how to explain it but everything shifted."`: `"It's not even the gift. It's that they noticed. They just... noticed."`,
+     thought:()=>"Being seen without having to ask — that's everything.",
+     goodResponses:[`"I want to say thank you in a way that actually means it."`,`"The surprise part is what got me. I didn't know I needed it until it happened."`,`"I'm saving the wrapping. Is that silly? I'm saving it anyway."`]},
+    {id:'school_play',title:'I Got the Part',weight:6,trigger:(g)=>g.skills.creative>20&&g.day>3,
+     narration:(g)=>`${g.charName} auditioned for the school play expecting nothing. The list went up today. Their name was right there.`,
+     opening:(g)=>g.personality.extraversion>60?`"I GOT IT! I actually got the part I wanted!"`:g.personality.neuroticism>60?`"My name is on the list. My actual name. I checked three times."`: `"I sang in front of everyone and now I have a part. I actually have a part."`,
+     thought:()=>"Maybe performing isn't something I just want to do. Maybe it's something I'm supposed to do.",
+     goodResponses:[`"My first rehearsal is tomorrow. I'm going to memorize every word."`,`"You think I can really do it? ...Yeah. I think I can really do it."`,`"I want to be so good that everyone forgets it was me up there."`]},
+    {id:'nature_wonder',title:'That Light',weight:5,trigger:()=>true,
+     narration:(g)=>`Something stopped ${g.charName} in their tracks today — a double rainbow, fireflies at dusk, a field of wildflowers. They stood there long after they needed to.`,
+     opening:(g)=>g.personality.openness>60?`"I just stood there. I couldn't move. Have you ever seen something so beautiful it made you feel full?"`:g.personality.extraversion>60?`"You have to come outside! The whole sky went orange and purple! Quick!"`: `"I don't know how to explain it. I just felt like... everything was okay."`,
+     thought:()=>"Some things are beautiful for no reason. Maybe that's the whole point.",
+     goodResponses:[`"I wanted to tell you immediately. I didn't want to keep it only in my head."`,`"Do you think things like that happen to remind you something good exists?"`,`"I want to see it again. I want to find more things like that."`]},
+    {id:'helping_younger',title:'The Big Kid',weight:5,trigger:(g)=>g.day>4,
+     narration:(g)=>`A younger child was crying at school today — lost, scared. ${g.charName} stopped, sat down, and helped. The kid's face changed completely.`,
+     opening:(g)=>g.personality.agreeableness>60?`"I just... knew what they needed. I don't know how I knew."`:g.emotions.confidence<40?`"I helped someone today. Like, actually helped. And they felt better because of ME."`: `"I remembered how it felt to be that small and scared. So I stayed."`,
+     thought:()=>"This is what being big enough to help feels like. I like it.",
+     goodResponses:[`"That kid's face — I keep thinking about it."`,`"I didn't think about it. I just did it. Is that what good instincts feel like?"`,`"I want to keep doing things like that. The feeling afterward is good."`]},
+    {id:'book_clicked',title:'The Book That Got Me',weight:6,trigger:(g)=>g.skills.academic>20&&g.day>2,
+     narration:(g)=>`${g.charName} started a book and couldn't stop. They read past bedtime, under the covers with a flashlight, and finished it at 2 AM.`,
+     opening:(g)=>g.personality.openness>60?`"I didn't know a book could do that to me. Like, I was INSIDE it."`:g.personality.conscientiousness>60?`"I was supposed to sleep at nine but the story wouldn't let me."`: `"I feel like I just lived an entire other life in two days."`,
+     thought:()=>"Stories are how people live more lives than one. I want to live all of them.",
+     goodResponses:[`"I want more. What do I read next? Is there a second one?"`,`"I'll never forget this one. Even when I'm old I'll remember."`,`"Can I tell you about it? I need to tell someone about it."`]},
+    {id:'wonder_day',title:'Did You Know This Exists?',weight:6,trigger:(g)=>g.day>3&&g.skills.academic>15,
+     narration:(g)=>`A trip to a museum, a nature park, or a class experiment cracked something open. ${g.charName} came home overflowing with facts and an entirely new obsession.`,
+     opening:(g)=>g.personality.openness>60?`"Did you KNOW that octopuses have three hearts? THREE! And blue blood! How is that real?"`:g.personality.extraversion>60?`"I have to tell you every single thing I learned today. You have to sit down. This is a lot."`: `"I don't know where to start. There's just so much I didn't know existed."`,
+     thought:()=>"The world is bigger than I thought. Way, way bigger.",
+     goodResponses:[`"I want to find out more. Can we go back? Can we get a book about it?"`,`"Why don't they teach this stuff first? This is the interesting part!"`,`"I want to learn everything. Is that too many things? I don't think it's too many things."`]},
+    {id:'first_sleepover',title:'Best Night Ever',weight:6,trigger:(g)=>g.day>5&&g.skills.social>20,
+     narration:(g)=>`${g.charName} had their first sleepover — stayed up far too late, laughed until their stomach hurt, and woke up already excited for the next one.`,
+     opening:(g)=>g.personality.extraversion>60?`"We didn't sleep until four in the morning! Four! And I'm not even tired!"`:g.personality.neuroticism>60?`"I thought I'd get homesick but I didn't. Not even a little."`: `"It was just... so good. Every part of it. I want to do it again already."`,
+     thought:()=>"I have the kind of friend you have sleepovers with. That's something.",
+     goodResponses:[`"My cheeks hurt from laughing so much. Is that a thing?"`,`"I felt totally safe the whole time. Like, at home but different."`,`"Next time can they come here? I want to show them my room."`]}
   ],
   teen:[
     {id:'party',title:'The Party',weight:9,trigger:()=>true,
@@ -1896,7 +1994,67 @@ const EVENTS={
      narration:(g)=>`${g.charName} hasn't been sleeping well. School, pressure, comparison — it's all piling up. They've been canceling plans and spending a lot of time alone.`,
      opening:(g)=>g.emotions.trust>55?`"I think something's wrong with me. Not like, physically. Just... inside."`:g.personality.neuroticism>60?`"I'm exhausted all the time but I can't sleep. Does that make sense?"`: `"Everyone says 'just think positive.' Thanks, fixed it."`,
      thought:()=>"Maybe this is just what being a teenager is. Maybe everyone feels this and I'm just weak.",
-     goodResponses:[`"This has a name and it can get better? I needed to hear that."`,`"I'm not dramatic for struggling — real things are actually hard."`,`"I'll try one small thing. Just one. I can do one thing."`]}
+     goodResponses:[`"This has a name and it can get better? I needed to hear that."`,`"I'm not dramatic for struggling — real things are actually hard."`,`"I'll try one small thing. Just one. I can do one thing."`]},
+    {id:'made_the_team',title:'I Made It',weight:7,trigger:(g)=>g.day>2&&g.skills.physical>25,
+     narration:(g)=>`Tryouts were brutal and ${g.charName} spent a week convinced they'd failed. The list went up this morning. Their name was on it.`,
+     opening:(g)=>g.personality.extraversion>60?`"I MADE THE TEAM! I actually made it! I screamed in the hallway I didn't care."`:g.personality.neuroticism>60?`"My name is actually on that list. I made myself look three times."`: `"All that training. All those early mornings. It turned into something."`,
+     thought:()=>"I bet on myself and it paid off. What else could I bet on?",
+     goodResponses:[`"I want to celebrate but also I'm terrified because now I actually have to perform."`,`"All the early mornings — it turns out they were worth it."`,`"I need you to be excited with me because I'm too shocked to be excited on my own."`]},
+    {id:'noticed',title:'They Noticed Me',weight:6,trigger:(g)=>g.day>3&&g.skills.social>30,
+     narration:(g)=>`Someone ${g.charName} deeply admires paid them a real compliment today — not hollow, not polite. The kind you turn over and over in your mind.`,
+     opening:(g)=>g.personality.extraversion>60?`"They told me I was talented. Not in a throw-away way. They meant it."`:g.emotions.confidence<45?`"I don't know what to do with this. They complimented me and I think I forgot how to stand."`: `"I keep replaying it. I want to make sure I'm remembering it right."`,
+     thought:()=>"What if they're right? What if the version of me they see is real?",
+     goodResponses:[`"Maybe I should start thinking about myself the way they do."`,`"It mattered so much I'm embarrassed by how much it mattered."`,`"I'm going to write it down so future-me doesn't forget someone said this."`]},
+    {id:'aced_it',title:'I Actually Aced It',weight:7,trigger:(g)=>g.day>3&&g.skills.academic>35,
+     narration:(g)=>`${g.charName} studied harder than ever for one test and got the highest grade in the class. The teacher said their name out loud as an example.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I studied for eight days. Eight. And it WORKED. That's not luck."`:g.personality.neuroticism>60?`"My first reaction was to think it was a grading error. Then I looked again."`: `"Turns out if you actually study the right things... you do well. Mind blown, honestly."`,
+     thought:()=>"I'm allowed to feel good about this. I earned it.",
+     goodResponses:[`"I'm not going to immediately panic about the next test. I'm just going to sit in this for a second."`,`"I called it before I looked — I said it went well. That's new for me."`,`"My method worked. I have a method that works now."`]},
+    {id:'creative_recognition',title:'Someone Gets It',weight:6,trigger:(g)=>g.skills.creative>30&&g.day>5,
+     narration:(g)=>`${g.charName} shared something they created — a song, a painting, a story, a design — with someone they respect. The response was more than they expected.`,
+     opening:(g)=>g.personality.openness>60?`"They understood it. Not just liked it — understood it. I didn't know that mattered until it happened."`:g.personality.neuroticism>60?`"I almost didn't share it. I almost deleted it. And then they said..."`: `"They got exactly what I was going for. Without me explaining it. How does that happen?"`,
+     thought:()=>"The thing I made communicated something real. That's not nothing.",
+     goodResponses:[`"I want to make ten more things now. Like right now."`,`"That validation — I hate that I needed it, but I needed it."`,`"When what you make connects with someone... that's the whole reason, isn't it?"`]},
+    {id:'first_concert',title:'That Concert',weight:5,trigger:(g)=>g.day>5,
+     narration:(g)=>`${g.charName}'s first real concert. The bass in their chest, thousands of people singing the same words, the lights going up for the last song. Something shifted.`,
+     opening:(g)=>g.personality.extraversion>60?`"I've never felt something like that with so many people at once. Everyone was the same person for a minute."`:g.personality.openness>60?`"Music doesn't sound the same now. Like, at all. Everything sounds different after tonight."`: `"I understand why people cry at concerts now. I almost did. I'm not going to say if I did."`,
+     thought:()=>"Something exists in a crowd that doesn't exist anywhere else.",
+     goodResponses:[`"I want to tell you every single song they played and what I felt."`,`"I was completely somewhere else for two hours. I forgot about everything."`,`"I need to find more things that do that to me."`]},
+    {id:'teacher_belief',title:'A Teacher Who Saw Me',weight:6,trigger:(g)=>g.day>4,
+     narration:(g)=>`A teacher stopped ${g.charName} after class and said something quiet, specific, and true — not a compliment, but a recognition. "I see what you're capable of."`,
+     opening:(g)=>g.personality.conscientiousness>60?`"No one's said it like that before. Not with that specific of a reason."`:g.emotions.confidence<45?`"I've been invisible in that class. I thought. And then they said that."`: `"They see potential I don't see. That's either terrifying or the best thing ever."`,
+     thought:()=>"Adults don't say things like that by accident. Maybe they mean it.",
+     goodResponses:[`"If they can see it, maybe it's actually there."`,`"I'm going to work harder in that class. Not for them. For me."`,`"What if the right people have been noticing all along and I just couldn't hear it?"`]},
+    {id:'found_my_people',title:'My People',weight:7,trigger:(g)=>g.day>5&&g.skills.social>30,
+     narration:(g)=>`After years of feeling like an outsider, ${g.charName} found a group where everyone is a little weird in the same direction. They came home different.`,
+     opening:(g)=>g.personality.extraversion>60?`"They're all chaotic and they liked me immediately. I've never been liked so fast."`:g.personality.neuroticism>60?`"I kept waiting for the part where they realize I'm too much. It didn't come."`: `"There's this group and it's like — the exact specific version of weird I am, they all are too."`,
+     thought:()=>"I spent years hiding the best parts of myself. I didn't need to.",
+     goodResponses:[`"I'm never going to shrink myself to fit in somewhere again after this."`,`"I kept testing them — pushing a little to see if they'd go weird. They didn't."`,`"I think this is what belonging feels like. I wasn't sure I'd ever feel it."`]},
+    {id:'first_earnings',title:'I Earned This',weight:6,trigger:(g)=>g.day>4,
+     narration:(g)=>`${g.charName} got their first paycheck from a job, a gig, or a favor done well. Holding money they earned themselves felt completely different.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I counted it four times. I earned that. Me. With my actual work."`:g.personality.extraversion>60?`"I bought myself lunch with MY OWN MONEY and it tasted like victory, honestly."`: `"I know it's not a lot but it feels enormous. I made this exist."`,
+     thought:()=>"I provided for myself. That's a new kind of power.",
+     goodResponses:[`"I can do things I want without asking. That's going to change how I feel about everything."`,`"I'm already thinking about the next way to make more."`,`"This is mine. All mine. No one gave it to me."`]},
+    {id:'stood_up',title:'I Spoke Up',weight:6,trigger:(g)=>g.skills.social>35&&g.day>6,
+     narration:(g)=>`Someone was being mocked in the hallway. Everyone else looked away. ${g.charName} said something. The room went quiet. Then it changed.`,
+     opening:(g)=>g.personality.extraversion>60?`"I just couldn't walk past it. So I said something. And they stopped."`:g.emotions.confidence<45?`"My voice was shaking but I said it. And the words came out right."`: `"I don't know where it came from. I was scared and then I just... wasn't."`,
+     thought:()=>"I found out what I'm made of today. That's a good thing to know.",
+     goodResponses:[`"I've never done anything like that before. I might again."`,`"That kid looked at me after. That look — I'll carry that."`,`"I thought I'd be the kind of person who looked away. Turns out I'm not."`]},
+    {id:'hidden_talent',title:'I Can Do That?',weight:5,trigger:(g)=>g.day>6,
+     narration:(g)=>`Something came easily to ${g.charName} that everyone said was hard — a skill they'd never tried, a gift they hadn't discovered yet.`,
+     opening:(g)=>g.personality.openness>60?`"I tried it as a joke and then... I wasn't joking anymore. I was actually good."`:g.personality.neuroticism>60?`"Is it suspicious that something came this naturally? Like am I missing something?"`: `"I picked it up in an afternoon. An afternoon. After years of thinking I wasn't talented."`,
+     thought:()=>"Talent isn't found. It's stumbled into. I wonder what else is out there.",
+     goodResponses:[`"All those years I thought I wasn't creative. All those years."`,`"I want to do it again right now. I want to get better."`,`"I feel like the world just got slightly bigger."`]},
+    {id:'independence_taste',title:'Out There Alone',weight:6,trigger:(g)=>g.day>7,
+     narration:(g)=>`For the first time, ${g.charName} navigated somewhere alone — a bus, a city street, a new place. They arrived, figured it out, and felt the shift.`,
+     opening:(g)=>g.personality.extraversion>60?`"I got there! By myself! I figured out the whole thing by myself!"`:g.personality.conscientiousness>60?`"I planned the route, checked the times, and everything went exactly as planned. It worked."`: `"There was a moment where I could have called for help and I didn't. And I was fine."`,
+     thought:()=>"The world is navigable. I can navigate it.",
+     goodResponses:[`"I want to go farther next time."`,`"It's different knowing you CAN do something versus actually doing it."`,`"I didn't need rescuing. That changes how I see myself."`]},
+    {id:'standing_ovation',title:'They Were With Me',weight:6,trigger:(g)=>g.skills.creative>30&&g.day>6,
+     narration:(g)=>`${g.charName} performed — music, theater, a speech, a presentation — and the audience gave it back. The room was completely with them.`,
+     opening:(g)=>g.personality.extraversion>60?`"I could feel them with me. The whole room. Like we were all in it together."`:g.personality.neuroticism>60?`"I forgot to be scared. That's never happened before. I just... performed."`: `"The applause — I know it's just clapping, but it felt like something more."`,
+     thought:()=>"I connected with people through something I made. That's as good as it gets.",
+     goodResponses:[`"I want that feeling again. I'm going to keep doing this."`,`"I worked so hard for thirty seconds of that feeling. It was worth it."`,`"I forgot who I was up there. In a good way. I was just the thing."`]}
   ],
   youngAdult:[
     {id:'career',title:'The Fork in the Road',weight:9,trigger:()=>true,
@@ -1933,7 +2091,67 @@ const EVENTS={
      narration:(g)=>`${g.charName} moved in with their partner six months ago. Now the small things — dishes, sleep schedules, silence — are starting to chafe.`,
      opening:(g)=>g.personality.conscientiousness>60?`"I asked them to do one thing. One. And they forgot again."`:g.emotions.trust>55?`"I don't want to be the one who always brings things up. But if I don't, nothing changes."`: `"Maybe we're just too different. Or maybe this is just what it's like?"`,
      thought:()=>"Love is supposed to be enough. Is it enough?",
-     goodResponses:[`"Having a system isn't unromantic — it's what makes the romance sustainable."`,`"This is a solvable problem. We're not incompatible, we're just learning each other."`,`"I can ask for what I need without it being a fight. That's a skill."`]}
+     goodResponses:[`"Having a system isn't unromantic — it's what makes the romance sustainable."`,`"This is a solvable problem. We're not incompatible, we're just learning each other."`,`"I can ask for what I need without it being a fight. That's a skill."`]},
+    {id:'graduation',title:'The Diploma Moment',weight:7,trigger:(g)=>g.day>3,
+     narration:(g)=>`${g.charName} graduated. Years of work, doubt, late nights, and pushed deadlines all collapsed into a single moment on a stage.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I kept thinking about every all-nighter, every moment I wanted to quit. They were all worth it."`:g.emotions.confidence<45?`"I actually did it. I kept waiting for someone to say there was a mistake."`: `"I was trying to hold the feeling still long enough to really feel it."`,
+     thought:()=>"I finished something hard. I didn't know if I was the kind of person who finishes hard things.",
+     goodResponses:[`"I'm an entirely different person than I was the day I started. I want to remember that."`,`"I cried a little. I'm going to admit that."`,`"Tell me you're proud of me. I just need to hear it from you."`]},
+    {id:'dream_job_offer',title:'They Want Me',weight:7,trigger:(g)=>g.day>4&&g.skills.practical>30,
+     narration:(g)=>`After weeks of applications and the silence that follows, ${g.charName} got the call. Not a consolation job — the actual one they wanted.`,
+     opening:(g)=>g.personality.extraversion>60?`"They offered me the job! THE job! Not a job, THE job!"`:g.personality.neuroticism>60?`"I'm terrified. I also said yes immediately. Is that normal — to say yes and be terrified at the same time?"`: `"I didn't know what I'd feel. I thought it would be more... certain. But it's mixed. Happy-scared."`,
+     thought:()=>"They picked me. Out of everyone, they picked me. Now I have to be the person they picked.",
+     goodResponses:[`"I'm already imagining what I'll build there."`,`"The job wants me AND I want the job. That combination is rare. I know that."`,`"I'm scared I'll mess it up. But that's a good problem to have."`]},
+    {id:'falling_in_love',title:'Something New',weight:7,trigger:(g)=>g.day>5&&g.skills.social>35,
+     narration:(g)=>`${g.charName} has been different lately — distracted, glowing, checking their phone too much. Today they admitted why.`,
+     opening:(g)=>g.personality.extraversion>60?`"I think I'm falling for someone. Like, actually falling. I can't stop thinking about them."`:g.personality.neuroticism>60?`"I don't want to say it out loud yet because what if saying it out loud ruins it?"`: `"It's new. And terrifying. And I'm smiling about it which isn't my usual thing."`,
+     thought:()=>"This is what it is. I've felt versions before, but not this.",
+     goodResponses:[`"I'm excited and scared and I want to tell you every single detail."`,`"What I felt before — I understand now why it didn't work. This is the difference."`,`"I want to be brave enough not to ruin this by overthinking it."`]},
+    {id:'creative_breakthrough',title:'It Came Together',weight:6,trigger:(g)=>g.skills.creative>35&&g.day>6,
+     narration:(g)=>`Something ${g.charName} had been building — a project, a piece, a vision — finally clicked into place. The gap between what they imagined and what existed closed.`,
+     opening:(g)=>g.personality.openness>60?`"I just sat there looking at it. I made this. And it's what I meant to make."`:g.personality.conscientiousness>60?`"Draft fourteen. FOURTEEN. And now I understand why."`: `"I kept going even when it wasn't working. And then it worked."`,
+     thought:()=>"I stuck with something all the way through. That's different.",
+     goodResponses:[`"I want to show everyone. And I want to keep it for myself. Both at once."`,`"The version in my head and the thing I made are the same thing now. That almost never happens."`,`"I feel like I understand something about making things that I didn't understand before."`]},
+    {id:'solo_travel',title:'Just Me Out There',weight:5,trigger:(g)=>g.day>7,
+     narration:(g)=>`${g.charName} took a trip alone — planned it, navigated it, got lost once, found something better. Came back changed.`,
+     opening:(g)=>g.personality.extraversion>60?`"I talked to strangers! Real strangers! And it was great!"`:g.personality.neuroticism>60?`"I was terrified the entire time and also it was the best thing I've ever done."`: `"There were moments where no one knew where I was and it was completely fine."`,
+     thought:()=>"I'm better at being alone than I thought. And better at finding my way.",
+     goodResponses:[`"I came back knowing something about myself that I didn't know before I left."`,`"The part where I got lost was the best part. That feels true."`,`"I need to do it again. Somewhere farther. Alone again."`]},
+    {id:'first_apartment_own',title:'This Is Mine',weight:6,trigger:(g)=>g.day>5,
+     narration:(g)=>`${g.charName} signed the lease on their first real apartment — their own kitchen, their own quiet, their own mess. Stood in the empty space and felt it.`,
+     opening:(g)=>g.personality.openness>60?`"I stood in the middle of empty rooms and just... felt the possibility."`:g.personality.conscientiousness>60?`"I made a spreadsheet for the budget and it actually works. I can actually afford this."`: `"It's small and the shower is weird but it's mine. Actually mine."`,
+     thought:()=>"I built a life that fits me. Small and entirely mine.",
+     goodResponses:[`"I keep walking around it. I've walked every room about eight times now."`,`"I'm going to make it exactly what I want and no one can say no."`,`"Having a home I chose — that's a feeling I didn't know I was missing."`]},
+    {id:'mentor_changes_everything',title:'The Right Words',weight:5,trigger:(g)=>g.skills.academic>35&&g.day>8,
+     narration:(g)=>`A mentor, boss, or trusted elder said something to ${g.charName} at exactly the right moment — direct, specific, and genuinely transformative.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"They said I have what it takes. Not in a flattery way. In a 'here's exactly why' way."`:g.emotions.confidence<45?`"Someone I really respect sees me as capable. That's colliding with a lot of old stories I have about myself."`: `"One conversation and my whole plan looks different now."`,
+     thought:()=>"The right person at the right time saying the right thing — that's not luck. That's who I've become.",
+     goodResponses:[`"I'm keeping what they said. I'm going to pull it out when I forget."`,`"They said it like it was already true. Maybe it already is."`,`"I've been waiting to feel ready. Maybe ready was here all along."`]},
+    {id:'deep_friendship',title:'The Kind That Lasts',weight:6,trigger:(g)=>g.skills.social>35&&g.day>8,
+     narration:(g)=>`A friendship with ${g.charName} deepened past convenience and schedules into something rare — the kind where you can say the true thing.`,
+     opening:(g)=>g.personality.extraversion>60?`"We talked for five hours and it felt like twenty minutes. That's what I want all friendships to feel like."`:g.personality.agreeableness>60?`"They said something only someone who really knows me could say. I almost cried."`: `"I've had people I like. This is different. This is the real kind."`,
+     thought:()=>"Being fully known by someone and not losing them — that's the thing.",
+     goodResponses:[`"I don't want to take this for granted. Not everyone has this."`,`"I think adult friendships are supposed to feel this intentional. We're both choosing it."`,`"They know the messy version. And they stayed."`]},
+    {id:'health_win',title:'My Body Did That',weight:5,trigger:(g)=>g.skills.physical>30&&g.day>9,
+     narration:(g)=>`${g.charName} hit a health goal they've been working toward — not out of fear, but out of care for themselves. Their body did something they didn't think it could.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"Weeks. It took weeks of actual consistency and it actually worked."`:g.emotions.stress>50?`"My body feels different. Like it's on my side again."`: `"I set a goal and I reached it. I keep waiting for the catch."`,
+     thought:()=>"I can do hard things that take time. That applies everywhere.",
+     goodResponses:[`"I'm not stopping here. This is the beginning of something."`,`"I did it for me. Not for anyone else. Just me."`,`"I feel capable in a way that carries over into other things."`]},
+    {id:'unexpected_recognition',title:'Out of Nowhere',weight:5,trigger:(g)=>g.day>10,
+     narration:(g)=>`Something ${g.charName} put effort into — work, a project, a kind act — was recognized unexpectedly and publicly by someone with weight.`,
+     opening:(g)=>g.personality.extraversion>60?`"They called me out in front of everyone. In a GOOD way. I turned completely red."`:g.personality.neuroticism>60?`"I keep thinking there must be a mistake. But then I think: what if there isn't?"`: `"I didn't do it to be noticed. And then I was noticed. That's strange and good."`,
+     thought:()=>"I matter to the work. I wasn't sure I did.",
+     goodResponses:[`"I want to be worthy of it. I want to earn it retroactively."`,`"The part where I wasn't trying to be seen — I think that's why they saw me."`,`"I'm keeping this moment. Next time I doubt myself, I'm pulling this out."`]},
+    {id:'life_clarity',title:'I Know Now',weight:5,trigger:(g)=>g.day>11,
+     narration:(g)=>`Something clicked for ${g.charName} — a quiet realization about who they are, what matters, and what they actually want. Not a plan, but a knowing.`,
+     opening:(g)=>g.personality.openness>60?`"I've been looking for the right map. I think I just realized I am the map."`:g.personality.conscientiousness>60?`"I've been optimizing for someone else's definition of success. I'm stopping that."`: `"I'm not the person I was performing. I'm this. I think I've been this the whole time."`,
+     thought:()=>"Knowing who you are doesn't make everything easy. But it makes you less afraid.",
+     goodResponses:[`"I want to live differently now. Starting actually now."`,`"I don't need all the answers. I just needed the one."`,`"I've been exhausted trying to be something approximate. I'm done with approximate."`]},
+    {id:'family_breakthrough',title:'We Finally Said It',weight:5,trigger:(g)=>g.day>9,
+     narration:(g)=>`A conversation with a parent or sibling that had been avoided for years finally happened. Something cleared. Not perfectly, but enough.`,
+     opening:(g)=>g.personality.agreeableness>60?`"We talked. Actually talked. About the things we've been not talking about."`:g.emotions.trust<45?`"I didn't think they'd hear me. And then they did. I don't know what to do with that."`: `"I said the thing I've been holding for years. And they said something back that I didn't expect."`,
+     thought:()=>"Old wounds don't have to stay unaddressed. I was the one who could have started this.",
+     goodResponses:[`"We don't have to fix everything. Just having said it is enough."`,`"Some of that weight is gone. I didn't know how much I was carrying."`,`"I want to keep going. Now that we've started, I want to keep going."`]}
   ],
   adult:[
     {id:'burnout',title:'The Wall',weight:9,trigger:()=>true,
@@ -1970,7 +2188,67 @@ const EVENTS={
      narration:(g)=>`${g.charName} is approaching the end of their working years. The finish line feels both like relief and like losing a piece of identity.`,
      opening:(g)=>g.personality.conscientiousness>60?`"I don't know who I am without this job. That's alarming, right?"`:g.emotions.stress>50?`"I'm exhausted. But I'm terrified of stopping."`: `"What do people actually DO in retirement? Wake up and... then what?"`,
      thought:()=>"My whole life was built around a schedule. What happens when the schedule ends?",
-     goodResponses:[`"I get to discover who I am outside of my work. That's not a loss — that's the whole point."`,`"I can structure my own days now. That's enormous freedom if I let it be."`,`"The people who know how to rest built that skill. I can learn it."`]}
+     goodResponses:[`"I get to discover who I am outside of my work. That's not a loss — that's the whole point."`,`"I can structure my own days now. That's enormous freedom if I let it be."`,`"The people who know how to rest built that skill. I can learn it."`]},
+    {id:'promotion_earned',title:'Moving Up',weight:7,trigger:(g)=>g.day>4&&g.skills.practical>40,
+     narration:(g)=>`Years of early mornings and late deliveries added up. ${g.charName} got the promotion they'd been quietly working toward.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"Every extra hour, every unglamorous task — they all counted. They actually counted."`:g.personality.neuroticism>60?`"Part of me is waiting for the other shoe. The bigger part is just... relieved."`: `"I've been here long enough to know this means something real. And I'm proud."`,
+     thought:()=>"I earned this with time and consistency, not luck. That's a different kind of pride.",
+     goodResponses:[`"I want to be the kind of leader I always wished I had."`,`"I almost burned out trying to get here. But I didn't. And now I can do it differently."`,`"More responsibility also means more freedom. I like that trade."`]},
+    {id:'published_work',title:'Out in the World',weight:6,trigger:(g)=>g.skills.creative>40&&g.day>5,
+     narration:(g)=>`Something ${g.charName} made — written, recorded, built, or painted — was accepted and put before an audience. It exists now outside of them.`,
+     opening:(g)=>g.personality.openness>60?`"It's out there now. Anyone can find it. I can never take it back. I don't want to."`:g.personality.neuroticism>60?`"I'm terrified of what people will think. I also feel more alive than I've felt in years."`: `"I made a thing and the world has it now. That's not nothing."`,
+     thought:()=>"Creating and releasing are different acts of courage. I did both.",
+     goodResponses:[`"Even if only ten people find it — those are ten people who wouldn't have had it otherwise."`,`"The making was mine. The receiving is theirs now. I have to be okay with that."`,`"I want to make something bigger next. Now I know I can get it out."`]},
+    {id:'home_milestone',title:'This Is Ours',weight:6,trigger:(g)=>g.day>6,
+     narration:(g)=>`${g.charName} crossed a threshold — a first home purchase, a major renovation completed, a space that finally feels exactly right.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"I ran the numbers for two years. Two years. And then we signed."`:g.emotions.happiness>65?`"We stood in the kitchen and just kept looking at each other. Is this really ours?"`: `"It's more than a building. It's evidence that we built something that lasts."`,
+     thought:()=>"Permanence, finally. I have a place that's mine to protect.",
+     goodResponses:[`"I want to make every room mean something."`,`"I'm going to take care of this. I've never had something worth this kind of care."`,`"It already smells like home. Is that too soon to say?"`]},
+    {id:'relationship_milestone',title:'We Made It Here',weight:6,trigger:(g)=>g.skills.social>40&&g.day>7,
+     narration:(g)=>`A significant relationship milestone — an anniversary, a shared commitment, a moment of deep re-choosing. ${g.charName} felt the weight and warmth of it.`,
+     opening:(g)=>g.emotions.trust>65?`"We've been through things that would have ended us. And every time, we stayed."`:g.personality.agreeableness>60?`"There's this person who's seen me at my worst and still showed up. That still surprises me."`: `"We don't mark every milestone. But this one felt important to say out loud."`,
+     thought:()=>"Real love is choosing. We keep choosing.",
+     goodResponses:[`"I didn't expect love to feel this ordinary and this extraordinary at the same time."`,`"I want to keep getting better at this. I don't want to coast on what we already have."`,`"I don't say it enough. But I know it every day."`]},
+    {id:'parenting_win',title:'I Saw Me in Them',weight:6,trigger:(g)=>g.age>=30&&g.day>5,
+     narration:(g)=>`${g.charName}'s child did something — stood up for someone, made a generous choice, showed resilience — and the values showed through clearly.`,
+     opening:(g)=>g.emotions.happiness>60?`"I watched them and thought: I had something to do with that."`:g.personality.agreeableness>60?`"They did exactly what I always hoped they'd do. Without me telling them to."`: `"I've been so focused on what I'm doing wrong. Today I saw something I did right."`,
+     thought:()=>"The love I gave them is still working even when I can't see it.",
+     goodResponses:[`"All those small moments matter. I needed to see that they do."`,`"I'm going to remember this the next time I feel like I'm getting it all wrong."`,`"They're going to be more than fine. That's a weight off I didn't know I was carrying."`]},
+    {id:'health_comeback',title:'Back in My Body',weight:5,trigger:(g)=>g.skills.physical>35&&g.day>6,
+     narration:(g)=>`After an illness, injury, or long stretch of neglect, ${g.charName} came back to themselves physically — and felt the gratitude of a body that works.`,
+     opening:(g)=>g.emotions.happiness>55?`"I just went for a run. An actual run. I didn't know I'd missed it so much until I did it."`:g.personality.conscientiousness>60?`"I followed the plan. Week by week. And I'm back."`: `"I forgot what it felt like to not think about my body. And now I'm not thinking about it."`,
+     thought:()=>"I used to take this for granted. I won't anymore.",
+     goodResponses:[`"I feel like myself again. I didn't realize how long I hadn't."`,`"My body did something hard. It came back. I owe it better care from now on."`,`"I want to celebrate this. Not loudly. Just quietly, with intention."`]},
+    {id:'old_friends_reunion',title:'We Picked Up Right There',weight:5,trigger:(g)=>g.day>8,
+     narration:(g)=>`A reunion with old friends — years of distance dissolved in minutes. The conversation started where it always did.`,
+     opening:(g)=>g.personality.extraversion>60?`"It was like no time had passed. We're all completely different and completely the same."`:g.personality.agreeableness>60?`"Sitting in a room with the people who knew me before everything — it does something to you."`: `"We've all changed in every way that matters and still recognized each other perfectly."`,
+     thought:()=>"Some friendships don't need maintenance. They just need presence.",
+     goodResponses:[`"I always say I'll see them more often. This time I mean it."`,`"They knew me before I knew myself. That's a specific kind of gift."`,`"The laughing — we laughed until we had to stop and catch our breath. I needed that."`]},
+    {id:'mentoring_moment',title:'I See Myself in You',weight:5,trigger:(g)=>g.age>=35&&g.skills.emotional>40,
+     narration:(g)=>`${g.charName} mentored a younger person today — and in the questions they asked, heard their younger self. Something was given and received at once.`,
+     opening:(g)=>g.personality.agreeableness>60?`"They asked me something and I thought: I asked that same question twenty years ago."`:g.personality.openness>60?`"I realized I know more than I think I do. Enough to actually help someone."`: `"I think I helped them. But sitting with them helped me too."`,
+     thought:()=>"What I know is worth passing on. I've been underestimating that.",
+     goodResponses:[`"Teaching it made me understand it better myself."`,`"The questions they asked reminded me what I used to care about. Still do, actually."`,`"If someone had told me what I told them at that age — it would have changed things."`]},
+    {id:'dream_trip',title:'We Finally Went',weight:5,trigger:(g)=>g.day>9,
+     narration:(g)=>`The trip that had been "someday" for years was finally taken. The photos won't capture it. The memories are impossibly full.`,
+     opening:(g)=>g.personality.openness>60?`"I don't know what I thought would happen. What happened was better."`:g.personality.conscientiousness>60?`"I finally let myself do the thing I'd been planning forever. Planning isn't the same as doing."`: `"We were there. We actually went. I keep saying it to make it real."`,
+     thought:()=>"The gap between imagining and going — I'm closing that gap from now on.",
+     goodResponses:[`"There was one specific moment I want to remember exactly. Can I tell you?"`,`"Experiences don't disappear. I own that now."`,`"I spent too long waiting to do things. That's changing."`]},
+    {id:'financial_milestone',title:'We Made It Work',weight:5,trigger:(g)=>g.skills.practical>45&&g.day>10,
+     narration:(g)=>`${g.charName} reached a financial goal they'd doubted was possible — not wealth, just security. A sense of having built a foundation.`,
+     opening:(g)=>g.personality.conscientiousness>60?`"Seven years of the plan. Seven. And the number finally says what I needed it to say."`:g.emotions.stress>50?`"I stopped bracing. I realized I stopped bracing. That's new."`: `"Security doesn't feel like I thought it would. It's quieter. But it's real."`,
+     thought:()=>"I built something lasting out of things that felt temporary for a long time.",
+     goodResponses:[`"I can focus on other things now. Things that aren't survival."`,`"I want to show others how I did it. I want the knowledge to compound."`,`"My future self is going to be grateful to the version of me that didn't give up on this."`]},
+    {id:'gratitude_moment',title:'This Is the Life',weight:5,trigger:(g)=>g.day>10&&g.emotions.happiness>60,
+     narration:(g)=>`Nothing dramatic. A quiet evening, the right people, something simple and warm. ${g.charName} looked around and felt something rare: enough.`,
+     opening:(g)=>g.personality.openness>60?`"I was just sitting there and I thought: this is it. This is the thing."`:g.emotions.happiness>70?`"I'm not waiting for anything right now. I'm just... here. And it's enough."`: `"I couldn't manufacture this if I tried. I just want to hold it for a second."`,
+     thought:()=>"I arrived somewhere. Maybe here. This might be the place.",
+     goodResponses:[`"I want to remember exactly how this feels when harder days come."`,`"Being present for good things is its own kind of skill. I don't have it often enough."`,`"I did the work. I built this. I'm allowed to enjoy it."`]},
+    {id:'seen_by_community',title:'They Know Who I Am Here',weight:5,trigger:(g)=>g.age>=32&&g.day>9,
+     narration:(g)=>`At a local event, gathering, or in their neighborhood, ${g.charName} was recognized — not for status, but for who they are and what they bring to a place.`,
+     opening:(g)=>g.personality.extraversion>60?`"Someone introduced me to their friend and said things about me that I didn't know other people noticed."`:g.personality.agreeableness>60?`"I've been showing up quietly for a long time. Turns out people were watching."`: `"I have roots here. I didn't realize how much I had roots here."`,
+     thought:()=>"Being known in a place — not famous, just known — is its own kind of belonging.",
+     goodResponses:[`"I want to show up even more now. Now that I know it matters."`,`"Community is something you build slowly and then one day realize you have."`,`"I belong here. That's not a small thing."`]}
   ]
 };
 

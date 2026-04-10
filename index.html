@@ -3834,8 +3834,8 @@ initAnimalGrid();
 
 // ---- VOICE: TTS (character speaks) + STT (player talks) ----
 
-// Persist voice-on/off preference; default on
-let _voiceEnabled=localStorage.getItem('wemakoshi-voice')!=='off';
+// Persist voice-on/off preference; default off
+let _voiceEnabled=localStorage.getItem('wemakoshi-voice')==='on';
 
 function toggleVoice(){
   _voiceEnabled=!_voiceEnabled;

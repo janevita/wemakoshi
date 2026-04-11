@@ -202,6 +202,46 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 .activity-badge{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:var(--activity-badge-bg);color:var(--text);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;white-space:nowrap;border:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);z-index:5;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
 
+/* ===== PET COMPANION ===== */
+.pet-companion{position:absolute;bottom:20px;right:10px;width:56px;height:56px;z-index:6;cursor:pointer;}
+.pet-companion:hover .pet-svg-inner{transform:scale(1.1);}
+.pet-svg-inner{transition:transform .2s;}
+.pet-speech{position:absolute;bottom:100%;right:0;background:var(--card);border:1.5px solid var(--border);border-radius:10px 10px 0 10px;padding:4px 8px;font-size:11px;font-weight:700;white-space:nowrap;margin-bottom:4px;box-shadow:0 2px 8px var(--shadow);animation:fadeUp .3s ease;pointer-events:none;}
+.pet-no-pet{position:absolute;bottom:20px;right:10px;width:44px;height:44px;cursor:pointer;z-index:6;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.2);border:2px dashed var(--border);border-radius:50%;font-size:20px;transition:all .2s;opacity:.55;backdrop-filter:blur(2px);}
+.pet-no-pet:hover{opacity:1;border-color:var(--accent);transform:scale(1.1);}
+/* Pet care bottom-sheet modal */
+#pet-care-modal{position:fixed;inset:0;background:var(--modal-overlay);z-index:130;display:none;align-items:flex-end;justify-content:center;}
+#pet-care-modal.open{display:flex;}
+.pet-care-sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:500px;padding:22px 24px 32px;animation:slideUpPet .28s cubic-bezier(.34,1.4,.64,1);}
+@keyframes slideUpPet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.pcs-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.pcs-pet-svg{width:68px;height:68px;flex-shrink:0;}
+.pcs-info{flex:1;}
+.pcs-name{font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:var(--accent);}
+.pcs-mood{font-size:12px;color:var(--soft);margin-top:2px;}
+.pcs-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--border);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pcs-needs{display:flex;gap:10px;margin-bottom:18px;}
+.pcs-need{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.pcs-need-icon{font-size:15px;}
+.pcs-need-bar{width:100%;height:5px;background:var(--track-bg);border-radius:3px;overflow:hidden;}
+.pcs-need-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.pcs-need-val{font-size:10px;font-weight:700;color:var(--soft);}
+.pcs-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pcs-action{background:var(--card);border:2px solid var(--border);border-radius:13px;padding:13px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:all .2s;font-family:inherit;}
+.pcs-action:hover{border-color:var(--accent);background:var(--accent-glow);transform:translateY(-2px);}
+.pcs-action-icon{font-size:26px;}
+.pcs-action-label{font-size:12px;font-weight:700;color:var(--text);}
+.pcs-action-desc{font-size:10px;color:var(--soft);}
+/* Pet shop */
+.pet-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:600px){.pet-type-grid{grid-template-columns:repeat(2,1fr);}}
+.pet-type-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s;}
+.pet-type-card:hover{border-color:var(--accent-l);transform:translateY(-2px);box-shadow:0 6px 18px var(--shadow);}
+.pet-type-card.adopted{border-color:var(--accent);background:var(--accent-glow);}
+.pt-icon{font-size:28px;margin-bottom:4px;}
+.pt-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.pt-desc{font-size:10px;color:var(--soft);line-height:1.4;}
+
 /* Needs */
 .needs-section{padding:10px 13px;flex:1;}
 .needs-section h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--soft);margin-bottom:8px;}
@@ -726,6 +766,10 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
           <div class="av-section-label">Accessory</div>
           <div class="av-style-pills" id="av-acc-pills"></div>
         </div>
+        <div>
+          <div class="av-section-label">Build</div>
+          <div class="av-style-pills" id="av-build-pills"></div>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -776,6 +820,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
         <div class="scene-bg bedroom" id="scene-bg"></div>
         <div class="scene-prop" id="scene-prop">🌱</div>
         <div class="char-svg-wrap state-idle" id="char-svg-wrap"><!-- SVG injected here --></div>
+        <div id="pet-companion"></div>
         <div class="zzz-wrap" id="zzz-wrap">
           <span class="zzz-item">z</span><span class="zzz-item">Z</span><span class="zzz-item">Z</span>
         </div>
@@ -882,6 +927,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
     <div class="shop-tabs">
       <div class="shop-tab active" onclick="shopTab('customize')">✨ Customize</div>
+      <div class="shop-tab" onclick="shopTab('pet')">🐾 Pet</div>
       <div class="shop-tab" onclick="shopTab('outfits')">👗 Outfits</div>
       <div class="shop-tab" onclick="shopTab('accessories')">🎩 Accessories</div>
       <div class="shop-tab" onclick="shopTab('packs')">📖 Story Packs</div>
@@ -915,6 +961,43 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       </div>
     </div>
     <div class="gem-note">💡 This is a prototype — gems are simulated. In production, purchases will be processed securely through app stores.</div>
+  </div>
+</div>
+
+<!-- PET CARE MODAL -->
+<div id="pet-care-modal" onclick="if(event.target===this)closePetCare()">
+  <div class="pet-care-sheet">
+    <div class="pcs-header">
+      <div class="pcs-pet-svg" id="pcs-pet-svg"></div>
+      <div class="pcs-info">
+        <div class="pcs-name" id="pcs-pet-name"></div>
+        <div class="pcs-mood" id="pcs-pet-mood"></div>
+      </div>
+      <button class="pcs-close" onclick="closePetCare()">✕</button>
+    </div>
+    <div class="pcs-needs" id="pcs-needs"></div>
+    <div class="pcs-actions">
+      <button class="pcs-action" onclick="petCareAction('feed')">
+        <span class="pcs-action-icon">🍖</span>
+        <span class="pcs-action-label">Feed</span>
+        <span class="pcs-action-desc">Fills hunger</span>
+      </button>
+      <button class="pcs-action" onclick="petCareAction('play')">
+        <span class="pcs-action-icon">🎾</span>
+        <span class="pcs-action-label">Play</span>
+        <span class="pcs-action-desc">Boosts happiness</span>
+      </button>
+      <button class="pcs-action" onclick="petCareAction('groom')">
+        <span class="pcs-action-icon">🛁</span>
+        <span class="pcs-action-label">Groom</span>
+        <span class="pcs-action-desc">Keeps them clean</span>
+      </button>
+      <button class="pcs-action" onclick="petCareAction('cuddle')">
+        <span class="pcs-action-icon">🤗</span>
+        <span class="pcs-action-label">Cuddle</span>
+        <span class="pcs-action-desc">Calms both of you</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1070,16 +1153,206 @@ const AV_HAIR_STYLES=[{id:'shortBob',label:'Short Bob'},{id:'longStraight',label
 const AV_EYE_SHAPES=[{id:'round',label:'Round'},{id:'almond',label:'Almond'},{id:'wide',label:'Wide'}];
 const AV_ACCESSORY_DEFS=[{id:'none',label:'None'},{id:'glasses',label:'Glasses'},{id:'hat',label:'Hat'},{id:'bow',label:'Bow'},{id:'headband',label:'Headband'}];
 const AV_OUTFIT_STYLES=[{id:'casual',label:'Casual'},{id:'collared',label:'Collared'},{id:'hoodie',label:'Hoodie'},{id:'dress',label:'Dress'},{id:'jacket',label:'Jacket'},{id:'sporty',label:'Sporty'}];
+const AV_BUILDS=[{id:'soft',label:'Soft'},{id:'strong',label:'Strong'}];
 const AV_PRESETS=[
-  {name:'Sunny',   skinTone:0,hairStyle:'shortBob',    hairColor:5,eyeShape:'wide',  outfit:'casual',  outfitColor:0,accessory:'none'},
-  {name:'River',   skinTone:1,hairStyle:'spiky',        hairColor:0,eyeShape:'round', outfit:'hoodie',  outfitColor:4,accessory:'none'},
-  {name:'Sage',    skinTone:2,hairStyle:'longStraight', hairColor:2,eyeShape:'almond',outfit:'casual',  outfitColor:2,accessory:'glasses'},
-  {name:'Mika',    skinTone:3,hairStyle:'curly',        hairColor:7,eyeShape:'wide',  outfit:'dress',   outfitColor:1,accessory:'bow'},
-  {name:'Leo',     skinTone:4,hairStyle:'shortBob',     hairColor:1,eyeShape:'almond',outfit:'jacket',  outfitColor:5,accessory:'none'},
-  {name:'Nova',    skinTone:5,hairStyle:'braids',       hairColor:0,eyeShape:'round', outfit:'sporty',  outfitColor:3,accessory:'headband'},
-  {name:'Quinn',   skinTone:1,hairStyle:'ponytail',     hairColor:4,eyeShape:'round', outfit:'collared',outfitColor:0,accessory:'none'},
-  {name:'Ash',     skinTone:2,hairStyle:'spiky',        hairColor:6,eyeShape:'almond',outfit:'hoodie',  outfitColor:5,accessory:'none'}
+  {name:'Sunny',skinTone:0,hairStyle:'shortBob',   hairColor:5,eyeShape:'wide',  outfit:'casual',  outfitColor:0,accessory:'none',  build:'soft'},
+  {name:'River',skinTone:1,hairStyle:'spiky',       hairColor:0,eyeShape:'round', outfit:'hoodie',  outfitColor:4,accessory:'none',  build:'strong'},
+  {name:'Sage', skinTone:2,hairStyle:'longStraight',hairColor:2,eyeShape:'almond',outfit:'casual',  outfitColor:2,accessory:'glasses',build:'soft'},
+  {name:'Mika', skinTone:3,hairStyle:'curly',       hairColor:7,eyeShape:'wide',  outfit:'dress',   outfitColor:1,accessory:'bow',   build:'soft'},
+  {name:'Leo',  skinTone:4,hairStyle:'shortBob',    hairColor:1,eyeShape:'almond',outfit:'jacket',  outfitColor:5,accessory:'none',  build:'strong'},
+  {name:'Nova', skinTone:5,hairStyle:'braids',      hairColor:0,eyeShape:'round', outfit:'sporty',  outfitColor:3,accessory:'headband',build:'soft'},
+  {name:'Quinn',skinTone:1,hairStyle:'ponytail',    hairColor:4,eyeShape:'round', outfit:'collared',outfitColor:0,accessory:'none',  build:'strong'},
+  {name:'Ash',  skinTone:2,hairStyle:'spiky',       hairColor:6,eyeShape:'almond',outfit:'hoodie',  outfitColor:5,accessory:'none',  build:'strong'}
 ];
+
+// ===== PET SYSTEM =====
+const PET_TYPES={
+  cat:    {name:'Cat',    icon:'🐱',desc:'Curious and independent', bodyCol:'#e8a87c',markCol:'#c4784a',details:'#e8829a'},
+  dog:    {name:'Dog',    icon:'🐶',desc:'Loyal and endlessly playful',  bodyCol:'#d4a060',markCol:'#a07040',details:'#c4784a'},
+  rabbit: {name:'Bunny',  icon:'🐰',desc:'Gentle and a little shy',      bodyCol:'#f0dcd0',markCol:'#e0b0a0',details:'#e8829a'},
+  hamster:{name:'Hamster',icon:'🐹',desc:'Tiny but full of energy',      bodyCol:'#d4a060',markCol:'#f0c080',details:'#e8829a'},
+  frog:   {name:'Frog',   icon:'🐸',desc:'Calm and wonderfully strange', bodyCol:'#5ca06e',markCol:'#3d7a4e',details:'#a0d870'},
+  fox:    {name:'Fox',    icon:'🦊',desc:'Clever and full of spirit',     bodyCol:'#e07030',markCol:'#c05020',details:'#f0d090'}
+};
+const PET_NAMES={
+  cat:    ['Whiskers','Luna','Mochi','Pepper','Sable'],
+  dog:    ['Biscuit','Cooper','Daisy','Milo','Boba'],
+  rabbit: ['Cotton','Clover','Bun','Maple','Puff'],
+  hamster:['Peanut','Nugget','Chip','Sunny','Acorn'],
+  frog:   ['Pebble','Pond','Basil','Reef','Dew'],
+  fox:    ['Ember','Russet','Sable','Blaze','Flicker']
+};
+
+function buildPetSVG(type,mood){
+  const t=PET_TYPES[type]||PET_TYPES.cat;
+  const c=t.bodyCol,m=t.markCol,d=t.details;
+  const happy=mood>65,sad=mood<35;
+  // Eyes
+  const eyeL=happy
+    ?`<ellipse cx="22" cy="27" rx="4" ry="5.5" fill="#1a1a2e"/><circle cx="23.5" cy="25" r="1.8" fill="white"/>`
+    :sad
+    ?`<ellipse cx="22" cy="28" rx="4" ry="3" fill="#1a1a2e"/>`
+    :`<circle cx="22" cy="27" r="4.5" fill="#1a1a2e"/><circle cx="23.5" cy="25.5" r="1.5" fill="white"/>`;
+  const eyeR=happy
+    ?`<ellipse cx="38" cy="27" rx="4" ry="5.5" fill="#1a1a2e"/><circle cx="39.5" cy="25" r="1.8" fill="white"/>`
+    :sad
+    ?`<ellipse cx="38" cy="28" rx="4" ry="3" fill="#1a1a2e"/>`
+    :`<circle cx="38" cy="27" r="4.5" fill="#1a1a2e"/><circle cx="39.5" cy="25.5" r="1.5" fill="white"/>`;
+  const mouth=happy
+    ?`<path d="M25,37 Q30,43 35,37" stroke="${d}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`
+    :sad
+    ?`<path d="M25,40 Q30,35 35,40" stroke="#c07070" stroke-width="2" fill="none" stroke-linecap="round"/>`
+    :`<path d="M26,38 Q30,40 34,38" stroke="${d}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+  const blush=happy?`<ellipse cx="16" cy="33" rx="5" ry="3.5" fill="#ffb8c0" opacity=".5"/><ellipse cx="44" cy="33" rx="5" ry="3.5" fill="#ffb8c0" opacity=".5"/>`:'';
+  let ears='',tail='',extras='';
+  if(type==='cat'){
+    ears=`<polygon points="10,22 17,8 24,22" fill="${c}"/><polygon points="11.5,21 17,11 22.5,21" fill="${m}"/><polygon points="36,22 43,8 50,22" fill="${c}"/><polygon points="37.5,21 43,11 48.5,21" fill="${m}"/>`;
+    tail=`<path d="M53,55 Q66,42 62,30" stroke="${c}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+    extras=`<line x1="18" y1="35" x2="9" y2="32" stroke="rgba(180,150,120,.8)" stroke-width="1.2"/><line x1="18" y1="38" x2="8" y2="38" stroke="rgba(180,150,120,.8)" stroke-width="1.2"/><line x1="42" y1="35" x2="51" y2="32" stroke="rgba(180,150,120,.8)" stroke-width="1.2"/><line x1="42" y1="38" x2="52" y2="38" stroke="rgba(180,150,120,.8)" stroke-width="1.2"/>`;
+  } else if(type==='dog'){
+    ears=`<ellipse cx="16" cy="24" rx="9" ry="14" fill="${m}" transform="rotate(-18,16,24)"/><ellipse cx="44" cy="24" rx="9" ry="14" fill="${m}" transform="rotate(18,44,24)"/>`;
+    tail=`<path d="M53,52 Q65,36 60,24" stroke="${c}" stroke-width="6.5" fill="none" stroke-linecap="round"/>`;
+    extras=`<ellipse cx="30" cy="39" rx="9" ry="6" fill="${m}" opacity=".65"/>`;
+  } else if(type==='rabbit'){
+    ears=`<ellipse cx="20" cy="9" rx="5.5" ry="13" fill="${c}"/><ellipse cx="20" cy="9" rx="2.8" ry="10" fill="${d}" opacity=".55"/><ellipse cx="40" cy="9" rx="5.5" ry="13" fill="${c}"/><ellipse cx="40" cy="9" rx="2.8" ry="10" fill="${d}" opacity=".55"/>`;
+    tail=`<circle cx="9" cy="53" r="7" fill="${c}"/>`;
+    extras=`<circle cx="30" cy="39" r="6" fill="${c}"/>`;
+  } else if(type==='hamster'){
+    ears=`<circle cx="15" cy="19" r="8" fill="${c}"/><circle cx="15" cy="19" r="4.5" fill="${m}"/><circle cx="45" cy="19" r="8" fill="${c}"/><circle cx="45" cy="19" r="4.5" fill="${m}"/>`;
+    extras=`<ellipse cx="19" cy="37" rx="10" ry="8" fill="${m}" opacity=".65"/><ellipse cx="41" cy="37" rx="10" ry="8" fill="${m}" opacity=".65"/>`;
+    tail='';
+  } else if(type==='frog'){
+    ears=`<circle cx="16" cy="17" r="9" fill="${c}"/><circle cx="16" cy="17" r="5.5" fill="${t.details}"/><circle cx="44" cy="17" r="9" fill="${c}"/><circle cx="44" cy="17" r="5.5" fill="${t.details}"/>`;
+    extras=`<ellipse cx="30" cy="50" rx="20" ry="7" fill="${m}" opacity=".45"/>`;
+    tail='';
+  } else if(type==='fox'){
+    ears=`<polygon points="11,20 18,5 25,20" fill="${c}"/><polygon points="12.5,19 18,8 23.5,19" fill="${d}"/><polygon points="35,20 42,5 49,20" fill="${c}"/><polygon points="36.5,19 42,8 47.5,19" fill="${d}"/>`;
+    tail=`<path d="M53,55 Q70,42 65,26" stroke="${c}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M55,55 Q70,42 65,26" stroke="${d}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+    extras='';
+  }
+  return`<svg viewBox="0 0 70 68" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  ${tail}
+  ${ears}
+  <ellipse cx="30" cy="40" rx="22" ry="19" fill="${c}"/>
+  <ellipse cx="30" cy="26" rx="19" ry="19" fill="${c}"/>
+  ${extras}
+  ${blush}
+  ${eyeL}${eyeR}
+  ${mouth}
+</svg>`;
+}
+function getPetMood(){if(!G.pet)return 50;return(G.pet.hunger+G.pet.energy+G.pet.happiness+G.pet.hygiene)/4;}
+function getPetMoodLabel(mood){if(mood>70)return'Happy 😊';if(mood>45)return'Content 😌';if(mood>25)return'Sad 😟';return'Neglected 😢';}
+function getPetNeedyMsg(){
+  if(!G.pet)return null;
+  if(G.pet.hunger<30)return'Hungry! 🍖';
+  if(G.pet.hygiene<28)return'Need a bath... 🛁';
+  if(G.pet.energy<28)return'Sleepy 😴';
+  if(G.pet.happiness<30)return'Feeling lonely 💔';
+  return null;
+}
+function updatePetUI(){
+  const wrap=document.getElementById('pet-companion');if(!wrap)return;
+  if(!G.pet){
+    wrap.innerHTML=`<div class="pet-no-pet" onclick="openShop();setTimeout(()=>shopTab('pet'),50)" title="Adopt a pet!">🐾</div>`;
+    return;
+  }
+  const mood=getPetMood();
+  const needy=getPetNeedyMsg();
+  const bubble=needy?`<div class="pet-speech">${needy}</div>`:'';
+  wrap.innerHTML=`${bubble}<div class="pet-svg-inner" style="width:56px;height:56px" onclick="openPetCare()" title="Care for ${G.pet.name}">${buildPetSVG(G.pet.type,mood)}</div>`;
+}
+function openPetCare(){
+  if(!G.pet)return;
+  _renderPetCareSheet();
+  document.getElementById('pet-care-modal').classList.add('open');
+}
+function closePetCare(){document.getElementById('pet-care-modal').classList.remove('open');}
+function _renderPetCareSheet(){
+  const p=G.pet;if(!p)return;
+  const mood=getPetMood();
+  const svgEl=document.getElementById('pcs-pet-svg');
+  const nameEl=document.getElementById('pcs-pet-name');
+  const moodEl=document.getElementById('pcs-pet-mood');
+  const needsEl=document.getElementById('pcs-needs');
+  if(svgEl)svgEl.innerHTML=buildPetSVG(p.type,mood);
+  if(nameEl)nameEl.textContent=p.name;
+  if(moodEl)moodEl.textContent=`${PET_TYPES[p.type]?.name||'Pet'} · ${getPetMoodLabel(mood)}`;
+  if(needsEl)needsEl.innerHTML=[
+    {icon:'🍖',label:'Hunger',v:p.hunger},
+    {icon:'⚡',label:'Energy',v:p.energy},
+    {icon:'🛁',label:'Hygiene',v:p.hygiene},
+    {icon:'💕',label:'Happy',v:p.happiness}
+  ].map(n=>{
+    const col=n.v>60?'var(--green)':n.v>30?'var(--yellow)':'var(--red)';
+    return`<div class="pcs-need"><div class="pcs-need-icon">${n.icon}</div><div class="pcs-need-bar"><div class="pcs-need-fill" style="width:${n.v}%;background:${col}"></div></div><div class="pcs-need-val">${Math.round(n.v)}</div></div>`;
+  }).join('');
+}
+function petCareAction(action){
+  if(!G.pet)return;
+  const p=G.pet;
+  switch(action){
+    case'feed':   p.hunger=clamp(p.hunger+38,0,100);p.energy=clamp(p.energy+5,0,100);showToast(`${p.name} munches happily! 🍖`);break;
+    case'play':   p.happiness=clamp(p.happiness+32,0,100);p.energy=clamp(p.energy-8,0,100);p.hunger=clamp(p.hunger-5,0,100);showToast(`${p.name} zooms around! 🎾`);break;
+    case'groom':  p.hygiene=clamp(p.hygiene+38,0,100);p.happiness=clamp(p.happiness+8,0,100);showToast(`${p.name} feels fresh! 🛁`);break;
+    case'cuddle': p.happiness=clamp(p.happiness+22,0,100);p.energy=clamp(p.energy+5,0,100);G.emotions.stress=clamp(G.emotions.stress-4,0,100);G.emotions.happiness=clamp(G.emotions.happiness+3,0,100);showToast(`${p.name} curls up with you 🤗`);break;
+  }
+  saveToBrowser();_renderPetCareSheet();updatePetUI();updateAllUI();
+}
+function adoptPet(type){
+  const t=PET_TYPES[type];if(!t)return;
+  const names=PET_NAMES[type]||['Pet'];
+  const name=names[Math.floor(Math.random()*names.length)];
+  G.pet={type,name,hunger:92,energy:88,happiness:85,hygiene:90};
+  saveToBrowser();updatePetUI();closeShop();
+  showToast(`You adopted ${name} the ${t.name}! 🐾`);
+  if(G.charName)addChat('narrator',`A tiny ${t.icon} trots in and looks up at ${G.charName} with wide curious eyes. It seems like ${G.charName} has found a new companion.`);
+}
+function renamePet(){
+  if(!G.pet)return;
+  const name=prompt(`What would you like to name your ${PET_TYPES[G.pet.type]?.name||'pet'}?`,G.pet.name);
+  if(name&&name.trim()){G.pet.name=name.trim().slice(0,20);saveToBrowser();updatePetUI();showToast(`Renamed to ${G.pet.name}! 🐾`);renderShopContent(shopCurrentTab);}
+}
+function renderPetShop(){
+  if(!G.pet){
+    return`<div style="padding:10px">
+      <p style="font-size:13px;color:var(--soft);margin-bottom:16px">Adopt a little companion for ${G.charName||'your character'}! Each one has their own personality.</p>
+      <div class="pet-type-grid">${Object.entries(PET_TYPES).map(([k,t])=>`
+        <div class="pet-type-card" onclick="adoptPet('${k}')">
+          <div class="pt-icon">${t.icon}</div>
+          <div style="width:52px;height:52px;margin:0 auto 6px">${buildPetSVG(k,75)}</div>
+          <div class="pt-name">${t.name}</div>
+          <div class="pt-desc">${t.desc}</div>
+          <div style="font-size:11px;color:var(--green);font-weight:700;margin-top:6px">Free to adopt</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+  const p=G.pet,t=PET_TYPES[p.type];
+  const mood=getPetMood();
+  return`<div style="padding:10px">
+    <div style="display:flex;align-items:center;gap:16px;background:var(--card);border-radius:14px;padding:16px;margin-bottom:16px;border:2px solid var(--accent)">
+      <div style="width:76px;height:76px;flex-shrink:0">${buildPetSVG(p.type,mood)}</div>
+      <div style="flex:1">
+        <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--accent)">${p.name}</div>
+        <div style="font-size:12px;color:var(--soft);margin-bottom:8px">${t?.name||'Pet'} · ${getPetMoodLabel(mood)}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="save-btn" style="width:auto;padding:6px 14px;font-size:12px" onclick="renamePet()">✏️ Rename</button>
+          <button class="save-btn accent" style="width:auto;padding:6px 14px;font-size:12px" onclick="openPetCare();closeShop()">🐾 Care for ${p.name}</button>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--soft);margin-bottom:12px">Want a different companion? (replaces current pet)</p>
+    <div class="pet-type-grid">${Object.entries(PET_TYPES).filter(([k])=>k!==p.type).map(([k,ot])=>`
+      <div class="pet-type-card" onclick="if(confirm('Switch to a ${ot.name}? Your current pet will be replaced.'))adoptPet('${k}')">
+        <div class="pt-icon">${ot.icon}</div>
+        <div style="width:44px;height:44px;margin:0 auto 5px">${buildPetSVG(k,75)}</div>
+        <div class="pt-name">${ot.name}</div>
+        <div class="pt-desc">${ot.desc}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
 
 // Avatar SVG builder
 function _avProps(age){
@@ -1100,19 +1373,33 @@ function _avHair(style,cx,cy,r,col){
     default:return`<ellipse cx="${cx}" cy="${cy-r*.1}" rx="${r+4}" ry="${r+3}" fill="${col}"/>`;
   }
 }
-function _avEyes(shape,cx,cy,r,mood){
+function _avEyes(shape,cx,cy,r,mood,build){
   const ey=cy-r*.1,sep=r*.42,lx=cx-sep,rx2=cx+sep;
+  if(build==='strong'){
+    // Narrower, heavier-lidded eyes for strong build — same for all shapes
+    const aw=r*.24,ah=r*.10;
+    return`<ellipse cx="${lx}" cy="${ey}" rx="${aw}" ry="${ah}" fill="#1a1a2e"/>
+           <ellipse cx="${rx2}" cy="${ey}" rx="${aw}" ry="${ah}" fill="#1a1a2e"/>
+           <line x1="${lx-aw}" y1="${ey-ah}" x2="${lx+aw}" y2="${ey-ah}" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
+           <line x1="${rx2-aw}" y1="${ey-ah}" x2="${rx2+aw}" y2="${ey-ah}" stroke="#1a1a2e" stroke-width="2" stroke-linecap="round"/>
+           <circle cx="${lx+aw*.25}" cy="${ey-ah*.2}" r="${ah*.5}" fill="white"/>
+           <circle cx="${rx2+aw*.25}" cy="${ey-ah*.2}" r="${ah*.5}" fill="white"/>`;
+  }
   if(shape==='almond'){const aw=r*.24,ah=r*.15;return`<ellipse cx="${lx}" cy="${ey}" rx="${aw}" ry="${ah}" fill="#1a1a2e"/><ellipse cx="${rx2}" cy="${ey}" rx="${aw}" ry="${ah}" fill="#1a1a2e"/><circle cx="${lx+aw*.3}" cy="${ey-ah*.3}" r="${ah*.45}" fill="white"/><circle cx="${rx2+aw*.3}" cy="${ey-ah*.3}" r="${ah*.45}" fill="white"/>`;}
   if(shape==='wide'){const wr=r*.21;return`<circle cx="${lx}" cy="${ey}" r="${wr}" fill="#1a1a2e"/><circle cx="${rx2}" cy="${ey}" r="${wr}" fill="#1a1a2e"/><circle cx="${lx}" cy="${ey}" r="${wr*.55}" fill="#3a4aee" opacity=".7"/><circle cx="${rx2}" cy="${ey}" r="${wr*.55}" fill="#3a4aee" opacity=".7"/><circle cx="${lx+wr*.3}" cy="${ey-wr*.3}" r="${wr*.3}" fill="white"/><circle cx="${rx2+wr*.3}" cy="${ey-wr*.3}" r="${wr*.3}" fill="white"/>`;}
   const er=r*.18;return`<circle cx="${lx}" cy="${ey}" r="${er}" fill="#1a1a2e"/><circle cx="${rx2}" cy="${ey}" r="${er}" fill="#1a1a2e"/><circle cx="${lx+er*.35}" cy="${ey-er*.35}" r="${er*.32}" fill="white"/><circle cx="${rx2+er*.35}" cy="${ey-er*.35}" r="${er*.32}" fill="white"/>`;
 }
-function _avMouth(cx,cy,r,mood,asleep){
+function _avMouth(cx,cy,r,mood,asleep,build){
   const my=cy+r*.45;
-  if(asleep)return`<path d="M${cx-r*.2},${my} Q${cx},${my+r*.1} ${cx+r*.2},${my}" stroke="#d4a0a0" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-  if(mood>65)return`<path d="M${cx-r*.3},${my} Q${cx},${my+r*.22} ${cx+r*.3},${my}" stroke="#d4706a" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
-  if(mood>35)return`<path d="M${cx-r*.22},${my} Q${cx},${my+r*.13} ${cx+r*.22},${my}" stroke="#d4706a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-  if(mood>15)return`<path d="M${cx-r*.2},${my} L${cx+r*.2},${my}" stroke="#c07070" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-  return`<path d="M${cx-r*.25},${my+r*.1} Q${cx},${my-r*.08} ${cx+r*.25},${my+r*.1}" stroke="#c07070" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  // Strong build: thinner, slightly wider, less curved mouth
+  const mw=build==='strong'?r*.28:r*.3;
+  const mc=build==='strong'?r*.14:r*.22;
+  const col=mood<35?'#c07070':'#d4706a';
+  if(asleep)return`<path d="M${cx-r*.18},${my} Q${cx},${my+r*.08} ${cx+r*.18},${my}" stroke="#d4a0a0" stroke-width="${build==='strong'?1.5:2}" fill="none" stroke-linecap="round"/>`;
+  if(mood>65)return`<path d="M${cx-mw},${my} Q${cx},${my+mc} ${cx+mw},${my}" stroke="${col}" stroke-width="${build==='strong'?2:2.5}" fill="none" stroke-linecap="round"/>`;
+  if(mood>35)return`<path d="M${cx-mw*.75},${my} Q${cx},${my+mc*.55} ${cx+mw*.75},${my}" stroke="${col}" stroke-width="${build==='strong'?1.5:2}" fill="none" stroke-linecap="round"/>`;
+  if(mood>15)return`<path d="M${cx-r*.2},${my} L${cx+r*.2},${my}" stroke="#c07070" stroke-width="${build==='strong'?1.5:2}" fill="none" stroke-linecap="round"/>`;
+  return`<path d="M${cx-r*.22},${my+r*.08} Q${cx},${my-r*.06} ${cx+r*.22},${my+r*.08}" stroke="#c07070" stroke-width="2" fill="none" stroke-linecap="round"/>`;
 }
 function _avAccessory(acc,cx,hCy,r,hairCol){
   if(acc==='glasses'){const gy=hCy-r*.05;return`<rect x="${cx-r*.55}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/><rect x="${cx+r*.1}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/><line x1="${cx-r*.1}" y1="${gy}" x2="${cx+r*.1}" y2="${gy}" stroke="#555" stroke-width="2"/>`;}
@@ -1135,8 +1422,12 @@ function _avBody(cx,p,outCol,skinCol,outfit){
   return s;
 }
 function buildHumanSVG(avatar,age,mood,activity){
-  const p=_avProps(age);
+  const _p=_avProps(age);
   const cx=60;
+  const build=avatar?.build||'soft';
+  const strong=build==='strong';
+  // Adjust proportions for strong build: broader shoulders, slightly squarer
+  const p={..._p,bW:strong?_p.bW+9:_p.bW,bRx:strong?Math.max(_p.bRx-4,10):_p.bRx};
   const skin=AV_SKIN[avatar?.skinTone??2];
   const hairCol=AV_HAIR_COL[avatar?.hairColor??0];
   const outCol=AV_OUTFIT_COL[avatar?.outfitColor??0];
@@ -1145,18 +1436,28 @@ function buildHumanSVG(avatar,age,mood,activity){
   const acc=avatar?.accessory||'none';
   const outfit=avatar?.outfit||'casual';
   const asleep=activity==='sleeping';
-  const blush=mood>65?`<ellipse cx="${cx-p.hR*.45}" cy="${p.hCy+p.hR*.3}" rx="6" ry="4" fill="#ffb8c0" opacity=".45"/><ellipse cx="${cx+p.hR*.45}" cy="${p.hCy+p.hR*.3}" rx="6" ry="4" fill="#ffb8c0" opacity=".45"/>`:'';
+  // Blush: soft build gets it at mood>65; strong build only at mood>85
+  const blush=(!strong&&mood>65)||(strong&&mood>85)
+    ?`<ellipse cx="${cx-p.hR*.45}" cy="${p.hCy+p.hR*.3}" rx="6" ry="4" fill="#ffb8c0" opacity=".4"/><ellipse cx="${cx+p.hR*.45}" cy="${p.hCy+p.hR*.3}" rx="6" ry="4" fill="#ffb8c0" opacity=".4"/>`:'';
+  // Jaw: strong build gets a subtle angular chin extension
+  const jaw=strong
+    ?`<ellipse cx="${cx}" cy="${p.hCy+p.hR*.75}" rx="${p.hR*.55}" ry="${p.hR*.28}" fill="${skin}"/>
+       <rect x="${cx-p.hR*.42}" y="${p.hCy+p.hR*.55}" width="${p.hR*.84}" height="${p.hR*.2}" fill="${skin}"/>`
+    :'';
+  // Neck: slightly wider for strong build
+  const neckW=strong?9:7;
   const zzz=asleep?`<text x="${cx+p.hR+4}" y="${p.hCy-p.hR+10}" font-size="13" fill="#a168b0" opacity=".7">z</text><text x="${cx+p.hR+10}" y="${p.hCy-p.hR}" font-size="10" fill="#a168b0" opacity=".5">z</text>`:'';
   return`<svg viewBox="0 0 120 165" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <ellipse cx="${cx}" cy="158" rx="26" ry="5" fill="#00000015"/>
+  <ellipse cx="${cx}" cy="158" rx="${strong?30:26}" ry="5" fill="#00000015"/>
   ${_avBody(cx,p,outCol,skin,outfit)}
-  <rect x="${cx-7}" y="${p.hCy+p.hR-5}" width="14" height="${10}" rx="6" fill="${skin}"/>
+  <rect x="${cx-neckW}" y="${p.hCy+p.hR-5}" width="${neckW*2}" height="10" rx="${strong?3:6}" fill="${skin}"/>
   <circle cx="${cx-p.hR+3}" cy="${p.hCy+2}" r="7" fill="${skin}"/>
   <circle cx="${cx+p.hR-3}" cy="${p.hCy+2}" r="7" fill="${skin}"/>
   ${_avHair(hairStyle,cx,p.hCy,p.hR,hairCol)}
   <circle cx="${cx}" cy="${p.hCy}" r="${p.hR}" fill="${skin}"/>
-  ${_avEyes(eyeShape,cx,p.hCy,p.hR,mood)}
-  ${_avMouth(cx,p.hCy,p.hR,mood,asleep)}
+  ${jaw}
+  ${_avEyes(eyeShape,cx,p.hCy,p.hR,mood,build)}
+  ${_avMouth(cx,p.hCy,p.hR,mood,asleep,build)}
   ${blush}
   ${_avAccessory(acc,cx,p.hCy,p.hR,hairCol)}
   ${zzz}
@@ -1238,7 +1539,7 @@ function getSeasonYear(){return Math.ceil(G.day/4);}
 
 let G={
   charName:'',age:5,startAge:5,day:1,background:'',
-  avatar:{skinTone:2,hairStyle:'shortBob',hairColor:0,eyeShape:'round',outfit:'casual',outfitColor:0,accessory:'none'},
+  avatar:{skinTone:2,hairStyle:'shortBob',hairColor:0,eyeShape:'round',outfit:'casual',outfitColor:0,accessory:'none',build:'soft'},
   personality:{openness:50,conscientiousness:50,extraversion:50,agreeableness:50,neuroticism:50},
   emotions:{happiness:60,stress:30,confidence:50,trust:50},
   skills:{academic:20,social:20,emotional:15,physical:30,creative:20,practical:10},
@@ -1262,7 +1563,8 @@ let G={
   yearSeasons:[],_lastEval:null,_wrapupShown:false,_endingShown:false,
   history:{snapshots:[],interactions:[],roleUsage:{teacher:0,parent:0,doctor:0,lawyer:0,therapist:0,friend:0,champion:0}},
   blinkTimer:null,tickTimer:null,
-  chatHistory:[],charMemory:[],lastProactiveTs:0,_bubbleTimer:null
+  chatHistory:[],charMemory:[],lastProactiveTs:0,_bubbleTimer:null,
+  pet:null
 };
 
 // ---- SETUP ----
@@ -1281,6 +1583,7 @@ function initAvatarBuilder(){
   _renderPills('av-outfit-pills',AV_OUTFIT_STYLES,'outfit');
   _renderSwatches('av-outfit-swatches',AV_OUTFIT_COL,'outfitColor');
   _renderPills('av-acc-pills',AV_ACCESSORY_DEFS,'accessory');
+  _renderPills('av-build-pills',AV_BUILDS,'build');
   _updateAvatarLivePreview();
 }
 
@@ -1309,6 +1612,7 @@ function _refreshAllAvatarControls(){
   _highlightPill('av-eye-pills','eyeShape');
   _highlightPill('av-outfit-pills','outfit');
   _highlightPill('av-acc-pills','accessory');
+  _highlightPill('av-build-pills','build');
 }
 
 function _renderSwatches(containerId,palette,key){
@@ -1488,6 +1792,19 @@ function tickNeeds(){
   if(G.needs.social.v<25)G.emotions.happiness=clamp(G.emotions.happiness-.3,0,100);
   if(G.needs.fun.v<20)G.emotions.stress=clamp(G.emotions.stress+.4,0,100);
   if(Math.random()<.33)pickActivity();
+  // Pet needs decay
+  if(G.pet){
+    const stressDrain=G.emotions.stress>65?0.45:0.22;
+    G.pet.hunger=clamp(G.pet.hunger-.48,0,100);
+    G.pet.energy=clamp(G.pet.energy-.28,0,100);
+    G.pet.hygiene=clamp(G.pet.hygiene-.18,0,100);
+    G.pet.happiness=clamp(G.pet.happiness-stressDrain,0,100);
+    // Pet mood feeds back to character
+    const petMood2=getPetMood();
+    if(petMood2<35)G.emotions.happiness=clamp(G.emotions.happiness-.25,0,100);
+    if(petMood2>72)G.emotions.happiness=clamp(G.emotions.happiness+.12,0,100);
+    updatePetUI();
+  }
   updateNeedsUI();updateAlertsUI();updateCharSVG();updateAllUI();
   checkProactiveMessage();
 }
@@ -1537,7 +1854,7 @@ function updateAllUI(){
   document.getElementById('skill-stats').innerHTML=Object.entries(G.skills).map(([k,v])=>`<div class="stat-bar"><span class="sn">${k[0].toUpperCase()+k.slice(1)}</span><div class="bt"><div class="bf" style="width:${v}%;background:${skC[k]}"></div></div><span class="sv">${v}</span></div>`).join('');
   document.getElementById('role-list').innerHTML=Object.entries(G.playerRoles).map(([k,v])=>`<div class="role-row"><div class="role-ic">${ROLES[k].icon}</div><div class="role-info"><div class="rn">${ROLES[k].label}</div><div class="rb"><div class="rf" style="width:${v}%"></div></div><div class="rl">Lv ${Math.floor(v/20)+1} · ${v}%</div></div></div>`).join('');
   if(G.memories.length>0)document.getElementById('mem-list').innerHTML=G.memories.slice(-6).reverse().map(m=>`<div class="mem-entry"><span class="ma">Age ${m.age}</span> — ${m.summary}</div>`).join('');
-  updateNeedsUI();updateAlertsUI();
+  updateNeedsUI();updateAlertsUI();updatePetUI();
 }
 
 // ---- CHAT ----
@@ -2986,7 +3303,8 @@ function _serializeState(){
     wl:{c:G.wallet.coins,g:G.wallet.gems},cos:{o:G.cosmetics.outfit,a:G.cosmetics.accessory},
     own:{o:[...G.owned.outfits],a:[...G.owned.accessories],pk:[...G.owned.packs],prem:G.owned.premium},
     pp:{...G.packProgress},ev:[...G.eventHistory],mem:[...G.memories],cm:[...G.charMemory],
-    day:G.day,ru:{...G.history.roleUsage},ys:[...G.yearSeasons]};
+    day:G.day,ru:{...G.history.roleUsage},ys:[...G.yearSeasons],
+    pet:G.pet?{...G.pet}:null};
 }
 function generateSaveCode(){try{return btoa(encodeURIComponent(JSON.stringify(_serializeState())));}catch(e){return null;}}
 function loadSaveCode(code,silent){
@@ -3006,6 +3324,7 @@ function loadSaveCode(code,silent){
     G.packProgress={...raw.pp};G.eventHistory=[...raw.ev];G.memories=[...raw.mem];G.charMemory=[...raw.cm];
     G.day=raw.day||1;for(const k in raw.ru)G.history.roleUsage[k]=raw.ru[k]||0;
     G.yearSeasons=Array.isArray(raw.ys)?raw.ys:[];
+    G.pet=raw.pet&&raw.pet.type&&PET_TYPES[raw.pet.type]?{...raw.pet}:null;
     if(!silent)showToast(`Welcome back, ${G.charName}! 👋`);
     return true;
   }catch(e){if(!silent)showToast('Invalid save code — check and try again.');return false;}
@@ -3245,12 +3564,13 @@ function updateShopWallet(){
 }
 function shopTab(tab){
   shopCurrentTab=tab;
-  document.querySelectorAll('.shop-tab').forEach((t,i)=>{const tabs=['animals','outfits','accessories','packs'];t.classList.toggle('active',tabs[i]===tab);});
+  document.querySelectorAll('.shop-tab').forEach((t,i)=>{const tabs=['customize','pet','outfits','accessories','packs'];t.classList.toggle('active',tabs[i]===tab);});
   renderShopContent(tab);
 }
 function renderShopContent(tab){
   const body=document.getElementById('shop-body');if(!body)return;
   if(tab==='customize')body.innerHTML=renderAvatarShop();
+  else if(tab==='pet')body.innerHTML=renderPetShop();
   else if(tab==='outfits')body.innerHTML=renderOutfitShop();
   else if(tab==='accessories')body.innerHTML=renderAccessoryShop();
   else body.innerHTML=renderPackShop();
@@ -3285,6 +3605,10 @@ function renderAvatarShop(){
     <div style="margin-bottom:14px">
       <div class="av-section-label">Accessory</div>
       <div class="av-style-pills">${AV_ACCESSORY_DEFS.map(d=>`<div class="av-pill${G.avatar.accessory===d.id?' sel':''}" onclick="liveSetAvatar('accessory','${d.id}')">${d.label}</div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Build</div>
+      <div class="av-style-pills">${AV_BUILDS.map(d=>`<div class="av-pill${(G.avatar.build||'soft')===d.id?' sel':''}" onclick="liveSetAvatar('build','${d.id}')">${d.label}</div>`).join('')}</div>
     </div>
   </div>`;
 }

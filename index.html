@@ -129,16 +129,26 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .bg-opt{padding:9px 12px;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:12px;}
 .bg-opt:hover,.bg-opt.sel{border-color:var(--accent);background:var(--accent-glow);}
 
-/* Animal selection */
-.animal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-.animal-opt{border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;text-align:center;padding:8px 4px 4px;background:var(--card);position:relative;overflow:hidden;}
-.animal-opt:hover{border-color:var(--accent-l);transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow);}
-.animal-opt.sel{border-color:var(--accent);background:var(--accent-glow);transform:translateY(-2px);box-shadow:0 4px 12px rgba(243,92,154,.2);}
-.animal-opt .a-svg{width:54px;height:64px;margin:0 auto;display:block;}
-.animal-opt .a-name{font-size:11px;font-weight:700;color:var(--soft);margin-top:3px;}
-.animal-opt.sel .a-name{color:var(--accent);}
-.animal-opt .a-sel-badge{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:700;}
-.animal-opt.sel .a-sel-badge{display:flex;}
+/* AVATAR BUILDER */
+.av-builder{display:flex;flex-direction:column;gap:14px;}
+.av-preview-wrap{display:flex;justify-content:center;align-items:center;padding:10px 0;}
+.av-preview-svg{width:90px;height:120px;display:block;}
+.av-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.av-preset{border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:.18s;text-align:center;padding:6px 4px 4px;background:var(--card);position:relative;}
+.av-preset:hover{border-color:var(--accent-l);transform:translateY(-2px);}
+.av-preset.sel{border-color:var(--accent);background:var(--accent-glow);}
+.av-preset-svg{width:46px;height:62px;display:block;margin:0 auto;}
+.av-preset-name{font-size:10px;font-weight:700;color:var(--soft);margin-top:3px;}
+.av-preset.sel .av-preset-name{color:var(--accent);}
+.av-section-label{font-size:11px;font-weight:800;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.av-swatches{display:flex;flex-wrap:wrap;gap:7px;}
+.av-swatch{width:28px;height:28px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:.15s;}
+.av-swatch.sel{border-color:var(--accent);transform:scale(1.18);}
+.av-style-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.av-pill{padding:5px 12px;border-radius:20px;border:2px solid var(--border);background:var(--card);font-size:12px;font-weight:700;cursor:pointer;transition:.15s;color:var(--text);}
+.av-pill:hover{border-color:var(--accent-l);}
+.av-pill.sel{border-color:var(--accent);background:var(--accent-glow);color:var(--accent);}
+@media(max-width:480px){.av-presets{grid-template-columns:repeat(4,1fr);}}
 
 .btn-primary{display:flex;align-items:center;justify-content:center;width:100%;padding:12px;border:none;border-radius:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(243,92,154,.35);transition:all .2s;margin-top:4px;}
 .btn-primary:hover{background:#d03c7e;transform:translateY(-1px);}
@@ -411,7 +421,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
   /* Setup screen adjustments */
   .setup-card{padding:20px 16px;}
-  .animal-grid{grid-template-columns:repeat(3,1fr)!important;}
 
   /* Space for bottom tab bar */
   body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px));}
@@ -583,6 +592,71 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 #ak-save-btn{background:var(--accent);color:#fff;}
 #ak-cancel-btn{background:var(--border);color:var(--text);}
 
+/* ===== GAMES HUB ===== */
+#games-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:900;}
+#games-modal.open{display:flex;}
+.games-panel{background:var(--card);border-radius:20px;padding:28px 24px;width:min(560px,94vw);max-height:90vh;overflow-y:auto;}
+.games-panel h2{text-align:center;margin-bottom:4px;font-size:20px;}
+.games-subtitle{text-align:center;font-size:13px;color:var(--text-2);margin-bottom:20px;}
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:480px){.games-grid{grid-template-columns:1fr;}}
+.game-card{background:var(--bg);border-radius:14px;padding:18px 14px;cursor:pointer;border:2px solid transparent;transition:.2s;text-align:center;display:flex;flex-direction:column;}
+.game-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.game-card-icon{font-size:34px;margin-bottom:8px;}
+.game-card-title{font-size:15px;font-weight:800;margin-bottom:5px;}
+.game-card-desc{font-size:12px;color:var(--text-2);margin-bottom:12px;line-height:1.4;flex:1;}
+.game-card-reward{font-size:12px;font-weight:700;color:var(--accent);background:rgba(161,104,176,.1);border-radius:20px;padding:4px 10px;display:inline-block;}
+.games-close-btn{display:block;margin:20px auto 0;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 28px;font-size:14px;font-weight:700;cursor:pointer;}
+
+/* ===== NEED RUSH ===== */
+#nr-overlay{position:fixed;inset:0;background:var(--bg);z-index:950;display:none;flex-direction:column;}
+#nr-overlay.open{display:flex;}
+.nr-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border-bottom:2px solid var(--accent-l);gap:8px;}
+.nr-stat{font-size:14px;font-weight:800;}
+.nr-field{flex:1;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%,var(--card) 100%);}
+.nr-char-face{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);font-size:52px;user-select:none;pointer-events:none;}
+.nr-item{position:absolute;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;border:3px solid rgba(255,255,255,.35);box-shadow:0 4px 14px rgba(0,0,0,.18);transition:transform .08s,opacity .15s;user-select:none;}
+.nr-item.caught{transform:scale(1.5)!important;opacity:0!important;}
+.nr-item.missed{transform:scale(.4)!important;opacity:0!important;}
+.nr-flash{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .18s;}
+.nr-controls{padding:10px 8px;background:var(--card);border-top:2px solid var(--accent-l);display:flex;gap:7px;justify-content:center;flex-wrap:wrap;}
+.nr-care-btn{width:54px;height:54px;border-radius:14px;border:2px solid var(--accent-l);background:var(--bg);font-size:22px;cursor:pointer;transition:.12s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;}
+.nr-care-btn span.lbl{font-size:9px;color:var(--text-2);font-weight:700;}
+.nr-care-btn:active{transform:scale(.88);}
+.nr-care-btn.flash-good{border-color:#5ca06e;background:rgba(92,160,110,.18);transform:scale(1.08);}
+.nr-care-btn.flash-bad{border-color:#cd2e3c;background:rgba(205,46,60,.12);}
+.nr-result-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;}
+.nr-result-panel{background:var(--card);border-radius:20px;padding:28px 24px;text-align:center;width:min(320px,86vw);}
+.nr-score-big{font-size:52px;font-weight:900;color:var(--accent);line-height:1;}
+.nr-action-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:11px 24px;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px;}
+
+/* ===== CROSSROADS ===== */
+#cr-overlay{position:fixed;inset:0;background:var(--bg);z-index:950;display:none;flex-direction:column;}
+#cr-overlay.open{display:flex;}
+.cr-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border-bottom:2px solid var(--accent-l);}
+.cr-depth-bar{display:flex;gap:6px;}
+.cr-depth-pip{width:28px;height:6px;border-radius:3px;background:var(--accent-l);transition:.3s;}
+.cr-depth-pip.done{background:var(--accent);}
+.cr-body{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:12px;max-width:640px;margin:0 auto;width:100%;}
+.cr-situation{background:var(--card);border-radius:14px;padding:16px;border-left:4px solid var(--accent);}
+.cr-situation-label{font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+.cr-situation-text{font-size:15px;line-height:1.55;}
+.cr-char-says{font-style:italic;color:var(--text-2);margin-top:9px;font-size:13px;line-height:1.4;}
+.cr-prompt{font-size:13px;font-weight:700;color:var(--text-2);text-align:center;padding:2px 0;}
+.cr-choices{display:flex;flex-direction:column;gap:9px;}
+.cr-choice{background:var(--card);border:2px solid var(--accent-l);border-radius:12px;padding:13px 15px;cursor:pointer;font-size:14px;line-height:1.45;transition:.18s;}
+.cr-choice:hover{border-color:var(--accent);background:rgba(161,104,176,.07);}
+.cr-choice.selected{border-color:var(--accent);}
+.cr-choice.rv-good{border-color:#5ca06e;background:rgba(92,160,110,.09);}
+.cr-choice.rv-ok{border-color:#e19c34;background:rgba(225,156,52,.09);}
+.cr-choice.rv-bad{border-color:#cd2e3c;background:rgba(205,46,60,.07);}
+.cr-outcome{font-size:12px;margin-top:7px;font-style:italic;color:var(--text-2);display:none;line-height:1.4;}
+.cr-choice.rv-good .cr-outcome,.cr-choice.rv-ok .cr-outcome,.cr-choice.rv-bad .cr-outcome{display:block;}
+.cr-result-panel{background:var(--card);border-radius:14px;padding:22px 18px;text-align:center;}
+.cr-score-big{font-size:52px;font-weight:900;color:var(--accent);line-height:1;margin:6px 0;}
+.cr-gems-earned{font-size:20px;font-weight:800;margin:8px 0;}
+.cr-action-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:11px 24px;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;}
+
 </style>
 </head>
 <body>
@@ -615,8 +689,44 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <input type="text" id="char-name" placeholder="Give them a name..." maxlength="20">
     </div>
     <div class="form-group">
-      <label>Choose Their Animal</label>
-      <div class="animal-grid" id="animal-grid"></div>
+      <label>Design Your Character</label>
+      <div class="av-builder" id="av-builder">
+        <div class="av-preview-wrap">
+          <div id="av-live-preview" class="av-preview-svg"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Choose a look</div>
+          <div class="av-presets" id="av-presets-grid"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Skin tone</div>
+          <div class="av-swatches" id="av-skin-swatches"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Hair style</div>
+          <div class="av-style-pills" id="av-hair-pills"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Hair colour</div>
+          <div class="av-swatches" id="av-hair-swatches"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Eyes</div>
+          <div class="av-style-pills" id="av-eye-pills"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Outfit</div>
+          <div class="av-style-pills" id="av-outfit-pills"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Outfit colour</div>
+          <div class="av-swatches" id="av-outfit-swatches"></div>
+        </div>
+        <div>
+          <div class="av-section-label">Accessory</div>
+          <div class="av-style-pills" id="av-acc-pills"></div>
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label>Starting Age</label>
@@ -650,6 +760,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
         <span class="gem-disp">💎 <span id="hdr-gems">0</span></span>
       </div>
       <button class="hbtn" onclick="openShop()">🛍️<span class="btn-lbl"> Shop</span></button>
+      <button class="hbtn" onclick="openGames()">🎮<span class="btn-lbl"> Games</span></button>
       <button class="hbtn dash" onclick="openDash()">📊<span class="btn-lbl"> Dashboard</span></button>
       <button class="hbtn voice-hbtn" id="voice-btn" onclick="toggleVoice()" title="Character voice on/off">🔊</button>
       <button class="hbtn" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark">🌙</button>
@@ -770,7 +881,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       <button class="shop-close" onclick="closeShop()">✕</button>
     </div>
     <div class="shop-tabs">
-      <div class="shop-tab active" onclick="shopTab('animals')">🐾 Animals</div>
+      <div class="shop-tab active" onclick="shopTab('customize')">✨ Customize</div>
       <div class="shop-tab" onclick="shopTab('outfits')">👗 Outfits</div>
       <div class="shop-tab" onclick="shopTab('accessories')">🎩 Accessories</div>
       <div class="shop-tab" onclick="shopTab('packs')">📖 Story Packs</div>
@@ -805,6 +916,55 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
     <div class="gem-note">💡 This is a prototype — gems are simulated. In production, purchases will be processed securely through app stores.</div>
   </div>
+</div>
+
+<!-- GAMES HUB -->
+<div id="games-modal" onclick="if(event.target===this)closeGames()">
+  <div class="games-panel">
+    <h2>🎮 Game Modes</h2>
+    <p class="games-subtitle">Play with <span id="games-char-name">your character</span> · earn gems</p>
+    <div class="games-grid">
+      <div class="game-card" onclick="closeGames();startNeedRush()">
+        <div class="game-card-icon">⚡</div>
+        <div class="game-card-title">Need Rush</div>
+        <div class="game-card-desc">Care items fall from the sky. Match each one before it hits the ground. Your character's mood sets the pace.</div>
+        <div class="game-card-reward">💎 Up to 15 gems</div>
+      </div>
+      <div class="game-card" onclick="closeGames();startCrossroads()">
+        <div class="game-card-icon">🌿</div>
+        <div class="game-card-title">Crossroads</div>
+        <div class="game-card-desc">A situation unfolds. You choose a path without seeing where it leads. Think ahead — consequences compound.</div>
+        <div class="game-card-reward">💎 Up to 20 gems</div>
+      </div>
+    </div>
+    <button class="games-close-btn" onclick="closeGames()">Close</button>
+  </div>
+</div>
+
+<!-- NEED RUSH -->
+<div id="nr-overlay">
+  <div class="nr-header">
+    <button class="hbtn" onclick="endNeedRush(true)" style="font-size:12px;padding:5px 10px">✕ Quit</button>
+    <div class="nr-stat">Score: <span id="nr-score-hdr">0</span></div>
+    <div class="nr-stat">⏱ <span id="nr-timer-hdr">60</span>s</div>
+    <div class="nr-stat">💎 <span id="nr-gems-hdr">0</span></div>
+  </div>
+  <div class="nr-field" id="nr-field">
+    <div class="nr-char-face" id="nr-char-face">😊</div>
+    <div class="nr-flash" id="nr-miss-flash" style="background:rgba(205,46,60,.14)"></div>
+    <div class="nr-flash" id="nr-catch-flash" style="background:rgba(92,160,110,.14)"></div>
+  </div>
+  <div class="nr-controls" id="nr-controls"></div>
+</div>
+
+<!-- CROSSROADS -->
+<div id="cr-overlay">
+  <div class="cr-header">
+    <button class="hbtn" onclick="endCrossroads(true)" style="font-size:12px;padding:5px 10px">✕ Quit</button>
+    <div style="font-weight:800;font-size:14px">🌿 Crossroads</div>
+    <div class="cr-depth-bar" id="cr-depth-bar"></div>
+  </div>
+  <div class="cr-body" id="cr-body"></div>
 </div>
 
 <!-- DASHBOARD -->
@@ -879,22 +1039,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 //  WEMAKOSHI v0.4 — Animal SVG Characters + Needs + Dashboard
 // ================================================================
 
-// ---- ANIMAL DEFINITIONS ----
-const ANIMALS = {
-  pig:     {name:'Pig',      emoji:'🐷', tc:'#ff7eb3',tl:'#ffafd0',td:'#e05585',ta:'#ff4a6a',earType:'round',   desc:'Curious & cheerful'},
-  cat:     {name:'Cat',      emoji:'🐱', tc:'#ffcf5c',tl:'#ffe88a',td:'#e0a820',ta:'#ff8c00',earType:'point',   desc:'Independent & clever'},
-  dog:     {name:'Dog',      emoji:'🐶', tc:'#ff8c42',tl:'#ffb07a',td:'#d05a10',ta:'#ffe0b0',earType:'floppy',  desc:'Loyal & energetic'},
-  rabbit:  {name:'Rabbit',   emoji:'🐰', tc:'#c0e8ff',tl:'#e0f6ff',td:'#78b8e0',ta:'#ff9ab0',earType:'tall',    desc:'Gentle & timid'},
-  bear:    {name:'Bear',     emoji:'🐻', tc:'#c87c2c',tl:'#e8a050',td:'#8a5010',ta:'#ffe0b0',earType:'round',   desc:'Warm & protective'},
-  cow:     {name:'Cow',      emoji:'🐮', tc:'#f0eeee',tl:'#ffffff',td:'#b8b0b0',ta:'#c8a050',earType:'round',   desc:'Gentle & steady'},
-  duck:    {name:'Duck',     emoji:'🦆', tc:'#f5e040',tl:'#fff790',td:'#c0a800',ta:'#ff8c10',earType:'tuft',    desc:'Playful & social'},
-  sheep:   {name:'Sheep',    emoji:'🐑', tc:'#80ccff',tl:'#b8e4ff',td:'#4890d0',ta:'#f0f0f8',earType:'fluffy',  desc:'Fluffy & calm'},
-  fox:     {name:'Fox',      emoji:'🦊', tc:'#ff5c18',tl:'#ff8a50',td:'#c03000',ta:'#fff0e0',earType:'point',   premium:true,gemCost:15,desc:'Clever & mischievous'},
-  panda:   {name:'Panda',    emoji:'🐼', tc:'#f0f0f0',tl:'#ffffff',td:'#c0c0c0',ta:'#1a1a2e',earType:'round',   premium:true,gemCost:15,desc:'Rare & lovable'},
-  capybara:{name:'Capybara', emoji:'🦫', tc:'#b0885a',tl:'#d0a878',td:'#786028',ta:'#e8cfa0',earType:'stub',    premium:true,gemCost:20,desc:'Chill & friendly'},
-  penguin: {name:'Penguin',  emoji:'🐧', tc:'#252538',tl:'#454558',td:'#101018',ta:'#f0f0f4',earType:'none',    premium:true,gemCost:15,desc:'Dapper & sweet'},
-  redpanda:{name:'Red Panda',emoji:'🦝', tc:'#d03818',tl:'#f05838',td:'#901008',ta:'#f0d0a0',earType:'point',   premium:true,gemCost:20,desc:'Exotic & playful'}
-};
 
 const OUTFITS={
   classic:{name:'Classic Denim', desc:"Each animal's natural look",  cost:{coins:0}, ov:'#4a7eb5',ovLt:'#6a9ed5',ovDk:'#3a6da0'},
@@ -917,219 +1061,110 @@ const ACCESSORIES={
   stargls:{name:'Star Glasses',  desc:'Shine bright! ⭐',  cost:{gems:10}, svg:`<path d="M43,46 l2.5,-5 l2.5,5 l5,-1 l-3.5,4 l1.5,5 l-5.5,-3 l-5.5,3 l1.5,-5 l-3.5,-4Z" fill="#ffd020" opacity=".93"/><path d="M77,46 l2.5,-5 l2.5,5 l5,-1 l-3.5,4 l1.5,5 l-5.5,-3 l-5.5,3 l1.5,-5 l-3.5,-4Z" fill="#ffd020" opacity=".93"/>`},
 };
 
-// ---- SVG VINYL TOY CHARACTER SYSTEM ----
 
-// X eye — permanent design mark (left eye)
-function toyXEye(cx,cy,col){
-  col=col||'#1a1a1a';const s=5;
-  return `<line x1="${cx-s}" y1="${cy-s}" x2="${cx+s}" y2="${cy+s}" stroke="${col}" stroke-width="3.2" stroke-linecap="round"/>`+
-         `<line x1="${cx+s}" y1="${cy-s}" x2="${cx-s}" y2="${cy+s}" stroke="${col}" stroke-width="3.2" stroke-linecap="round"/>`;
+// ===== AVATAR SYSTEM =====
+const AV_SKIN=['#FDDBB4','#F5C597','#E8A87C','#C68642','#8D5524','#4A2912'];
+const AV_HAIR_COL=['#1a1a1a','#4A3728','#8B4513','#D2691E','#DAA520','#F5DEB3','#CC3333','#6B48D4'];
+const AV_OUTFIT_COL=['#6BA3D6','#E8829A','#5CA06E','#E19C34','#9B7BC4','#7A9BA8'];
+const AV_HAIR_STYLES=[{id:'shortBob',label:'Short Bob'},{id:'longStraight',label:'Long Straight'},{id:'curly',label:'Curly'},{id:'ponytail',label:'Ponytail'},{id:'spiky',label:'Spiky'},{id:'braids',label:'Braids'}];
+const AV_EYE_SHAPES=[{id:'round',label:'Round'},{id:'almond',label:'Almond'},{id:'wide',label:'Wide'}];
+const AV_ACCESSORY_DEFS=[{id:'none',label:'None'},{id:'glasses',label:'Glasses'},{id:'hat',label:'Hat'},{id:'bow',label:'Bow'},{id:'headband',label:'Headband'}];
+const AV_OUTFIT_STYLES=[{id:'casual',label:'Casual'},{id:'collared',label:'Collared'},{id:'hoodie',label:'Hoodie'},{id:'dress',label:'Dress'},{id:'jacket',label:'Jacket'},{id:'sporty',label:'Sporty'}];
+const AV_PRESETS=[
+  {name:'Sunny',   skinTone:0,hairStyle:'shortBob',    hairColor:5,eyeShape:'wide',  outfit:'casual',  outfitColor:0,accessory:'none'},
+  {name:'River',   skinTone:1,hairStyle:'spiky',        hairColor:0,eyeShape:'round', outfit:'hoodie',  outfitColor:4,accessory:'none'},
+  {name:'Sage',    skinTone:2,hairStyle:'longStraight', hairColor:2,eyeShape:'almond',outfit:'casual',  outfitColor:2,accessory:'glasses'},
+  {name:'Mika',    skinTone:3,hairStyle:'curly',        hairColor:7,eyeShape:'wide',  outfit:'dress',   outfitColor:1,accessory:'bow'},
+  {name:'Leo',     skinTone:4,hairStyle:'shortBob',     hairColor:1,eyeShape:'almond',outfit:'jacket',  outfitColor:5,accessory:'none'},
+  {name:'Nova',    skinTone:5,hairStyle:'braids',       hairColor:0,eyeShape:'round', outfit:'sporty',  outfitColor:3,accessory:'headband'},
+  {name:'Quinn',   skinTone:1,hairStyle:'ponytail',     hairColor:4,eyeShape:'round', outfit:'collared',outfitColor:0,accessory:'none'},
+  {name:'Ash',     skinTone:2,hairStyle:'spiky',        hairColor:6,eyeShape:'almond',outfit:'hoodie',  outfitColor:5,accessory:'none'}
+];
+
+// Avatar SVG builder
+function _avProps(age){
+  if(!age||age<13)return{hR:34,hCy:40,bTop:80,bH:52,bW:44,bRx:22};
+  if(age<18)return{hR:29,hCy:35,bTop:70,bH:62,bW:38,bRx:18};
+  if(age<30)return{hR:26,hCy:32,bTop:64,bH:68,bW:39,bRx:18};
+  return{hR:25,hCy:31,bTop:62,bH:72,bW:42,bRx:18};
 }
-
-// Mood-reactive right eye
-function toyEye(cx,cy,mood,eyeState){
-  if(eyeState==='sleeping')return`<path d="M${cx-7},${cy+1} Q${cx},${cy-5} ${cx+7},${cy+1}" stroke="#1a1a1a" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;
-  if(mood==='happy')return`<path d="M${cx-7},${cy+2} Q${cx},${cy-7} ${cx+7},${cy+2}" fill="#1a1a1a"/>`;
-  if(mood==='sad')return`<ellipse cx="${cx}" cy="${cy}" rx="7" ry="7.5" fill="white"/><circle cx="${cx}" cy="${cy+1.5}" r="4" fill="#1a1a1a"/><circle cx="${cx+2}" cy="${cy-1.5}" r="1.6" fill="white"/><path d="M${cx-5},${cy-9} Q${cx},${cy-13} ${cx+5},${cy-9}" stroke="#555" stroke-width="1.3" fill="none"/>`;
-  return`<ellipse cx="${cx}" cy="${cy}" rx="7" ry="7.5" fill="white"/><circle cx="${cx}" cy="${cy+0.5}" r="4" fill="#1a1a1a"/><circle cx="${cx+2}" cy="${cy-2}" r="1.6" fill="white"/>`;
-}
-
-// Mischievous mouth — asymmetric smirk by default
-function toyMouth(cx,cy,mood){
-  if(mood==='happy')return`<path d="M${cx-9},${cy} Q${cx},${cy+10} ${cx+9},${cy}" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
-  if(mood==='sad')return`<path d="M${cx-8},${cy+5} Q${cx},${cy+1} ${cx+8},${cy+3}" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
-  return`<path d="M${cx-7},${cy+3} Q${cx+1},${cy+8} ${cx+9},${cy}" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
-}
-
-// Happy blush cheeks
-function toyBlush(mood){
-  if(mood!=='happy')return'';
-  return`<ellipse cx="35" cy="52" rx="9" ry="5" fill="#ff88aa" opacity="0.4"/><ellipse cx="85" cy="52" rx="9" ry="5" fill="#ff88aa" opacity="0.4"/>`;
-}
-
-// Per-animal ears drawn BEHIND head (appear under head circle)
-function toyEarsBehind(key,tc,tl,td,ta){
-  switch(key){
-    case'pig':return`
-      <circle cx="37" cy="20" r="14" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <circle cx="83" cy="20" r="14" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <circle cx="37" cy="20" r="9" fill="${ta}" opacity=".65"/>
-      <circle cx="83" cy="20" r="9" fill="${ta}" opacity=".65"/>`;
-    case'cat':case'fox':case'redpanda':return`
-      <polygon points="26,30 36,4 50,26" fill="${tc}"/>
-      <polygon points="94,30 84,4 70,26" fill="${tc}"/>
-      <polygon points="30,28 37,10 47,25" fill="${ta}" opacity=".7"/>
-      <polygon points="90,28 83,10 73,25" fill="${ta}" opacity=".7"/>`;
-    case'dog':return`
-      <ellipse cx="20" cy="47" rx="13" ry="19" fill="${td}" transform="rotate(-12,20,47)"/>
-      <ellipse cx="20" cy="47" rx="9" ry="14" fill="${tc}" opacity=".7" transform="rotate(-12,20,47)"/>
-      <ellipse cx="100" cy="47" rx="13" ry="19" fill="${td}" transform="rotate(12,100,47)"/>
-      <ellipse cx="100" cy="47" rx="9" ry="14" fill="${tc}" opacity=".7" transform="rotate(12,100,47)"/>`;
-    case'rabbit':return`
-      <ellipse cx="40" cy="8" rx="11" ry="26" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <ellipse cx="80" cy="8" rx="11" ry="26" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <ellipse cx="40" cy="8" rx="7" ry="21" fill="${ta}" opacity=".7"/>
-      <ellipse cx="80" cy="8" rx="7" ry="21" fill="${ta}" opacity=".7"/>`;
-    case'bear':return`
-      <circle cx="37" cy="20" r="14" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <circle cx="83" cy="20" r="14" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <circle cx="37" cy="20" r="9" fill="${ta}" opacity=".55"/>
-      <circle cx="83" cy="20" r="9" fill="${ta}" opacity=".55"/>`;
-    case'cow':return`
-      <path d="M34,22 Q24,4 29,10" stroke="${ta}" stroke-width="7" fill="none" stroke-linecap="round"/>
-      <path d="M86,22 Q96,4 91,10" stroke="${ta}" stroke-width="7" fill="none" stroke-linecap="round"/>
-      <circle cx="37" cy="20" r="13" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <circle cx="83" cy="20" r="13" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <circle cx="37" cy="20" r="8" fill="${ta}" opacity=".5"/>
-      <circle cx="83" cy="20" r="8" fill="${ta}" opacity=".5"/>`;
-    case'duck':return`
-      <ellipse cx="52" cy="14" rx="7" ry="11" fill="${tc}" transform="rotate(-18,52,14)"/>
-      <ellipse cx="60" cy="12" rx="7" ry="12" fill="${tc}"/>
-      <ellipse cx="68" cy="14" rx="7" ry="11" fill="${tc}" transform="rotate(18,68,14)"/>`;
-    case'sheep':return`
-      <circle cx="22" cy="40" r="13" fill="${ta}"/>
-      <circle cx="98" cy="40" r="13" fill="${ta}"/>
-      <circle cx="38" cy="18" r="14" fill="${ta}"/>
-      <circle cx="60" cy="14" r="15" fill="${ta}"/>
-      <circle cx="82" cy="18" r="14" fill="${ta}"/>`;
-    case'panda':return`
-      <circle cx="37" cy="20" r="14" fill="#1c1c1c"/>
-      <circle cx="83" cy="20" r="14" fill="#1c1c1c"/>`;
-    case'capybara':return`
-      <ellipse cx="38" cy="22" rx="10" ry="11" fill="${tc}" stroke="${td}" stroke-width="1.5"/>
-      <ellipse cx="82" cy="22" rx="10" ry="11" fill="${tc}" stroke="${td}" stroke-width="1.5"/>`;
-    default:return'';
+function _avHair(style,cx,cy,r,col){
+  const t=cy-r;
+  switch(style){
+    case'shortBob':return`<ellipse cx="${cx}" cy="${cy-r*.1}" rx="${r+5}" ry="${r+3}" fill="${col}"/><rect x="${cx-r-4}" y="${cy-r*.1}" width="${(r+4)*2}" height="${r*.45}" fill="${col}"/><rect x="${cx-r-3}" y="${cy+r*.3}" width="9" height="${r*.35}" rx="4" fill="${col}"/><rect x="${cx+r-6}" y="${cy+r*.3}" width="9" height="${r*.35}" rx="4" fill="${col}"/>`;
+    case'longStraight':return`<ellipse cx="${cx}" cy="${cy-r*.1}" rx="${r+4}" ry="${r+3}" fill="${col}"/><rect x="${cx-r-4}" y="${cy}" width="12" height="${r*1.5+25}" rx="6" fill="${col}"/><rect x="${cx+r-8}" y="${cy}" width="12" height="${r*1.5+25}" rx="6" fill="${col}"/>`;
+    case'curly':{const b=[];for(let i=0;i<8;i++){const a=-Math.PI+i*Math.PI/4,bx=cx+Math.cos(a)*(r+2),by=cy+Math.sin(a)*(r+2);if(by<cy+r*.4)b.push(`<circle cx="${bx}" cy="${by}" r="${r*.44}" fill="${col}"/>`);}return`<circle cx="${cx}" cy="${cy}" r="${r+4}" fill="${col}"/>${b.join('')}`;}
+    case'ponytail':return`<ellipse cx="${cx}" cy="${cy-r*.15}" rx="${r+4}" ry="${r+2}" fill="${col}"/><rect x="${cx-r-4}" y="${cy-r*.15}" width="${(r+4)*2}" height="${r*.44}" fill="${col}"/><ellipse cx="${cx+r+5}" cy="${cy-r+5}" rx="7" ry="19" fill="${col}" transform="rotate(-20,${cx+r+5},${cy-r+5})"/>`;
+    case'spiky':{const sp=[];[-0.7,-0.35,0,0.35,0.7].forEach(o=>{const sx=cx+o*(r+2),sy=t-12-Math.abs(o)*4;sp.push(`<polygon points="${sx},${sy} ${cx+o*(r+2)-7},${t+4} ${cx+o*(r+2)+7},${t+4}" fill="${col}"/>`);});return`<ellipse cx="${cx}" cy="${cy-r*.1}" rx="${r+4}" ry="${r+2}" fill="${col}"/>${sp.join('')}`;}
+    case'braids':return`<ellipse cx="${cx}" cy="${cy-r*.1}" rx="${r+4}" ry="${r+3}" fill="${col}"/><rect x="${cx-r-3}" y="${cy}" width="11" height="${r*1.5+22}" rx="5" fill="${col}"/><rect x="${cx+r-8}" y="${cy}" width="11" height="${r*1.5+22}" rx="5" fill="${col}"/><rect x="${cx-r}" y="${cy+8}" width="7" height="${r*1.4+14}" rx="3" fill="${col}" opacity=".5"/><rect x="${cx+r-4}" y="${cy+8}" width="7" height="${r*1.4+14}" rx="3" fill="${col}" opacity=".5"/>`;
+    default:return`<ellipse cx="${cx}" cy="${cy-r*.1}" rx="${r+4}" ry="${r+3}" fill="${col}"/>`;
   }
 }
-
-// Animal-specific overlays drawn ON TOP of head (muzzles, belly, patches)
-function toyFaceOverlays(key,tc,ta){
-  switch(key){
-    case'panda':return`
-      <ellipse cx="44" cy="43" rx="11" ry="12" fill="#1c1c1c" opacity=".82"/>
-      <ellipse cx="76" cy="43" rx="11" ry="12" fill="#1c1c1c" opacity=".82"/>`;
-    case'dog':return`
-      <ellipse cx="60" cy="56" rx="15" ry="10" fill="${ta}" opacity=".78"/>`;
-    case'duck':return`
-      <path d="M49,60 Q60,71 71,60 Q60,65 49,60Z" fill="${ta}"/>
-      <line x1="49" y1="60" x2="71" y2="60" stroke="#b85c00" stroke-width="1.5"/>`;
-    case'capybara':return`
-      <rect x="40" y="52" width="40" height="16" rx="10" fill="${ta}" opacity=".65"/>`;
-    case'cow':return`
-      <ellipse cx="44" cy="34" rx="12" ry="8" fill="#302820" opacity=".45"/>
-      <ellipse cx="76" cy="40" rx="10" ry="7" fill="#302820" opacity=".38"/>`;
-    case'penguin':return`
-      <ellipse cx="60" cy="54" rx="16" ry="14" fill="${ta}" opacity=".92"/>`;
-    default:return'';
-  }
+function _avEyes(shape,cx,cy,r,mood){
+  const ey=cy-r*.1,sep=r*.42,lx=cx-sep,rx2=cx+sep;
+  if(shape==='almond'){const aw=r*.24,ah=r*.15;return`<ellipse cx="${lx}" cy="${ey}" rx="${aw}" ry="${ah}" fill="#1a1a2e"/><ellipse cx="${rx2}" cy="${ey}" rx="${aw}" ry="${ah}" fill="#1a1a2e"/><circle cx="${lx+aw*.3}" cy="${ey-ah*.3}" r="${ah*.45}" fill="white"/><circle cx="${rx2+aw*.3}" cy="${ey-ah*.3}" r="${ah*.45}" fill="white"/>`;}
+  if(shape==='wide'){const wr=r*.21;return`<circle cx="${lx}" cy="${ey}" r="${wr}" fill="#1a1a2e"/><circle cx="${rx2}" cy="${ey}" r="${wr}" fill="#1a1a2e"/><circle cx="${lx}" cy="${ey}" r="${wr*.55}" fill="#3a4aee" opacity=".7"/><circle cx="${rx2}" cy="${ey}" r="${wr*.55}" fill="#3a4aee" opacity=".7"/><circle cx="${lx+wr*.3}" cy="${ey-wr*.3}" r="${wr*.3}" fill="white"/><circle cx="${rx2+wr*.3}" cy="${ey-wr*.3}" r="${wr*.3}" fill="white"/>`;}
+  const er=r*.18;return`<circle cx="${lx}" cy="${ey}" r="${er}" fill="#1a1a2e"/><circle cx="${rx2}" cy="${ey}" r="${er}" fill="#1a1a2e"/><circle cx="${lx+er*.35}" cy="${ey-er*.35}" r="${er*.32}" fill="white"/><circle cx="${rx2+er*.35}" cy="${ey-er*.35}" r="${er*.32}" fill="white"/>`;
 }
-
-function buildCharSVG(animalKey,actId,moodScore){
-  const A=ANIMALS[animalKey]||ANIMALS.pig;
-  const outfitKey=G?.cosmetics?.outfit||'classic';
-  const O=OUTFITS[outfitKey]||OUTFITS.classic;
-  // Outfit colors override body/limbs; head always stays native animal color
-  const tc=O.ov, tl=O.ovLt, td=O.ovDk;
-  // Head + ear colors — always native animal color regardless of outfit
-  const hc=A.tc, hl=A.tl, hd=A.td;
-  const ta=A.ta;
-  const accSVG=ACCESSORIES[G?.cosmetics?.accessory||'none']?.svg||'';
-  const mood=moodScore>=65?'happy':moodScore<=30?'sad':'neutral';
-  const eyeState=actId==='sleeping'?'sleeping':mood;
-  // Arm angles: kept within viewBox (pivot at x=20 left, x=100 right; arm height 30px)
-  const lAng=actId==='playing'?-35:actId==='studying'?20:12;
-  const rAng=actId==='eating'?-55:actId==='playing'?35:actId==='studying'?-25:-12;
-  const xCol=(animalKey==='panda'||animalKey==='penguin')?'white':'#1a1a1a';
-  /* viewBox extended 22px upward so accessories (top hat y=-10, wizard hat y=-16)
-     are fully inside the viewBox and always visible regardless of overflow setting */
-  return`<svg viewBox="0 -22 120 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;overflow:visible" preserveAspectRatio="xMidYMax meet">
-  <defs>
-    <radialGradient id="hg" cx="34%" cy="28%" r="72%">
-      <stop offset="0%" stop-color="${hl}"/>
-      <stop offset="100%" stop-color="${hc}"/>
-    </radialGradient>
-    <radialGradient id="bg" cx="38%" cy="25%" r="75%">
-      <stop offset="0%" stop-color="${tl}"/>
-      <stop offset="100%" stop-color="${td}"/>
-    </radialGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
-      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#00000022"/>
-    </filter>
-  </defs>
-  <!-- Ground shadow -->
-  <ellipse cx="60" cy="156" rx="28" ry="5" fill="#00000018"/>
-  <!-- Feet -->
-  <ellipse cx="40" cy="149" rx="14" ry="7" fill="${td}" opacity=".9"/>
-  <ellipse cx="80" cy="149" rx="14" ry="7" fill="${td}" opacity=".9"/>
-  <ellipse cx="39" cy="147" rx="9" ry="4.5" fill="${tl}" opacity=".45"/>
-  <ellipse cx="79" cy="147" rx="9" ry="4.5" fill="${tl}" opacity=".45"/>
-  <!-- Legs -->
-  <rect x="28" y="118" width="22" height="36" rx="11" fill="${tc}"/>
-  <rect x="28" y="118" width="22" height="36" rx="11" fill="${td}" opacity=".18"/>
-  <rect x="70" y="118" width="22" height="36" rx="11" fill="${tc}"/>
-  <rect x="70" y="118" width="22" height="36" rx="11" fill="${td}" opacity=".18"/>
-  <!-- Body blob -->
-  <rect x="17" y="76" width="86" height="58" rx="35" fill="url(#bg)" filter="url(#shadow)"/>
-  <!-- Body gloss -->
-  <ellipse cx="37" cy="87" rx="18" ry="10" fill="white" opacity=".14"/>
-  <!-- Ears behind head (always native color) -->
-  ${toyEarsBehind(animalKey,hc,hl,hd,ta)}
-  <!-- Left arm (pivot at shoulder center x=20) -->
-  <rect x="11" y="84" width="18" height="30" rx="9" fill="${tc}" transform="rotate(${lAng},20,84)"/>
-  <rect x="11" y="84" width="18" height="30" rx="9" fill="${td}" opacity=".2" transform="rotate(${lAng},20,84)"/>
-  <!-- Right arm (pivot at shoulder center x=100) -->
-  <rect x="91" y="84" width="18" height="30" rx="9" fill="${tc}" transform="rotate(${rAng},100,84)"/>
-  <rect x="91" y="84" width="18" height="30" rx="9" fill="${td}" opacity=".2" transform="rotate(${rAng},100,84)"/>
-  <!-- Head blob -->
-  <circle cx="60" cy="48" r="34" fill="url(#hg)" filter="url(#shadow)"/>
-  <!-- Head gloss highlight -->
-  <ellipse cx="44" cy="32" rx="13" ry="9" fill="white" opacity=".22" transform="rotate(-25,44,32)"/>
-  <!-- Face overlays (always native color) -->
-  ${toyFaceOverlays(animalKey,hc,ta)}
-  <!-- Face -->
-  ${toyXEye(44,44,xCol)}
-  ${toyEye(76,44,mood,eyeState)}
-  ${animalKey!=='duck'?toyMouth(60,58,mood):''}
-  ${toyBlush(mood)}
-  <!-- Accessory -->
-  ${accSVG}
+function _avMouth(cx,cy,r,mood,asleep){
+  const my=cy+r*.45;
+  if(asleep)return`<path d="M${cx-r*.2},${my} Q${cx},${my+r*.1} ${cx+r*.2},${my}" stroke="#d4a0a0" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  if(mood>65)return`<path d="M${cx-r*.3},${my} Q${cx},${my+r*.22} ${cx+r*.3},${my}" stroke="#d4706a" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  if(mood>35)return`<path d="M${cx-r*.22},${my} Q${cx},${my+r*.13} ${cx+r*.22},${my}" stroke="#d4706a" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  if(mood>15)return`<path d="M${cx-r*.2},${my} L${cx+r*.2},${my}" stroke="#c07070" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  return`<path d="M${cx-r*.25},${my+r*.1} Q${cx},${my-r*.08} ${cx+r*.25},${my+r*.1}" stroke="#c07070" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+}
+function _avAccessory(acc,cx,hCy,r,hairCol){
+  if(acc==='glasses'){const gy=hCy-r*.05;return`<rect x="${cx-r*.55}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/><rect x="${cx+r*.1}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/><line x1="${cx-r*.1}" y1="${gy}" x2="${cx+r*.1}" y2="${gy}" stroke="#555" stroke-width="2"/>`;}
+  if(acc==='hat')return`<rect x="${cx-r*.75}" y="${hCy-r*.9}" width="${r*1.5}" height="${r*.8}" rx="4" fill="${hairCol}"/><rect x="${cx-r*.92}" y="${hCy-r*.15}" width="${r*1.84}" height="${r*.18}" rx="3" fill="${hairCol}"/>`;
+  if(acc==='bow')return`<polygon points="${cx-r*.35},${hCy-r-8} ${cx-r*.05},${hCy-r} ${cx-r*.35},${hCy-r+8}" fill="#ff6b9d"/><polygon points="${cx+r*.35},${hCy-r-8} ${cx+r*.05},${hCy-r} ${cx+r*.35},${hCy-r+8}" fill="#ff6b9d"/><circle cx="${cx}" cy="${hCy-r}" r="5" fill="#ff6b9d"/>`;
+  if(acc==='headband')return`<path d="M${cx-r},${hCy-r*.5} Q${cx},${hCy-r*1.2} ${cx+r},${hCy-r*.5}" stroke="${hairCol}" stroke-width="8" fill="none" stroke-linecap="round"/>`;
+  return'';
+}
+function _avBody(cx,p,outCol,skinCol,outfit){
+  const bx=cx-p.bW/2,by=p.bTop,bw=p.bW,bh=p.bH,rx=p.bRx;
+  const ay=by+14;
+  let s=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="${rx}" fill="${outCol}"/>`;
+  s+=`<ellipse cx="${bx-5}" cy="${ay+12}" rx="5" ry="12" fill="${outCol}"/><ellipse cx="${bx+bw+5}" cy="${ay+12}" rx="5" ry="12" fill="${outCol}"/>`;
+  s+=`<ellipse cx="${bx-5}" cy="${ay+23}" rx="8" ry="8" fill="${skinCol}"/><ellipse cx="${bx+bw+5}" cy="${ay+23}" rx="8" ry="8" fill="${skinCol}"/>`;
+  if(outfit==='collared')s+=`<polygon points="${cx-10},${by} ${cx+10},${by} ${cx+5},${by+13} ${cx-5},${by+13}" fill="white" opacity=".8"/>`;
+  else if(outfit==='hoodie')s+=`<rect x="${cx-3}" y="${by}" width="2.5" height="17" rx="1" fill="rgba(0,0,0,.2)"/><rect x="${cx+.5}" y="${by}" width="2.5" height="17" rx="1" fill="rgba(0,0,0,.2)"/>`;
+  else if(outfit==='dress')s+=`<ellipse cx="${cx}" cy="${by+bh}" rx="${bw*.68}" ry="11" fill="${outCol}"/>`;
+  else if(outfit==='jacket')s+=`<polygon points="${cx-8},${by} ${cx},${by+15} ${cx-bw/2},${by+15} ${cx-bw/2},${by}" fill="rgba(0,0,0,.15)"/><polygon points="${cx+8},${by} ${cx},${by+15} ${cx+bw/2},${by+15} ${cx+bw/2},${by}" fill="rgba(0,0,0,.15)"/>`;
+  else if(outfit==='sporty')s+=`<rect x="${bx+bw-11}" y="${by}" width="5" height="${bh}" rx="2" fill="rgba(255,255,255,.3)"/>`;
+  return s;
+}
+function buildHumanSVG(avatar,age,mood,activity){
+  const p=_avProps(age);
+  const cx=60;
+  const skin=AV_SKIN[avatar?.skinTone??2];
+  const hairCol=AV_HAIR_COL[avatar?.hairColor??0];
+  const outCol=AV_OUTFIT_COL[avatar?.outfitColor??0];
+  const hairStyle=avatar?.hairStyle||'shortBob';
+  const eyeShape=avatar?.eyeShape||'round';
+  const acc=avatar?.accessory||'none';
+  const outfit=avatar?.outfit||'casual';
+  const asleep=activity==='sleeping';
+  const blush=mood>65?`<ellipse cx="${cx-p.hR*.45}" cy="${p.hCy+p.hR*.3}" rx="6" ry="4" fill="#ffb8c0" opacity=".45"/><ellipse cx="${cx+p.hR*.45}" cy="${p.hCy+p.hR*.3}" rx="6" ry="4" fill="#ffb8c0" opacity=".45"/>`:'';
+  const zzz=asleep?`<text x="${cx+p.hR+4}" y="${p.hCy-p.hR+10}" font-size="13" fill="#a168b0" opacity=".7">z</text><text x="${cx+p.hR+10}" y="${p.hCy-p.hR}" font-size="10" fill="#a168b0" opacity=".5">z</text>`:'';
+  return`<svg viewBox="0 0 120 165" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+  <ellipse cx="${cx}" cy="158" rx="26" ry="5" fill="#00000015"/>
+  ${_avBody(cx,p,outCol,skin,outfit)}
+  <rect x="${cx-7}" y="${p.hCy+p.hR-5}" width="14" height="${10}" rx="6" fill="${skin}"/>
+  <circle cx="${cx-p.hR+3}" cy="${p.hCy+2}" r="7" fill="${skin}"/>
+  <circle cx="${cx+p.hR-3}" cy="${p.hCy+2}" r="7" fill="${skin}"/>
+  ${_avHair(hairStyle,cx,p.hCy,p.hR,hairCol)}
+  <circle cx="${cx}" cy="${p.hCy}" r="${p.hR}" fill="${skin}"/>
+  ${_avEyes(eyeShape,cx,p.hCy,p.hR,mood)}
+  ${_avMouth(cx,p.hCy,p.hR,mood,asleep)}
+  ${blush}
+  ${_avAccessory(acc,cx,p.hCy,p.hR,hairCol)}
+  ${zzz}
 </svg>`;
 }
-
-// Compact SVG for setup screen animal selection
-function buildPreviewSVG(key){
-  const A=ANIMALS[key]||ANIMALS.pig;
-  const tc=A.tc,tl=A.tl,td=A.td,ta=A.ta;
-  const xCol=(key==='panda'||key==='penguin')?'white':'#1a1a1a';
-  return`<svg viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg" style="width:54px;height:64px">
-  <defs>
-    <radialGradient id="hg${key}" cx="34%" cy="28%" r="72%">
-      <stop offset="0%" stop-color="${tl}"/>
-      <stop offset="100%" stop-color="${tc}"/>
-    </radialGradient>
-    <radialGradient id="bg${key}" cx="38%" cy="25%" r="75%">
-      <stop offset="0%" stop-color="${tl}"/>
-      <stop offset="100%" stop-color="${td}"/>
-    </radialGradient>
-  </defs>
-  <!-- Body stub -->
-  <rect x="22" y="85" width="76" height="45" rx="28" fill="url(#bg${key})"/>
-  <!-- Arm stubs -->
-  <rect x="8" y="90" width="16" height="30" rx="8" fill="${tc}" transform="rotate(15,16,90)"/>
-  <rect x="96" y="90" width="16" height="30" rx="8" fill="${tc}" transform="rotate(-15,104,90)"/>
-  <!-- Ears behind head -->
-  ${toyEarsBehind(key,tc,tl,td,ta)}
-  <!-- Head -->
-  <circle cx="60" cy="52" r="34" fill="url(#hg${key})"/>
-  <!-- Head gloss -->
-  <ellipse cx="44" cy="36" rx="12" ry="8" fill="white" opacity=".2" transform="rotate(-25,44,36)"/>
-  <!-- Face overlays -->
-  ${toyFaceOverlays(key,tc,ta)}
-  <!-- Face -->
-  ${toyXEye(44,48,xCol)}
-  ${toyEye(76,48,'happy','happy')}
-  ${key!=='duck'?toyMouth(60,62,'happy'):''}
-  </svg>`;
+// Small preview for builder grid
+function buildHumanPreviewSVG(preset){
+  return buildHumanSVG(preset,5,65,'idle').replace('style="width:100%;height:100%"','style="width:46px;height:62px"');
 }
 
 // ---- ROLES ----
@@ -1202,7 +1237,8 @@ function getSeasonLabel(){return getSeasonLabelForDay(G.day);}
 function getSeasonYear(){return Math.ceil(G.day/4);}
 
 let G={
-  charName:'',animal:'pig',age:5,startAge:5,day:1,background:'',
+  charName:'',age:5,startAge:5,day:1,background:'',
+  avatar:{skinTone:2,hairStyle:'shortBob',hairColor:0,eyeShape:'round',outfit:'casual',outfitColor:0,accessory:'none'},
   personality:{openness:50,conscientiousness:50,extraversion:50,agreeableness:50,neuroticism:50},
   emotions:{happiness:60,stress:30,confidence:50,trust:50},
   skills:{academic:20,social:20,emotional:15,physical:30,creative:20,practical:10},
@@ -1217,7 +1253,7 @@ let G={
   },
   wallet:{coins:150,gems:0},
   cosmetics:{outfit:'classic',accessory:'none'},
-  owned:{outfits:['classic'],accessories:['none'],animals:['pig','cat','dog','rabbit','bear','cow','duck','sheep'],packs:[],premium:false},
+  owned:{outfits:['classic'],accessories:['none'],packs:[],premium:false},
   weekSnapshot:null,
   packProgress:{},
   currentActivity:'idle',currentEvent:null,phase:'waiting',
@@ -1230,24 +1266,88 @@ let G={
 };
 
 // ---- SETUP ----
-let selAgeV=null,selBgV=null,selAnimalV='pig';
+let selAgeV=null,selBgV=null;
 
-function initAnimalGrid(){
-  const g=document.getElementById('animal-grid');
-  g.innerHTML=Object.entries(ANIMALS).filter(([k,a])=>!a.premium).map(([k,a])=>`
-    <div class="animal-opt ${k==='pig'?'sel':''}" id="aopt-${k}" onclick="selAnimal('${k}')">
-      <div class="a-sel-badge">✓</div>
-      ${buildPreviewSVG(k)}
-      <div class="a-name">${a.name}</div>
-    </div>`).join('');
-  selAnimalV='pig';
+// ---- AVATAR BUILDER (setup screen) ----
+let _selAvatar={...AV_PRESETS[0]};
+
+function initAvatarBuilder(){
+  _selAvatar={...AV_PRESETS[0]};
+  _renderPresetGrid();
+  _renderSwatches('av-skin-swatches',AV_SKIN,'skinTone');
+  _renderHairPills();
+  _renderSwatches('av-hair-swatches',AV_HAIR_COL,'hairColor');
+  _renderPills('av-eye-pills',AV_EYE_SHAPES,'eyeShape');
+  _renderPills('av-outfit-pills',AV_OUTFIT_STYLES,'outfit');
+  _renderSwatches('av-outfit-swatches',AV_OUTFIT_COL,'outfitColor');
+  _renderPills('av-acc-pills',AV_ACCESSORY_DEFS,'accessory');
+  _updateAvatarLivePreview();
 }
 
-function selAnimal(key){
-  document.querySelectorAll('.animal-opt').forEach(o=>o.classList.remove('sel'));
-  document.getElementById('aopt-'+key)?.classList.add('sel');
-  selAnimalV=key;
-  checkReady();
+function _renderPresetGrid(){
+  const grid=document.getElementById('av-presets-grid');
+  if(!grid)return;
+  grid.innerHTML=AV_PRESETS.map((pr,i)=>`
+    <div class="av-preset${i===0?' sel':''}" id="avpr-${i}" onclick="selAvatarPreset(${i})">
+      <div class="av-preset-svg">${buildHumanPreviewSVG(pr)}</div>
+      <div class="av-preset-name">${pr.name}</div>
+    </div>`).join('');
+}
+
+function selAvatarPreset(idx){
+  _selAvatar={...AV_PRESETS[idx]};
+  document.querySelectorAll('.av-preset').forEach((e,i)=>e.classList.toggle('sel',i===idx));
+  _refreshAllAvatarControls();
+  _updateAvatarLivePreview();
+}
+
+function _refreshAllAvatarControls(){
+  _highlightSwatch('av-skin-swatches','skinTone');
+  _highlightSwatch('av-hair-swatches','hairColor');
+  _highlightSwatch('av-outfit-swatches','outfitColor');
+  _highlightPill('av-hair-pills','hairStyle');
+  _highlightPill('av-eye-pills','eyeShape');
+  _highlightPill('av-outfit-pills','outfit');
+  _highlightPill('av-acc-pills','accessory');
+}
+
+function _renderSwatches(containerId,palette,key){
+  const c=document.getElementById(containerId);if(!c)return;
+  c.innerHTML=palette.map((col,i)=>`
+    <div class="av-swatch${_selAvatar[key]===i?' sel':''}" style="background:${col}" onclick="setAvatarProp('${key}',${i})"></div>`).join('');
+}
+function _renderPills(containerId,defs,key){
+  const c=document.getElementById(containerId);if(!c)return;
+  c.innerHTML=defs.map(d=>`
+    <div class="av-pill${_selAvatar[key]===d.id?' sel':''}" onclick="setAvatarProp('${key}','${d.id}')">${d.label}</div>`).join('');
+}
+function _renderHairPills(){_renderPills('av-hair-pills',AV_HAIR_STYLES,'hairStyle');}
+
+function _highlightSwatch(containerId,key){
+  document.querySelectorAll(`#${containerId} .av-swatch`).forEach((el,i)=>el.classList.toggle('sel',_selAvatar[key]===i));
+}
+function _highlightPill(containerId,key){
+  document.querySelectorAll(`#${containerId} .av-pill`).forEach(el=>el.classList.toggle('sel',el.textContent===AV_HAIR_STYLES.concat(AV_EYE_SHAPES,AV_OUTFIT_STYLES,AV_ACCESSORY_DEFS).find(d=>d.id===_selAvatar[key])?.label));
+}
+
+function setAvatarProp(key,val){
+  _selAvatar[key]=val;
+  // Clear preset selection
+  document.querySelectorAll('.av-preset').forEach(e=>e.classList.remove('sel'));
+  // Re-highlight relevant controls
+  if(key==='skinTone')_highlightSwatch('av-skin-swatches','skinTone');
+  else if(key==='hairColor')_highlightSwatch('av-hair-swatches','hairColor');
+  else if(key==='outfitColor')_highlightSwatch('av-outfit-swatches','outfitColor');
+  else if(key==='hairStyle')_highlightPill('av-hair-pills','hairStyle');
+  else if(key==='eyeShape')_highlightPill('av-eye-pills','eyeShape');
+  else if(key==='outfit')_highlightPill('av-outfit-pills','outfit');
+  else if(key==='accessory')_highlightPill('av-acc-pills','accessory');
+  _updateAvatarLivePreview();
+}
+
+function _updateAvatarLivePreview(){
+  const el=document.getElementById('av-live-preview');
+  if(el)el.innerHTML=buildHumanSVG(_selAvatar,5,65,'idle');
 }
 
 function selAge(el){
@@ -1264,12 +1364,12 @@ function selAge(el){
   checkReady();
 }
 
-function checkReady(){document.getElementById('start-btn').disabled=!(document.getElementById('char-name').value.trim()&&selAgeV&&selBgV&&selAnimalV);}
+function checkReady(){document.getElementById('start-btn').disabled=!(document.getElementById('char-name').value.trim()&&selAgeV&&selBgV);}
 document.getElementById('char-name').addEventListener('input',checkReady);
 
 function startGame(){
   G.charName=document.getElementById('char-name').value.trim();
-  G.animal=selAnimalV;G.age=selAgeV;G.startAge=selAgeV;G.background=selBgV;
+  G.avatar={..._selAvatar};G.age=selAgeV;G.startAge=selAgeV;G.background=selBgV;
   seedPersonality();seedSkills();
   // Apply legacy nudges from previous life if present
   const leg=localStorage.getItem('wemakoshi-legacy');
@@ -1330,7 +1430,7 @@ function updateCharSVG(){
   const mood=getMoodScore();
   const wrap=document.getElementById('char-svg-wrap');
   if(!wrap)return;
-  wrap.innerHTML=buildCharSVG(G.animal,G.currentActivity,mood);
+  wrap.innerHTML=buildHumanSVG(G.avatar||AV_PRESETS[0],G.age,mood,G.currentActivity);
   // State class for animation
   let stateClass='state-idle';
   if(G.currentActivity==='sleeping')stateClass='state-sleeping';
@@ -1358,7 +1458,7 @@ function startBlink(){
     const mood=getMoodScore();
     const savedHTML=wrap.innerHTML;
     // Draw sleeping-eyes version momentarily
-    wrap.innerHTML=buildCharSVG(G.animal,G.currentActivity==='sleeping'?'sleeping':'__blink__',mood);
+    wrap.innerHTML=buildHumanSVG(G.avatar||AV_PRESETS[0],G.age,mood,G.currentActivity==='sleeping'?'sleeping':'idle');
     // Patch: replace eye draws with blink lines inside
     setTimeout(()=>{wrap.innerHTML=savedHTML;},110);
   },3200+Math.random()*1800);
@@ -2493,7 +2593,7 @@ function _svgLines(str,maxChars){
 }
 
 function generateProfileCardSVG(arch,logoDataUrl){
-  const A=ANIMALS[G.animal]||ANIMALS.pig;
+  const A={emoji:'🧒',name:'Human'};
   const avg=G.history.interactions.length?Math.round(G.history.interactions.reduce((s,i)=>s+i.score,0)/G.history.interactions.length):0;
   const ru=G.history.roleUsage;const totalRU=Object.values(ru).reduce((s,v)=>s+v,0)||1;
   const topRoles=Object.entries(ru).sort((a,b)=>b[1]-a[1]).slice(0,3);
@@ -2881,7 +2981,7 @@ function nextDay(){nextSeason();}
 // ---- SAVE & SHARE ----
 function _serializeState(){
   const n={};for(const k in G.needs)n[k]=Math.round(G.needs[k].v);
-  return{v:1,cn:G.charName,an:G.animal,ag:G.age,sa:G.startAge,bg:G.background,
+  return{v:1,cn:G.charName,av:{...G.avatar},ag:G.age,sa:G.startAge,bg:G.background,
     p:{...G.personality},em:{...G.emotions},sk:{...G.skills},pr:{...G.playerRoles},nd:n,
     wl:{c:G.wallet.coins,g:G.wallet.gems},cos:{o:G.cosmetics.outfit,a:G.cosmetics.accessory},
     own:{o:[...G.owned.outfits],a:[...G.owned.accessories],pk:[...G.owned.packs],prem:G.owned.premium},
@@ -2893,7 +2993,7 @@ function loadSaveCode(code,silent){
   try{
     const raw=JSON.parse(decodeURIComponent(atob(code)));
     if(!raw||raw.v!==1)throw new Error('bad version');
-    G.charName=raw.cn||'';G.animal=raw.an||'pig';G.age=raw.ag||5;G.startAge=raw.sa||5;G.background=raw.bg||'';
+    G.charName=raw.cn||'';G.avatar=raw.av?{...raw.av}:{...AV_PRESETS[0]};G.age=raw.ag||5;G.startAge=raw.sa||5;G.background=raw.bg||'';
     for(const k of Object.keys(G.personality))G.personality[k]=raw.p?.[k]??50;
     for(const k of Object.keys(G.emotions))G.emotions[k]=raw.em?.[k]??50;
     for(const k of Object.keys(G.skills))G.skills[k]=raw.sk?.[k]??20;
@@ -2941,10 +3041,9 @@ function shareSaveURL(){
   else{navigator.clipboard.writeText(url).then(()=>showToast('Share link copied! 🔗')).catch(()=>showToast('Copy failed.'));}
 }
 function shareStoryCard(){
-  const A=ANIMALS[G.animal]||ANIMALS.pig;
   const score=G.history.interactions.length?Math.round(G.history.interactions.reduce((s,i)=>s+i.score,0)/G.history.interactions.length):0;
-  const text=`I'm raising ${G.charName} the ${A.name} in Wemakoshi!
-${A.emoji} Age ${G.age} · ${getSeasonLabel()} · Care ${score}/100
+  const text=`I'm raising ${G.charName} in Wemakoshi! 🌱
+Age ${G.age} · ${getSeasonLabel()} · Care ${score}/100
 Play now: ${location.origin}${location.pathname}`;
   if(navigator.share){navigator.share({title:`${G.charName}'s Wemakoshi Story`,text}).catch(()=>{});}
   else{navigator.clipboard.writeText(text).then(()=>showToast('Story card copied! 🪪')).catch(()=>showToast('Copy failed.'));}
@@ -2959,10 +3058,8 @@ function checkURLLoad(){
     const raw=JSON.parse(decodeURIComponent(atob(code)));
     if(raw&&raw.v===1&&raw.cn){
       _pendingResumeCode=code;
-      const A=ANIMALS[raw.an]||ANIMALS.pig;
-      // Set banner text (banner shown after initAnimalGrid)
-      document.getElementById('resume-name').textContent=`${A.emoji} ${raw.cn}`;
-      document.getElementById('resume-meta').textContent=`Age ${raw.ag} · Day ${raw.day} · ${A.name} — shared save`;
+      document.getElementById('resume-name').textContent=`🌱 ${raw.cn}`;
+      document.getElementById('resume-meta').textContent=`Age ${raw.ag} · Day ${raw.day} — shared save`;
       document.getElementById('resume-banner').style.display='block';
       document.getElementById('setup-card').style.display='none';
     }
@@ -2991,7 +3088,6 @@ function showLifeEnding(){
   G._endingShown=true;
   const ints=G.history.interactions;
   const score=ints.length?Math.round(ints.reduce((s,i)=>s+i.score,0)/ints.length):0;
-  const A=ANIMALS[G.animal]||ANIMALS.pig;
   const arch=detectCaregiverArchetype();
   const legacy=score>=80?'extraordinary':score>=60?'meaningful':score>=40?'honest':'complicated';
   const msgs={extraordinary:`You gave ${G.charName} something rare — someone who showed up, every time, and meant it. They lived a full life because of how you loved them.`,
@@ -2999,7 +3095,7 @@ function showLifeEnding(){
     honest:`${G.charName}'s journey wasn't always easy, and neither was yours. But you stayed. That counts for more than a score ever could.`,
     complicated:`Every caregiver has gaps. So does every story. ${G.charName} is who they are — complicated, resilient — partly because of the moments you tried.`};
   document.getElementById('ending-title').textContent=`${G.charName}'s Story`;
-  document.getElementById('ending-sub').textContent=`${A.emoji} A ${A.name} · Lived ${G.age} years · ${G.day} seasons together`;
+  document.getElementById('ending-sub').textContent=`🌱 Lived ${G.age} years · ${G.day} seasons together`;
   document.getElementById('ending-score').textContent=score;
   document.getElementById('ending-msg').textContent=msgs[legacy];
   document.getElementById('life-ending').classList.add('open');
@@ -3154,23 +3250,48 @@ function shopTab(tab){
 }
 function renderShopContent(tab){
   const body=document.getElementById('shop-body');if(!body)return;
-  if(tab==='animals')body.innerHTML=renderAnimalShop();
+  if(tab==='customize')body.innerHTML=renderAvatarShop();
   else if(tab==='outfits')body.innerHTML=renderOutfitShop();
   else if(tab==='accessories')body.innerHTML=renderAccessoryShop();
   else body.innerHTML=renderPackShop();
 }
-function renderAnimalShop(){
-  return`<div class="shop-grid">${Object.entries(ANIMALS).map(([k,a])=>{
-    const owned=G.owned.animals.includes(k);
-    const equipped=G.animal===k;
-    const premium=a.premium;
-    let badge='',btn='';
-    if(equipped){badge=`<span class="si-badge equipped">✓ Active</span>`;btn=`<button class="si-buy-btn equipped-btn" disabled>Active</button>`;}
-    else if(owned){badge=`<span class="si-badge owned">Owned</span>`;btn=`<button class="si-buy-btn equip-btn" onclick="equipAnimal('${k}')">Switch To</button>`;}
-    else if(premium){badge=`<span class="si-badge premium">💎 Premium</span>`;btn=`<button class="si-buy-btn buy-gem" onclick="buyAnimal('${k}')">💎 ${a.gemCost} Unlock</button>`;}
-    const cls=equipped?'equipped':owned?'owned':premium?'premium-locked':'';
-    return`<div class="shop-item ${cls}">${badge}<div class="si-preview">${buildPreviewSVG(k)}</div><div class="si-name">${a.name} ${a.emoji}</div><div class="si-desc">${a.desc}</div><div class="si-price ${premium&&!owned?'gem':'free'}">${premium&&!owned?'💎 '+a.gemCost+' gems':'✓ Available'}</div>${btn}</div>`;
-  }).join('')}</div>`;
+function renderAvatarShop(){
+  return`<div style="padding:8px">
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">Customise your character's look. Changes apply immediately.</p>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Skin tone</div>
+      <div class="av-swatches">${AV_SKIN.map((col,i)=>`<div class="av-swatch${G.avatar.skinTone===i?' sel':''}" style="background:${col}" onclick="liveSetAvatar('skinTone',${i})"></div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Hair style</div>
+      <div class="av-style-pills">${AV_HAIR_STYLES.map(d=>`<div class="av-pill${G.avatar.hairStyle===d.id?' sel':''}" onclick="liveSetAvatar('hairStyle','${d.id}')">${d.label}</div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Hair colour</div>
+      <div class="av-swatches">${AV_HAIR_COL.map((col,i)=>`<div class="av-swatch${G.avatar.hairColor===i?' sel':''}" style="background:${col}" onclick="liveSetAvatar('hairColor',${i})"></div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Eyes</div>
+      <div class="av-style-pills">${AV_EYE_SHAPES.map(d=>`<div class="av-pill${G.avatar.eyeShape===d.id?' sel':''}" onclick="liveSetAvatar('eyeShape','${d.id}')">${d.label}</div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Outfit style</div>
+      <div class="av-style-pills">${AV_OUTFIT_STYLES.map(d=>`<div class="av-pill${G.avatar.outfit===d.id?' sel':''}" onclick="liveSetAvatar('outfit','${d.id}')">${d.label}</div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Outfit colour</div>
+      <div class="av-swatches">${AV_OUTFIT_COL.map((col,i)=>`<div class="av-swatch${G.avatar.outfitColor===i?' sel':''}" style="background:${col}" onclick="liveSetAvatar('outfitColor',${i})"></div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="av-section-label">Accessory</div>
+      <div class="av-style-pills">${AV_ACCESSORY_DEFS.map(d=>`<div class="av-pill${G.avatar.accessory===d.id?' sel':''}" onclick="liveSetAvatar('accessory','${d.id}')">${d.label}</div>`).join('')}</div>
+    </div>
+  </div>`;
+}
+function liveSetAvatar(key,val){
+  G.avatar[key]=val;
+  updateCharSVG();saveToBrowser();
+  renderShopContent(shopCurrentTab);
 }
 function renderOutfitShop(){
   return`<div class="shop-grid">${Object.entries(OUTFITS).map(([k,o])=>{
@@ -3213,19 +3334,6 @@ function renderAccessoryShop(){
     const preview=k==='none'?`<div style="font-size:36px;line-height:82px">✨</div>`:`<svg viewBox="0 -20 120 88" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:51px">${a.svg}<circle cx="60" cy="40" r="24" fill="#f0c870" opacity=".55"/><ellipse cx="43" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="43" cy="38.5" r="3.5" fill="#1a1a1a"/><ellipse cx="77" cy="38" rx="5" ry="5.5" fill="white"/><circle cx="77" cy="38.5" r="3.5" fill="#1a1a1a"/><path d="M51,51 Q60,58 69,51" stroke="#b05030" stroke-width="2" fill="none"/></svg>`;
     return`<div class="shop-item ${cls}">${badge}<div class="si-preview">${preview}</div><div class="si-name">${a.name}</div><div class="si-desc">${a.desc}</div>${!owned||cost.coins===0?`<div class="si-price ${cost.gems?'gem':cost.coins===0?'free':'coin'}">${cost.gems?'💎 '+cost.gems+' gems':cost.coins===0?'Free':'🪙 '+cost.coins}</div>`:''} ${btn}</div>`;
   }).join('')}</div>`;
-}
-function buyAnimal(key){
-  const a=ANIMALS[key];if(!a||!a.premium)return;
-  if(G.owned.animals.includes(key)){equipAnimal(key);return;}
-  if(G.wallet.gems<a.gemCost){showToast('Not enough gems! Get more below. 💎');openGemStore();return;}
-  G.wallet.gems-=a.gemCost;G.owned.animals.push(key);
-  updateShopWallet();updateAllUI();equipAnimal(key);
-  showToast(`${a.name} unlocked! 🎉`);
-}
-function equipAnimal(key){
-  if(!G.owned.animals.includes(key))return;
-  G.animal=key;updateCharSVG();updateAllUI();renderShopContent(shopCurrentTab);
-  showToast(`Switched to ${ANIMALS[key].name}! ${ANIMALS[key].emoji}`);
 }
 function buyOutfit(key){
   const o=OUTFITS[key];if(!o)return;
@@ -3335,24 +3443,6 @@ function renderPackShop(){
 //  WEMAKOSHI AI COMPANION SYSTEM
 // ================================================================
 
-// Human personality archetypes — chosen by animal selection but define the person's
-// communication style and temperament, NOT their species. The character never knows
-// or thinks of themselves as an animal.
-const CHAR_PERSONALITY = {
-  pig:     'naturally curious and upbeat, always finding something to be excited about — asks a lot of questions and finds joy in small things',
-  cat:     'self-sufficient and sharp, with a dry wit — often seems unbothered but cares more deeply than they let on',
-  dog:     'openly enthusiastic and loyal — wears emotions on their sleeve, gets excited easily, and hates being away from the people they care about',
-  rabbit:  'gentle and sincere, with an anxious streak — deeply empathetic, sometimes overthinks, but always means well',
-  bear:    'warm and grounded, a quiet protector — chooses words carefully, speaks from experience, and makes others feel safe',
-  cow:     'patient and steady, with a nurturing presence — never in a rush, always listening, a calming force in any room',
-  duck:    'chatty and social, the one who fills silences — quick to make jokes, needs people around, and always has an opinion',
-  sheep:   'soft-spoken and reflective — observes more than they speak, but when they do say something, it lands',
-  fox:     'sharp and playful, with a hint of mischief — thinks quickly, gets bored of the obvious, and loves a good twist',
-  panda:   'easygoing and quietly philosophical — low-key on the surface but surprisingly thoughtful underneath',
-  capybara:'extraordinarily unhurried, with an almost zen-like perspective on life — stress slides off them, and they radiate calm',
-  penguin: 'composed and somewhat formal in manner, but privately quite warm and a little awkward in an endearing way',
-  redpanda:'passionate and expressive — rides emotional highs and lows hard, treats everything like a big deal (and usually it is, to them)'
-};
 
 // Translate raw need values into natural prose — avoids the AI parroting
 // capitalised label names ("Hunger", "Hygiene") directly in dialogue.
@@ -3450,7 +3540,7 @@ function _getStageVoice(){
 }
 
 function buildSystemPrompt(){
-  const pers=CHAR_PERSONALITY[G.animal]||'curious and expressive';
+  const _p=G.personality||{};const _pTraits=[];if(_p.openness>65)_pTraits.push('curious and drawn to new ideas');else if(_p.openness<35)_pTraits.push('practical and grounded');if(_p.extraversion>65)_pTraits.push('outgoing and energised by people');else if(_p.extraversion<35)_pTraits.push('quietly self-contained');if(_p.agreeableness>65)_pTraits.push('warm and easy to get along with');else if(_p.agreeableness<35)_pTraits.push('direct and not afraid to push back');if(_p.neuroticism>65)_pTraits.push('emotionally intense and feels things deeply');else if(_p.neuroticism<35)_pTraits.push('emotionally steady and hard to rattle');const pers=_pTraits.length?_pTraits.join(', '):'complex and still figuring themselves out';
   const mood=getMoodScore();
   const moodWord=mood>=70?'upbeat':mood>=45?'getting by':'struggling';
   const innerState=_needsAsInnerState();
@@ -3469,7 +3559,6 @@ HOW YOU THINK AND SPEAK AT ${G.age}:
 ${stageVoice}
 
 RULES:
-- You are a person. You do NOT think of yourself as having fur, paws, a tail, whiskers, or any animal body. Never reference animal traits or sounds.
 - Speak in first person. 1–2 short sentences. Be emotionally real, NOT assistant-like.
 - Match the voice for your age — vocabulary, sentence length, and concerns should feel authentic to ${G.age}.
 - Let your physical state colour your tone subtly — don't announce it like a status report.
@@ -3838,9 +3927,8 @@ function _showResumeBanner(code){
     const raw=JSON.parse(decodeURIComponent(atob(code)));
     if(!raw||raw.v!==1||!raw.cn)return;
     _pendingResumeCode=code;
-    const A=ANIMALS[raw.an]||ANIMALS.pig;
-    document.getElementById('resume-name').textContent=`${A.emoji} ${raw.cn}`;
-    document.getElementById('resume-meta').textContent=`Age ${raw.ag} · Day ${raw.day} · ${A.name}`;
+    document.getElementById('resume-name').textContent=`🌱 ${raw.cn}`;
+    document.getElementById('resume-meta').textContent=`Age ${raw.ag} · Day ${raw.day}`;
     document.getElementById('resume-banner').style.display='block';
     document.getElementById('setup-card').style.display='none';
   }catch(e){}
@@ -3873,7 +3961,7 @@ if(!document.getElementById('game-screen').classList.contains('active')){
   const prev=localStorage.getItem('wemakoshi-save');
   if(prev)_showResumeBanner(prev);
 }
-initAnimalGrid();
+initAvatarBuilder();
 
 // ---- VOICE: TTS (character speaks) + STT (player talks) ----
 
@@ -4000,6 +4088,365 @@ const _origSendMsg=sendMsg;
 
 // Init voice button state once game is visible
 document.addEventListener('DOMContentLoaded',()=>_updateVoiceBtn());
+
+// ============================================================
+// GAME MODES
+// ============================================================
+
+function openGames(){
+  document.getElementById('games-char-name').textContent=G.charName||'your character';
+  document.getElementById('games-modal').classList.add('open');
+}
+function closeGames(){document.getElementById('games-modal').classList.remove('open');}
+
+// ---- NEED RUSH ----
+const NR_DEFS=[
+  {key:'hunger', icon:'🍎', care:'🥗', careLabel:'Food',    color:'#e19c34'},
+  {key:'energy', icon:'⚡', care:'🛏️', careLabel:'Rest',    color:'#a168b0'},
+  {key:'hygiene',icon:'🧼', care:'🚿', careLabel:'Shower',  color:'#5ca06e'},
+  {key:'social', icon:'💬', care:'🤝', careLabel:'Talk',    color:'#f35c9a'},
+  {key:'fun',    icon:'🎮', care:'🎯', careLabel:'Play',    color:'#74419c'},
+  {key:'health', icon:'❤️', care:'💊', careLabel:'Care',    color:'#cd2e3c'}
+];
+
+let NR={active:false,score:0,gemsEarned:0,misses:0,items:[],rafId:null,timerId:null,spawnId:null,timeLeft:60,nextId:0,fallDuration:3800,spawnInterval:2200};
+
+function startNeedRush(){
+  const stress=G.emotions?.stress??30;
+  const happiness=G.emotions?.happiness??60;
+  const speedMult=0.85+(stress/100)*0.8;
+  const baseFall=Math.max(1800,4200-(G.age-5)*45);
+  NR={active:true,score:0,gemsEarned:0,misses:0,items:[],rafId:null,timerId:null,spawnId:null,
+      timeLeft:60,nextId:0,
+      fallDuration:Math.round(baseFall/speedMult),
+      spawnInterval:Math.max(1000,2600-stress*10)};
+  const face=happiness>70?'😄':happiness>45?'😊':happiness>25?'😐':'😟';
+  document.getElementById('nr-char-face').textContent=face;
+  document.getElementById('nr-score-hdr').textContent='0';
+  document.getElementById('nr-timer-hdr').textContent='60';
+  document.getElementById('nr-gems-hdr').textContent='0';
+  // Clear field
+  const field=document.getElementById('nr-field');
+  field.querySelectorAll('.nr-item').forEach(e=>e.remove());
+  // Build care buttons
+  document.getElementById('nr-controls').innerHTML=NR_DEFS.map(d=>`
+    <button class="nr-care-btn" id="nr-btn-${d.key}" onclick="nrPressCare('${d.key}')">
+      <span style="font-size:22px">${d.care}</span>
+      <span class="lbl">${d.careLabel}</span>
+    </button>`).join('');
+  document.getElementById('nr-overlay').classList.add('open');
+  NR.timerId=setInterval(()=>{
+    NR.timeLeft--;
+    document.getElementById('nr-timer-hdr').textContent=NR.timeLeft;
+    if(NR.timeLeft<=0)endNeedRush(false);
+  },1000);
+  nrSpawnItem();
+  NR.spawnId=setInterval(nrSpawnItem,NR.spawnInterval);
+  NR.rafId=requestAnimationFrame(nrFrame);
+}
+
+function nrSpawnItem(){
+  if(!NR.active)return;
+  const def=NR_DEFS[Math.floor(Math.random()*NR_DEFS.length)];
+  const field=document.getElementById('nr-field');
+  const fw=field.clientWidth||320;
+  const id='nri'+NR.nextId++;
+  const x=16+Math.random()*(fw-88);
+  const el=document.createElement('div');
+  el.className='nr-item';el.id=id;
+  el.dataset.key=def.key;
+  el.style.cssText=`left:${x}px;top:-60px;background:${def.color};`;
+  el.textContent=def.icon;
+  field.appendChild(el);
+  NR.items.push({id,key:def.key,el,startTime:Date.now(),caught:false,missed:false});
+}
+
+function nrFrame(){
+  if(!NR.active)return;
+  const field=document.getElementById('nr-field');
+  const fh=field.clientHeight||500;
+  const now=Date.now();
+  for(const item of NR.items){
+    if(item.caught||item.missed)continue;
+    const pct=(now-item.startTime)/NR.fallDuration;
+    const y=-60+(fh+20)*pct;
+    item.el.style.top=y+'px';
+    if(y>=fh-10){
+      item.missed=true;
+      item.el.classList.add('missed');
+      NR.misses++;
+      nrFlash('miss');
+      setTimeout(()=>{try{item.el.remove();}catch(e){}},180);
+    }
+  }
+  NR.items=NR.items.filter(i=>!i.caught&&!i.missed);
+  NR.rafId=requestAnimationFrame(nrFrame);
+}
+
+function nrPressCare(careKey){
+  if(!NR.active)return;
+  const btn=document.getElementById('nr-btn-'+careKey);
+  // Find lowest (most urgent) matching falling item
+  let best=null,bestY=-Infinity;
+  for(const item of NR.items){
+    if(item.key===careKey&&!item.caught&&!item.missed){
+      const y=parseFloat(item.el.style.top)||0;
+      if(y>bestY){bestY=y;best=item;}
+    }
+  }
+  if(best){
+    best.caught=true;
+    best.el.classList.add('caught');
+    setTimeout(()=>{try{best.el.remove();}catch(e){}},200);
+    NR.score+=10;
+    NR.gemsEarned=Math.min(15,Math.floor(NR.score/10));
+    document.getElementById('nr-score-hdr').textContent=NR.score;
+    document.getElementById('nr-gems-hdr').textContent=NR.gemsEarned;
+    nrFlash('catch');
+    if(btn){btn.classList.add('flash-good');setTimeout(()=>btn.classList.remove('flash-good'),320);}
+  } else {
+    NR.score=Math.max(0,NR.score-3);
+    document.getElementById('nr-score-hdr').textContent=NR.score;
+    if(btn){btn.classList.add('flash-bad');setTimeout(()=>btn.classList.remove('flash-bad'),300);}
+  }
+}
+
+function nrFlash(type){
+  const el=document.getElementById(type==='miss'?'nr-miss-flash':'nr-catch-flash');
+  if(!el)return;
+  el.style.opacity='1';setTimeout(()=>el.style.opacity='0',200);
+}
+
+function endNeedRush(quit){
+  if(!NR.active)return;
+  NR.active=false;
+  clearInterval(NR.timerId);clearInterval(NR.spawnId);cancelAnimationFrame(NR.rafId);
+  document.getElementById('nr-field').querySelectorAll('.nr-item').forEach(e=>e.remove());
+  if(quit){document.getElementById('nr-overlay').classList.remove('open');return;}
+  const gems=NR.gemsEarned;
+  G.wallet.gems=clamp(G.wallet.gems+gems,0,9999);
+  updateAllUI();saveToBrowser();
+  const field=document.getElementById('nr-field');
+  const res=document.createElement('div');
+  res.className='nr-result-overlay';
+  const grade=NR.score>=120?'🌟 Incredible!':NR.score>=80?'💪 Great run!':NR.score>=40?'👍 Good effort':'🌱 Keep going';
+  res.innerHTML=`<div class="nr-result-panel">
+    <div style="font-size:22px;font-weight:900;margin-bottom:4px">⚡ Need Rush</div>
+    <div class="nr-score-big">${NR.score}</div>
+    <div style="font-size:13px;color:var(--text-2);margin-bottom:8px">points · ${NR.misses} missed</div>
+    <div style="font-size:18px;font-weight:800;margin-bottom:6px">${grade}</div>
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px">+💎 ${gems} gems</div>
+    <button class="nr-action-btn" onclick="document.getElementById('nr-overlay').classList.remove('open');this.closest('.nr-result-overlay').remove()">Done</button>
+  </div>`;
+  field.appendChild(res);
+}
+
+// ---- CROSSROADS ----
+const CR_SCENARIOS=[
+  {id:'lunch_table',stages:['child','teen'],
+   situation:"Your best friend didn't save you a seat at lunch. They're sitting with a new group, laughing. You're standing there with your tray.",
+   charSays:'"It felt really small, like I suddenly didn\'t exist."',
+   choices:[
+     {text:"Walk over and ask if you can join them.",outcome:'good',result:"They made room immediately. They hadn't even realized they'd left you out.",next:{
+       situation:"That night, they text: \"Hey, I'm sorry about lunch. I didn't think. Can we talk?\"",
+       choices:[
+         {text:'"It did hurt — but I\'m glad you said something."',outcome:'good',result:"The honesty opened a real conversation. They felt trusted, not accused."},
+         {text:'"Don\'t worry, it\'s fine."',outcome:'ok',result:"They seemed relieved, but something unresolved stayed between you."},
+         {text:'"You should\'ve thought of it before."',outcome:'bad',result:"The apology turned into an argument. The repair took longer than it needed to."}
+       ]}},
+     {text:"Find somewhere else to sit quietly.",outcome:'ok',result:"You kept your dignity. But they never knew it hurt, so nothing changed.",next:{
+       situation:"The next morning they act completely normal, like nothing happened.",
+       choices:[
+         {text:"\"Yesterday felt off for me. Can we talk?\"",outcome:'good',result:"They hadn't realized. A short conversation cleared more than days of silence would have."},
+         {text:"Match their energy and let it go.",outcome:'ok',result:"The day moved forward. The thing stayed unspoken between you."},
+         {text:"Start spending lunch elsewhere without explanation.",outcome:'bad',result:"They noticed the drift and didn't know how to cross it."}
+       ]}},
+     {text:"Walk past without looking at them.",outcome:'bad',result:"They noticed. The rest of the day felt cold and neither of you knew how to break it.",next:{
+       situation:"They catch you at your locker after last class.",
+       choices:[
+         {text:'"I was hurt. I want to talk about it."',outcome:'good',result:"They were ready. The directness broke the ice faster than either expected."},
+         {text:'"I\'m fine. Just tired."',outcome:'ok',result:"They weren't convinced, but let it drop. Things stayed fragile."},
+         {text:"Walk away again.",outcome:'bad',result:"They stopped trying. The silence became the new normal."}
+       ]}}
+   ]},
+  {id:'big_moment',stages:['teen','youngAdult'],
+   situation:"You just gave the biggest presentation of your life. It went okay — not great. You can see it on people's faces. Your mentor is walking toward you.",
+   charSays:'"My hands were still shaking. I wanted to disappear."',
+   choices:[
+     {text:'"I know parts of it didn\'t land. I want to understand what I can do better."',outcome:'good',result:"Your mentor's expression shifted. They sat with you for an extra twenty minutes.",next:{
+       situation:"They give you real, direct feedback — some of it hard to hear.",
+       choices:[
+         {text:"Take notes and ask follow-up questions.",outcome:'good',result:"They saw someone ready to grow. You left with a clear plan."},
+         {text:"Listen and nod, but feel deflated inside.",outcome:'ok',result:"You absorbed it. The self-doubt stayed louder than the advice, but it was still in there."},
+         {text:"Defend yourself on the parts you disagreed with.",outcome:'bad',result:"The conversation closed off. They offered less after that."}
+       ]}},
+     {text:'"Thanks for watching. Still processing."',outcome:'ok',result:"They respected the honesty. But you left without the feedback you actually needed.",next:{
+       situation:"The same opportunity comes up again two weeks later.",
+       choices:[
+         {text:"Prepare more and ask for a pre-review this time.",outcome:'good',result:"The preparation showed. You went in with more ground under you."},
+         {text:"Go in the same way — maybe it'll click.",outcome:'ok',result:"Some things improved naturally. Others repeated."},
+         {text:"Don't sign up this time.",outcome:'bad',result:"The avoidance felt like relief, then quietly became regret."}
+       ]}},
+     {text:'"I actually thought it went well." (It didn\'t.)',outcome:'bad',result:"They paused. You could see them deciding how honest to be.",next:{
+       situation:"They give you vague, protective feedback that doesn't tell you much.",
+       choices:[
+         {text:'"I\'d really like the real version of what you thought."',outcome:'good',result:"They opened up. Late — but you got what you needed."},
+         {text:"Take the gentle version and move on.",outcome:'ok',result:"You left feeling okay. The growth window quietly closed."},
+         {text:'"See? I knew it was good."',outcome:'bad',result:"The disconnect widened. They stopped offering feedback altogether."}
+       ]}}
+   ]},
+  {id:'hard_choice',stages:['youngAdult','adult'],
+   situation:"You've been offered a job that pays significantly more — but the company's values feel off to you. You have 48 hours to decide.",
+   charSays:'"I keep running the numbers and then feeling guilty for running the numbers."',
+   choices:[
+     {text:"Make a list of what each option actually costs you — not just financially.",outcome:'good',result:"The exercise made the real trade-offs visible. You stopped feeling like both options were wrong.",next:{
+       situation:"You realize the salary would solve a real and pressing problem in your life right now.",
+       choices:[
+         {text:"Accept it, but set yourself a personal timeline to leave if it doesn't feel right.",outcome:'good',result:"The boundary made it feel like a choice, not a trap. You went in with open eyes."},
+         {text:"Accept and try to focus purely on the work.",outcome:'ok',result:"It worked, mostly. There were moments the misalignment surfaced."},
+         {text:"Turn it down — the values thing is too important to compromise.",outcome:'good',result:"It cost you short-term. The clarity felt like its own kind of gain."}
+       ]}},
+     {text:"Ask for more time to think.",outcome:'ok',result:"They agreed to extend. The extra days mostly meant more circular thinking.",next:{
+       situation:"You call someone you trust. They ask: \"What are you actually afraid of?\"",
+       choices:[
+         {text:"Answer honestly, even if the answer surprises you.",outcome:'good',result:"The real fear became visible — and it wasn't the one you thought it was."},
+         {text:'"I don\'t know. Both feel wrong."',outcome:'ok',result:"They sat with you in it. It didn't resolve, but felt less alone."},
+         {text:'"Just tell me what to do."',outcome:'bad',result:"They gave you an answer. You followed it without really owning the choice."}
+       ]}},
+     {text:"Take it. You need the money and you'll figure out the rest later.",outcome:'ok',result:"The relief was real and immediate. The rest-of-it arrived sooner than you expected.",next:{
+       situation:"Three months in, the culture is wearing on you in ways you hadn't fully anticipated.",
+       choices:[
+         {text:"Start a quiet search while you're still employed.",outcome:'good',result:"The security of being employed made the search cleaner and less desperate."},
+         {text:"Stay focused and see if it improves.",outcome:'ok',result:"Some things did. You stopped expecting all of them to."},
+         {text:"Quit without a plan.",outcome:'bad',result:"The freedom felt good for two weeks. Then the gap started pressing."}
+       ]}}
+   ]},
+  {id:'family_silence',stages:['child','teen','adult'],
+   situation:"You and someone in your family had a big argument last night. They said something that stung. This morning the house is completely silent. Neither of you has spoken.",
+   charSays:'"I keep replaying it. What they said. And also what I said."',
+   choices:[
+     {text:"Go find them and say: \"I've been thinking about last night.\"",outcome:'good',result:"They looked surprised — then relieved. The conversation that followed was softer than the argument.",next:{
+       situation:"They apologize for the thing that stung. But they also bring up what you said.",
+       choices:[
+         {text:"Acknowledge what you said and why it came out the way it did.",outcome:'good',result:"The accountability on both sides made the repair feel real."},
+         {text:"Accept the apology without addressing yours.",outcome:'ok',result:"Things softened. Something unfinished stayed in the room."},
+         {text:'"Yeah, but you started it."',outcome:'bad',result:"The conversation circled back into argument. Nothing got resolved."}
+       ]}},
+     {text:"Wait and see if they come to you first.",outcome:'ok',result:"They didn't — not yet. The silence stretched into the afternoon.",next:{
+       situation:"By evening, they knock on your door.",
+       choices:[
+         {text:'"Come in. I\'m glad you came."',outcome:'good',result:"The openness made it easier for them to say what they'd been holding."},
+         {text:'"What do you want?"',outcome:'ok',result:"They winced but sat down. The conversation got there, eventually."},
+         {text:'"I\'m busy." (you weren\'t)',outcome:'bad',result:"They left. The door between you stayed closed another day."}
+       ]}},
+     {text:"Text a friend to get it out of your head.",outcome:'ok',result:"It helped to say it out loud. But nothing at home changed while you were venting.",next:{
+       situation:"Your friend asks: \"Have you talked to them since?\"",
+       choices:[
+         {text:'"Not yet. But I think I\'m ready to."',outcome:'good',result:"Saying it made it true. You went home and knocked on their door."},
+         {text:'"No. Waiting for them to come to me."',outcome:'ok',result:"Your friend nodded. The wait continued."},
+         {text:'"Why should I go first? They hurt me."',outcome:'bad',result:"Your friend agreed to agree. The silence at home lasted three more days."}
+       ]}}
+   ]}
+];
+
+let CR={active:false,scenario:null,depth:0,score:0,gemsEarned:0,currentChoices:[],revealPending:false,nextSituation:''};
+
+function startCrossroads(){
+  const stage=G.age<13?'child':G.age<18?'teen':G.age<30?'youngAdult':'adult';
+  const valid=CR_SCENARIOS.filter(s=>s.stages.includes(stage));
+  const scenario=(valid.length?valid:CR_SCENARIOS)[Math.floor(Math.random()*(valid.length||CR_SCENARIOS.length))];
+  CR={active:true,scenario,depth:0,score:0,gemsEarned:0,currentChoices:scenario.choices,revealPending:false,nextSituation:''};
+  document.getElementById('cr-overlay').classList.add('open');
+  crRender();
+}
+
+function crRender(){
+  const body=document.getElementById('cr-body');
+  const bar=document.getElementById('cr-depth-bar');
+  bar.innerHTML=[0,1].map(i=>`<div class="cr-depth-pip${i<CR.depth?' done':''}"></div>`).join('');
+  const situation=CR.depth===0?CR.scenario.situation:CR.nextSituation;
+  const charSays=CR.depth===0?CR.scenario.charSays:'';
+  body.innerHTML=`
+    <div class="cr-situation">
+      <div class="cr-situation-label">🌿 The Situation</div>
+      <div class="cr-situation-text">${situation}</div>
+      ${charSays?`<div class="cr-char-says">${charSays}</div>`:''}
+    </div>
+    <div class="cr-prompt">How do you respond?</div>
+    <div class="cr-choices" id="cr-choices">
+      ${CR.currentChoices.map((c,i)=>`
+        <div class="cr-choice" id="cr-c${i}" onclick="crChoose(${i})">
+          ${c.text}
+          <div class="cr-outcome">${c.result}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function crChoose(idx){
+  if(!CR.active||CR.revealPending)return;
+  CR.revealPending=true;
+  const chosen=CR.currentChoices[idx];
+  CR.score+=chosen.outcome==='good'?3:chosen.outcome==='ok'?1:0;
+  // Reveal all
+  CR.currentChoices.forEach((c,i)=>{
+    const el=document.getElementById('cr-c'+i);
+    if(!el)return;
+    if(i===idx)el.classList.add('selected');
+    el.classList.add('rv-'+c.outcome);
+    el.style.cursor='default';
+    el.onclick=null;
+  });
+  setTimeout(()=>{
+    const body=document.getElementById('cr-body');
+    const btn=document.createElement('button');
+    btn.className='cr-action-btn';
+    btn.style.marginTop='4px';
+    if(CR.depth<1&&chosen.next){
+      btn.textContent='Continue →';
+      btn.onclick=()=>{
+        CR.depth++;
+        CR.nextSituation=chosen.next.situation;
+        CR.currentChoices=chosen.next.choices;
+        CR.revealPending=false;
+        crRender();
+      };
+    } else {
+      btn.textContent='See results';
+      btn.onclick=crShowResult;
+    }
+    body.appendChild(btn);
+  },900);
+}
+
+function crShowResult(){
+  const maxPts=6;
+  const pct=CR.score/maxPts;
+  const gems=Math.round(pct*20);
+  CR.gemsEarned=gems;
+  G.wallet.gems=clamp(G.wallet.gems+gems,0,9999);
+  updateAllUI();saveToBrowser();
+  const grade=pct>=.84?'🌟 Exceptional read':pct>=.67?'💪 Strong instincts':pct>=.34?'👍 Decent path':'🌱 Room to grow';
+  const note=pct>=.84?'You read the emotional current and moved with it.'
+    :pct>=.67?'Mostly on track — a few moments could have gone deeper.'
+    :pct>=.34?'Some good instincts, but the path had some costly detours.'
+    :'The situations were complex. Play again and see what different choices reveal.';
+  document.getElementById('cr-body').innerHTML=`
+    <div class="cr-result-panel">
+      <div style="font-size:22px;font-weight:900;margin-bottom:6px">🌿 Crossroads</div>
+      <div class="cr-score-big">${CR.score}<span style="font-size:22px;font-weight:500"> / ${maxPts}</span></div>
+      <div style="font-size:17px;font-weight:800;margin:8px 0">${grade}</div>
+      <div class="cr-gems-earned">+💎 ${gems} gems</div>
+      <div style="font-size:13px;color:var(--text-2);margin:8px 0;line-height:1.5">${note}</div>
+      <button class="cr-action-btn" onclick="endCrossroads(false)">Done</button>
+    </div>`;
+}
+
+function endCrossroads(quit){
+  CR.active=false;
+  document.getElementById('cr-overlay').classList.remove('open');
+  if(!quit&&CR.gemsEarned>0)showToast(`🌿 Crossroads done! +💎${CR.gemsEarned}`);
+}
+
 </script>
 <!-- Milestone overlay -->
 <div id="milestone-overlay">

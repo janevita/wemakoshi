@@ -202,13 +202,34 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 
 .activity-badge{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:var(--activity-badge-bg);color:var(--text);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;white-space:nowrap;border:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);z-index:5;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
 
-/* ===== PET COMPANION ===== */
-.pet-companion{position:absolute;bottom:20px;right:10px;width:56px;height:56px;z-index:6;cursor:pointer;}
-.pet-companion:hover .pet-svg-inner{transform:scale(1.1);}
-.pet-svg-inner{transition:transform .2s;}
-.pet-speech{position:absolute;bottom:100%;right:0;background:var(--card);border:1.5px solid var(--border);border-radius:10px 10px 0 10px;padding:4px 8px;font-size:11px;font-weight:700;white-space:nowrap;margin-bottom:4px;box-shadow:0 2px 8px var(--shadow);animation:fadeUp .3s ease;pointer-events:none;}
-.pet-no-pet{position:absolute;bottom:20px;right:10px;width:44px;height:44px;cursor:pointer;z-index:6;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.2);border:2px dashed var(--border);border-radius:50%;font-size:20px;transition:all .2s;opacity:.55;backdrop-filter:blur(2px);}
-.pet-no-pet:hover{opacity:1;border-color:var(--accent);transform:scale(1.1);}
+/* ===== PET COMPANION (scene) ===== */
+.pet-companion{position:absolute;bottom:14px;right:8px;width:62px;height:62px;z-index:6;}
+.pet-companion:hover .pet-svg-inner{transform:scale(1.1);filter:drop-shadow(0 3px 6px rgba(0,0,0,.28));}
+.pet-svg-inner{transition:transform .2s,filter .2s;cursor:pointer;}
+.pet-speech{position:absolute;bottom:100%;right:0;background:var(--card);border:1.5px solid var(--border);border-radius:10px 10px 0 10px;padding:4px 9px;font-size:11px;font-weight:700;white-space:nowrap;margin-bottom:4px;box-shadow:0 2px 8px var(--shadow);animation:fadeUp .3s ease;pointer-events:none;z-index:7;}
+/* Pet status panel — left column */
+.pet-section{padding:8px 13px 10px;border-top:1px solid var(--border);flex-shrink:0;}
+.pet-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.pet-section-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--soft);}
+.pet-care-chip{font-size:10px;font-weight:700;color:var(--accent);cursor:pointer;background:var(--accent-glow);border:1.5px solid var(--accent-l);border-radius:12px;padding:2px 9px;transition:background .15s;}
+.pet-care-chip:hover{background:rgba(243,92,154,.25);}
+.pet-status-row{display:flex;align-items:center;gap:9px;}
+.pet-mini-svg{width:42px;height:42px;flex-shrink:0;cursor:pointer;}
+.pet-mini-info{flex:1;}
+.pet-mini-name{font-size:11px;font-weight:800;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pet-mini-needs{display:flex;flex-direction:column;gap:3px;}
+.pet-mini-need{display:flex;align-items:center;gap:4px;}
+.pet-mini-icon{font-size:11px;width:14px;text-align:center;flex-shrink:0;}
+.pet-mini-track{flex:1;height:4px;background:var(--track-bg);border-radius:2px;overflow:hidden;}
+.pet-mini-fill{height:100%;border-radius:2px;transition:width .7s ease;}
+.pet-adopt-prompt{text-align:center;padding:4px 0 2px;}
+.pet-adopt-link{font-size:12px;color:var(--accent);font-weight:700;cursor:pointer;background:none;border:none;font-family:inherit;opacity:.8;}
+.pet-adopt-link:hover{opacity:1;text-decoration:underline;}
+/* Pet collar swatches */
+.collar-swatches{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px;}
+.collar-swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0;}
+.collar-swatch.sel{border-color:var(--text);transform:scale(1.15);}
+.collar-none{background:var(--track-bg);border:2px dashed var(--border) !important;}
 /* Pet care bottom-sheet modal */
 #pet-care-modal{position:fixed;inset:0;background:var(--modal-overlay);z-index:130;display:none;align-items:flex-end;justify-content:center;}
 #pet-care-modal.open{display:flex;}
@@ -635,11 +656,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 /* ===== GAMES HUB ===== */
 #games-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:900;}
 #games-modal.open{display:flex;}
-.games-panel{background:var(--card);border-radius:20px;padding:28px 24px;width:min(560px,94vw);max-height:90vh;overflow-y:auto;}
+.games-panel{background:var(--card);border-radius:20px;padding:28px 24px;width:min(700px,94vw);max-height:90vh;overflow-y:auto;}
 .games-panel h2{text-align:center;margin-bottom:4px;font-size:20px;}
 .games-subtitle{text-align:center;font-size:13px;color:var(--text-2);margin-bottom:20px;}
-.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:480px){.games-grid{grid-template-columns:1fr;}}
+.games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:600px){.games-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.games-grid{grid-template-columns:1fr;}}
 .game-card{background:var(--bg);border-radius:14px;padding:18px 14px;cursor:pointer;border:2px solid transparent;transition:.2s;text-align:center;display:flex;flex-direction:column;}
 .game-card:hover{border-color:var(--accent);transform:translateY(-2px);}
 .game-card-icon{font-size:34px;margin-bottom:8px;}
@@ -828,6 +850,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
       </div>
       <div class="needs-section"><h3>Daily Needs</h3><div id="needs-list"></div></div>
       <div class="alerts-section" id="alerts-section"></div>
+      <div class="pet-section" id="pet-section"></div>
     </div>
 
     <!-- CENTER -->
@@ -1019,6 +1042,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
         <div class="game-card-desc">A situation unfolds. You choose a path without seeing where it leads. Think ahead — consequences compound.</div>
         <div class="game-card-reward">💎 Up to 20 gems</div>
       </div>
+      <div class="game-card" id="pet-game-card" onclick="onPetGameClick()">
+        <div class="game-card-icon">🐾</div>
+        <div class="game-card-title">Pet Time</div>
+        <div class="game-card-desc" id="pet-game-desc">Check in on your companion. Feed, play, groom, and cuddle — a happy pet lifts your character's spirits too.</div>
+        <div class="game-card-reward" id="pet-game-reward">🤗 Boosts both moods</div>
+      </div>
     </div>
     <button class="games-close-btn" onclick="closeGames()">Close</button>
   </div>
@@ -1174,6 +1203,9 @@ const PET_TYPES={
   frog:   {name:'Frog',   icon:'🐸',desc:'Calm and wonderfully strange', bodyCol:'#5ca06e',markCol:'#3d7a4e',details:'#a0d870'},
   fox:    {name:'Fox',    icon:'🦊',desc:'Clever and full of spirit',     bodyCol:'#e07030',markCol:'#c05020',details:'#f0d090'}
 };
+// Collar: index 0 = none
+const PET_COLLAR_COLORS=[null,'#e84040','#4070e8','#3aaa5c','#9a45e0','#e8a020','#f35c9a'];
+const PET_COLLAR_LABELS=['None','Red','Blue','Green','Purple','Gold','Pink'];
 const PET_NAMES={
   cat:    ['Whiskers','Luna','Mochi','Pepper','Sable'],
   dog:    ['Biscuit','Cooper','Daisy','Milo','Boba'],
@@ -1183,7 +1215,7 @@ const PET_NAMES={
   fox:    ['Ember','Russet','Sable','Blaze','Flicker']
 };
 
-function buildPetSVG(type,mood){
+function buildPetSVG(type,mood,collar){
   const t=PET_TYPES[type]||PET_TYPES.cat;
   const c=t.bodyCol,m=t.markCol,d=t.details;
   const happy=mood>65,sad=mood<35;
@@ -1230,12 +1262,17 @@ function buildPetSVG(type,mood){
     tail=`<path d="M53,55 Q70,42 65,26" stroke="${c}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M55,55 Q70,42 65,26" stroke="${d}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
     extras='';
   }
+  const collarCol=PET_COLLAR_COLORS[collar||0];
+  const collarSvg=collarCol
+    ?`<ellipse cx="30" cy="43" rx="11" ry="3.5" fill="${collarCol}" opacity=".9"/><circle cx="30" cy="46" r="2.2" fill="${collarCol}" opacity=".7"/>`
+    :'';
   return`<svg viewBox="0 0 70 68" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
   ${tail}
   ${ears}
   <ellipse cx="30" cy="40" rx="22" ry="19" fill="${c}"/>
   <ellipse cx="30" cy="26" rx="19" ry="19" fill="${c}"/>
   ${extras}
+  ${collarSvg}
   ${blush}
   ${eyeL}${eyeR}
   ${mouth}
@@ -1253,21 +1290,47 @@ function getPetNeedyMsg(){
 }
 function updatePetUI(){
   const wrap=document.getElementById('pet-companion');if(!wrap)return;
-  if(!G.pet){
-    wrap.innerHTML=`<div class="pet-no-pet" onclick="openShop();setTimeout(()=>shopTab('pet'),50)" title="Adopt a pet!">🐾</div>`;
-    return;
-  }
+  if(!G.pet){wrap.innerHTML='';return;}
   const mood=getPetMood();
   const needy=getPetNeedyMsg();
   const bubble=needy?`<div class="pet-speech">${needy}</div>`:'';
-  wrap.innerHTML=`${bubble}<div class="pet-svg-inner" style="width:56px;height:56px" onclick="openPetCare()" title="Care for ${G.pet.name}">${buildPetSVG(G.pet.type,mood)}</div>`;
+  wrap.innerHTML=`${bubble}<div class="pet-svg-inner" style="width:62px;height:62px" onclick="openPetCare()" title="Care for ${G.pet.name}">${buildPetSVG(G.pet.type,mood,G.pet.collar)}</div>`;
+}
+function updatePetStatusUI(){
+  const sec=document.getElementById('pet-section');if(!sec)return;
+  if(!G.pet){
+    sec.innerHTML=`<div class="pet-adopt-prompt"><button class="pet-adopt-link" onclick="openShop();setTimeout(()=>shopTab('pet'),50)">🐾 Adopt a pet</button></div>`;
+    return;
+  }
+  const mood=getPetMood();
+  const needs=[{icon:'🍖',v:G.pet.hunger},{icon:'⚡',v:G.pet.energy},{icon:'🛁',v:G.pet.hygiene},{icon:'💕',v:G.pet.happiness}];
+  sec.innerHTML=`
+    <div class="pet-section-hdr">
+      <span class="pet-section-title">🐾 ${G.pet.name}</span>
+      <span class="pet-care-chip" onclick="openPetCare()">Care ›</span>
+    </div>
+    <div class="pet-status-row">
+      <div class="pet-mini-svg" onclick="openPetCare()">${buildPetSVG(G.pet.type,mood,G.pet.collar)}</div>
+      <div class="pet-mini-info">
+        <div class="pet-mini-name">${PET_TYPES[G.pet.type]?.name||'Pet'} · ${getPetMoodLabel(mood)}</div>
+        <div class="pet-mini-needs">${needs.map(n=>{
+          const col=n.v>60?'var(--green)':n.v>30?'var(--yellow)':'var(--red)';
+          return`<div class="pet-mini-need"><span class="pet-mini-icon">${n.icon}</span><div class="pet-mini-track"><div class="pet-mini-fill" style="width:${n.v}%;background:${col}"></div></div></div>`;
+        }).join('')}</div>
+      </div>
+    </div>`;
 }
 function openPetCare(){
-  if(!G.pet)return;
+  if(!G.pet){openShop();setTimeout(()=>shopTab('pet'),50);return;}
   _renderPetCareSheet();
   document.getElementById('pet-care-modal').classList.add('open');
 }
 function closePetCare(){document.getElementById('pet-care-modal').classList.remove('open');}
+function onPetGameClick(){
+  closeGames();
+  if(G.pet)openPetCare();
+  else{openShop();setTimeout(()=>shopTab('pet'),50);}
+}
 function _renderPetCareSheet(){
   const p=G.pet;if(!p)return;
   const mood=getPetMood();
@@ -1275,7 +1338,7 @@ function _renderPetCareSheet(){
   const nameEl=document.getElementById('pcs-pet-name');
   const moodEl=document.getElementById('pcs-pet-mood');
   const needsEl=document.getElementById('pcs-needs');
-  if(svgEl)svgEl.innerHTML=buildPetSVG(p.type,mood);
+  if(svgEl)svgEl.innerHTML=buildPetSVG(p.type,mood,p.collar);
   if(nameEl)nameEl.textContent=p.name;
   if(moodEl)moodEl.textContent=`${PET_TYPES[p.type]?.name||'Pet'} · ${getPetMoodLabel(mood)}`;
   if(needsEl)needsEl.innerHTML=[
@@ -1297,13 +1360,13 @@ function petCareAction(action){
     case'groom':  p.hygiene=clamp(p.hygiene+38,0,100);p.happiness=clamp(p.happiness+8,0,100);showToast(`${p.name} feels fresh! 🛁`);break;
     case'cuddle': p.happiness=clamp(p.happiness+22,0,100);p.energy=clamp(p.energy+5,0,100);G.emotions.stress=clamp(G.emotions.stress-4,0,100);G.emotions.happiness=clamp(G.emotions.happiness+3,0,100);showToast(`${p.name} curls up with you 🤗`);break;
   }
-  saveToBrowser();_renderPetCareSheet();updatePetUI();updateAllUI();
+  saveToBrowser();_renderPetCareSheet();updatePetUI();updatePetStatusUI();updateAllUI();
 }
 function adoptPet(type){
   const t=PET_TYPES[type];if(!t)return;
   const names=PET_NAMES[type]||['Pet'];
   const name=names[Math.floor(Math.random()*names.length)];
-  G.pet={type,name,hunger:92,energy:88,happiness:85,hygiene:90};
+  G.pet={type,name,hunger:92,energy:88,happiness:85,hygiene:90,collar:0};
   saveToBrowser();updatePetUI();closeShop();
   showToast(`You adopted ${name} the ${t.name}! 🐾`);
   if(G.charName)addChat('narrator',`A tiny ${t.icon} trots in and looks up at ${G.charName} with wide curious eyes. It seems like ${G.charName} has found a new companion.`);
@@ -1316,11 +1379,11 @@ function renamePet(){
 function renderPetShop(){
   if(!G.pet){
     return`<div style="padding:10px">
-      <p style="font-size:13px;color:var(--soft);margin-bottom:16px">Adopt a little companion for ${G.charName||'your character'}! Each one has their own personality.</p>
+      <p style="font-size:13px;color:var(--soft);margin-bottom:16px">Adopt a companion for ${G.charName||'your character'}! Caring for them boosts both their moods.</p>
       <div class="pet-type-grid">${Object.entries(PET_TYPES).map(([k,t])=>`
         <div class="pet-type-card" onclick="adoptPet('${k}')">
           <div class="pt-icon">${t.icon}</div>
-          <div style="width:52px;height:52px;margin:0 auto 6px">${buildPetSVG(k,75)}</div>
+          <div style="width:52px;height:52px;margin:0 auto 6px">${buildPetSVG(k,75,0)}</div>
           <div class="pt-name">${t.name}</div>
           <div class="pt-desc">${t.desc}</div>
           <div style="font-size:11px;color:var(--green);font-weight:700;margin-top:6px">Free to adopt</div>
@@ -1330,28 +1393,45 @@ function renderPetShop(){
   }
   const p=G.pet,t=PET_TYPES[p.type];
   const mood=getPetMood();
+  const collarHtml=`
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--soft);margin-bottom:8px">🎀 Collar</div>
+      <div class="collar-swatches">
+        ${PET_COLLAR_COLORS.map((col,i)=>`
+          <div class="collar-swatch${(p.collar||0)===i?' sel':''}${i===0?' collar-none':''}"
+            style="${col?'background:'+col:''}"
+            title="${PET_COLLAR_LABELS[i]}"
+            onclick="setPetCollar(${i})"></div>`).join('')}
+      </div>
+    </div>`;
   return`<div style="padding:10px">
-    <div style="display:flex;align-items:center;gap:16px;background:var(--card);border-radius:14px;padding:16px;margin-bottom:16px;border:2px solid var(--accent)">
-      <div style="width:76px;height:76px;flex-shrink:0">${buildPetSVG(p.type,mood)}</div>
-      <div style="flex:1">
-        <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--accent)">${p.name}</div>
-        <div style="font-size:12px;color:var(--soft);margin-bottom:8px">${t?.name||'Pet'} · ${getPetMoodLabel(mood)}</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="save-btn" style="width:auto;padding:6px 14px;font-size:12px" onclick="renamePet()">✏️ Rename</button>
-          <button class="save-btn accent" style="width:auto;padding:6px 14px;font-size:12px" onclick="openPetCare();closeShop()">🐾 Care for ${p.name}</button>
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:16px;border:2px solid var(--accent)">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:76px;height:76px;flex-shrink:0">${buildPetSVG(p.type,mood,p.collar)}</div>
+        <div style="flex:1">
+          <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--accent)">${p.name}</div>
+          <div style="font-size:12px;color:var(--soft);margin-bottom:8px">${t?.name||'Pet'} · ${getPetMoodLabel(mood)}</div>
+          <button class="save-btn" style="width:auto;padding:5px 13px;font-size:12px" onclick="renamePet()">✏️ Rename</button>
         </div>
       </div>
+      ${collarHtml}
     </div>
-    <p style="font-size:12px;color:var(--soft);margin-bottom:12px">Want a different companion? (replaces current pet)</p>
+    <p style="font-size:12px;color:var(--soft);margin-bottom:12px">Adopt a different companion (replaces current pet)</p>
     <div class="pet-type-grid">${Object.entries(PET_TYPES).filter(([k])=>k!==p.type).map(([k,ot])=>`
       <div class="pet-type-card" onclick="if(confirm('Switch to a ${ot.name}? Your current pet will be replaced.'))adoptPet('${k}')">
         <div class="pt-icon">${ot.icon}</div>
-        <div style="width:44px;height:44px;margin:0 auto 5px">${buildPetSVG(k,75)}</div>
+        <div style="width:44px;height:44px;margin:0 auto 5px">${buildPetSVG(k,75,0)}</div>
         <div class="pt-name">${ot.name}</div>
         <div class="pt-desc">${ot.desc}</div>
       </div>`).join('')}
     </div>
   </div>`;
+}
+function setPetCollar(idx){
+  if(!G.pet)return;
+  G.pet.collar=idx;
+  saveToBrowser();updatePetUI();updatePetStatusUI();
+  renderShopContent(shopCurrentTab);
 }
 
 // Avatar SVG builder
@@ -1803,7 +1883,7 @@ function tickNeeds(){
     const petMood2=getPetMood();
     if(petMood2<35)G.emotions.happiness=clamp(G.emotions.happiness-.25,0,100);
     if(petMood2>72)G.emotions.happiness=clamp(G.emotions.happiness+.12,0,100);
-    updatePetUI();
+    updatePetUI();updatePetStatusUI();
   }
   updateNeedsUI();updateAlertsUI();updateCharSVG();updateAllUI();
   checkProactiveMessage();
@@ -1854,7 +1934,7 @@ function updateAllUI(){
   document.getElementById('skill-stats').innerHTML=Object.entries(G.skills).map(([k,v])=>`<div class="stat-bar"><span class="sn">${k[0].toUpperCase()+k.slice(1)}</span><div class="bt"><div class="bf" style="width:${v}%;background:${skC[k]}"></div></div><span class="sv">${v}</span></div>`).join('');
   document.getElementById('role-list').innerHTML=Object.entries(G.playerRoles).map(([k,v])=>`<div class="role-row"><div class="role-ic">${ROLES[k].icon}</div><div class="role-info"><div class="rn">${ROLES[k].label}</div><div class="rb"><div class="rf" style="width:${v}%"></div></div><div class="rl">Lv ${Math.floor(v/20)+1} · ${v}%</div></div></div>`).join('');
   if(G.memories.length>0)document.getElementById('mem-list').innerHTML=G.memories.slice(-6).reverse().map(m=>`<div class="mem-entry"><span class="ma">Age ${m.age}</span> — ${m.summary}</div>`).join('');
-  updateNeedsUI();updateAlertsUI();updatePetUI();
+  updateNeedsUI();updateAlertsUI();updatePetUI();updatePetStatusUI();
 }
 
 // ---- CHAT ----
@@ -4419,6 +4499,11 @@ document.addEventListener('DOMContentLoaded',()=>_updateVoiceBtn());
 
 function openGames(){
   document.getElementById('games-char-name').textContent=G.charName||'your character';
+  // Update pet card dynamically
+  const petDesc=document.getElementById('pet-game-desc');
+  const petReward=document.getElementById('pet-game-reward');
+  if(G.pet&&petDesc)petDesc.textContent=`Check in on ${G.pet.name}. Feed, play, groom, or cuddle — a happy pet lifts ${G.charName||'their'} spirits too.`;
+  if(petReward)petReward.textContent=G.pet?'🤗 Boosts both moods':'🐾 Adopt a pet first';
   document.getElementById('games-modal').classList.add('open');
 }
 function closeGames(){document.getElementById('games-modal').classList.remove('open');}

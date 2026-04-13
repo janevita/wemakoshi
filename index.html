@@ -16,53 +16,76 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#160d12;--card:#241320;--text:#f5e0ec;--soft:#a08090;
-  --accent:#f35c9a;--accent-l:#f78bb8;--accent-glow:rgba(243,92,154,.18);
-  --green:#5ca06e;--blue:#a168b0;--purple:#74419c;--red:#cd2e3c;--yellow:#e19c34;
-  --border:#4b2130;--shadow:rgba(10,3,8,.45);--r:14px;
-  /* theme-sensitive tokens */
-  --track-bg:#3a2030;
-  --narrator-grad-a:#2d1a24;--narrator-grad-b:#3a2030;
-  --thought-grad-a:#2a1a3a;--thought-grad-b:#1e1030;
-  --setup-grad-a:#1e0f18;--setup-grad-b:#2d1820;
-  --weekly-grad-a:#2a1a08;--weekly-grad-b:#1e1008;
-  --weekly-stat-bg:rgba(75,33,48,.4);
-  --weekly-insight-bg:rgba(75,33,48,.35);
-  --arch-card-grad:#2a1520;
-  --activity-badge-bg:rgba(36,19,32,.92);
+  /* === GAME UI PALETTE (default / night mode) === */
+  --bg:#1a4a8a;              /* deep game-world blue */
+  --card:#3aa0dc;            /* bright panel blue */
+  --text:#ffffff;            /* white — primary text on panels */
+  --soft:rgba(255,255,255,.65); /* secondary text on panels */
+  --accent:#f35c9a;          /* brand pink — stays for character/pet elements */
+  --accent-l:#f78bb8;
+  --accent-glow:rgba(243,92,154,.22);
+  --btn-orange:#ff9500;      /* orange — primary action buttons */
+  --btn-orange-l:#ffb340;
+  --btn-green:#28c840;       /* green — positive/secondary buttons */
+  --btn-green-l:#42d858;
+  --green:#28c840;--blue:#1e90e8;--purple:#9c4bcc;--red:#ff3b30;--yellow:#f5c218;
+  --border:rgba(255,255,255,.38); /* white border on blue panels */
+  --shadow:rgba(15,45,120,.35);
+  --r:14px;
+  --track-bg:rgba(0,0,0,.22);
+  /* dialogue gradients */
+  --narrator-grad-a:#1e6aaa;--narrator-grad-b:#155a96;
+  --thought-grad-a:#1a4e8a;--thought-grad-b:#112e60;
+  /* setup/weekly */
+  --setup-grad-a:#123870;--setup-grad-b:#1e5099;
+  --weekly-grad-a:#1a3870;--weekly-grad-b:#102850;
+  --weekly-stat-bg:rgba(255,255,255,.14);
+  --weekly-insight-bg:rgba(255,255,255,.11);
+  --arch-card-grad:#2a70b8;
+  --activity-badge-bg:rgba(15,50,120,.88);
+  /* scenes */
   --scene-bedroom:linear-gradient(180deg,#2d1e3a 0%,#3a2850 54%,#2a1e3a 55%,#1a0f28 100%);
   --scene-kitchen:linear-gradient(180deg,#3a1a0f 0%,#4c2018 54%,#3a1a0f 55%,#2a1008 100%);
   --scene-bathroom:linear-gradient(180deg,#0e1e30 0%,#162840 54%,#0e1e30 55%,#08141e 100%);
   --scene-study:linear-gradient(180deg,#28180a 0%,#341e0c 54%,#28180a 55%,#1a0e06 100%);
   --scene-outside:linear-gradient(180deg,#0e1e34 0%,#162848 54%,#0e1e0e 55%,#081008 100%);
   --scene-living:linear-gradient(180deg,#2a1020 0%,#3a1530 54%,#2a0f20 55%,#1a0818 100%);
-  --chart-text:#c0a0b0;--chart-sub:#8a6070;--chart-grid:#3a2030;--chart-empty:#6a3a50;
-  --modal-overlay:rgba(10,3,8,.78);
-  --coin-bg:rgba(225,156,52,.12);--gem-bg:rgba(116,65,156,.12);
+  --chart-text:#a8ccee;--chart-sub:#6a9cc8;--chart-grid:#1e4880;--chart-empty:#0e2850;
+  --modal-overlay:rgba(8,24,70,.82);
+  --coin-bg:rgba(245,194,24,.15);--gem-bg:rgba(156,75,204,.14);
 }
 [data-theme="light"]{
-  --bg:#f8f4ff;--card:#ffffff;--text:#2d1a26;--soft:#675555;
-  --accent:#f35c9a;--accent-l:#f78bb8;--accent-glow:rgba(243,92,154,.12);
-  --green:#4a9060;--blue:#9058a8;--purple:#6030a8;--red:#cd2e3c;--yellow:#d4900a;
-  --border:#e8d0e8;--shadow:rgba(75,33,48,.1);
-  --track-bg:#f0dcea;
-  --narrator-grad-a:#fff5f9;--narrator-grad-b:#fce8f0;
-  --thought-grad-a:#f2e8fb;--thought-grad-b:#e8d8f8;
-  --setup-grad-a:#f8f4ff;--setup-grad-b:#f0e8ff;
-  --weekly-grad-a:#fffbf0;--weekly-grad-b:#fdf5e0;
-  --weekly-stat-bg:rgba(255,255,255,.9);
-  --weekly-insight-bg:rgba(255,255,255,.85);
-  --arch-card-grad:#fdf0f8;
-  --activity-badge-bg:rgba(255,255,255,.95);
+  /* === GAME UI PALETTE (day mode) === */
+  --bg:#5ab8f0;              /* sky-blue game world */
+  --card:#82cef8;            /* lighter bright blue panels */
+  --text:#0a2a58;            /* deep navy text — readable on light blue */
+  --soft:#2860a8;            /* medium blue — secondary text */
+  --accent:#f35c9a;
+  --accent-l:#f78bb8;
+  --accent-glow:rgba(243,92,154,.18);
+  --btn-orange:#ff9500;--btn-orange-l:#ffb340;
+  --btn-green:#22b838;--btn-green-l:#3acc50;
+  --green:#22b838;--blue:#1478d4;--purple:#7c30b0;--red:#e82828;--yellow:#e8b418;
+  --border:rgba(255,255,255,.6);
+  --shadow:rgba(20,70,160,.2);
+  --track-bg:rgba(0,0,0,.14);
+  --narrator-grad-a:#60c0f8;--narrator-grad-b:#4aaae8;
+  --thought-grad-a:#4898d8;--thought-grad-b:#3880c0;
+  --setup-grad-a:#48a8e8;--setup-grad-b:#5ab8f0;
+  --weekly-grad-a:#3898e0;--weekly-grad-b:#2880c8;
+  --weekly-stat-bg:rgba(255,255,255,.55);
+  --weekly-insight-bg:rgba(255,255,255,.45);
+  --arch-card-grad:#70c0f8;
+  --activity-badge-bg:rgba(255,255,255,.92);
   --scene-bedroom:linear-gradient(180deg,#c5d8f0 0%,#dde8f5 54%,#b8cce0 55%,#8aab8a 100%);
   --scene-kitchen:linear-gradient(180deg,#fef5e0 0%,#fdebc8 54%,#e8cca0 55%,#c4a878 100%);
   --scene-bathroom:linear-gradient(180deg,#e0f0f8 0%,#c8e4f4 54%,#a8c8e0 55%,#8ab0c8 100%);
   --scene-study:linear-gradient(180deg,#f5e8d8 0%,#ecdbc8 54%,#c8a870 55%,#a08850 100%);
   --scene-outside:linear-gradient(180deg,#87ceeb 0%,#a8dff0 54%,#5a9e5a 55%,#3d7a3d 100%);
   --scene-living:linear-gradient(180deg,#f0e8d8 0%,#e8dcc8 54%,#c8b890 55%,#a09060 100%);
-  --chart-text:#675555;--chart-sub:#a08090;--chart-grid:#f0dcea;--chart-empty:#c0a0b0;
-  --modal-overlay:rgba(30,10,20,.6);
-  --coin-bg:rgba(212,144,10,.1);--gem-bg:rgba(96,48,168,.1);
+  --chart-text:#0a2a58;--chart-sub:#2860a8;--chart-grid:#a8d8f8;--chart-empty:#c8e8ff;
+  --modal-overlay:rgba(20,60,140,.65);
+  --coin-bg:rgba(232,180,24,.14);--gem-bg:rgba(124,48,176,.12);
 }
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:calc(var(--vh,1vh)*100);overflow-x:hidden;}
 .save-btn{width:100%;padding:10px 16px;border-radius:10px;border:2px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;text-align:left;}
@@ -732,6 +755,316 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .cr-score-big{font-size:52px;font-weight:900;color:var(--accent);line-height:1;margin:6px 0;}
 .cr-gems-earned{font-size:20px;font-weight:800;margin:8px 0;}
 .cr-action-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:11px 24px;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;}
+
+/* ================================================================
+   GAME UI THEME — panels, buttons, cards, bars
+   ================================================================ */
+
+/* ---- App background: game-world gradient ---- */
+body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 70%,#000) 100%) fixed;background-attachment:fixed;}
+
+/* ---- Game panels ---- */
+.panel-left,.panel-right{
+  background:linear-gradient(175deg,color-mix(in srgb,var(--card) 115%,#fff) 0%,var(--card) 55%,color-mix(in srgb,var(--card) 85%,#000) 100%);
+  border-color:var(--border);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.35),2px 0 10px var(--shadow);
+}
+.panel-center{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 60%,#fff) 0%,color-mix(in srgb,var(--bg) 40%,#fff) 100%);
+}
+.game-header{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--card) 115%,#fff) 0%,var(--card) 100%);
+  border-bottom:3px solid rgba(255,255,255,.2);
+  box-shadow:0 4px 16px var(--shadow),inset 0 2px 0 rgba(255,255,255,.3);
+}
+
+/* ---- Orange primary action button (3D candy style) ---- */
+.btn-primary{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--btn-orange) 130%,#fff) 0%,var(--btn-orange) 45%,color-mix(in srgb,var(--btn-orange) 75%,#000) 100%);
+  border:none;
+  border-bottom:4px solid color-mix(in srgb,var(--btn-orange) 55%,#000);
+  border-radius:14px;
+  box-shadow:0 5px 0 rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.4);
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.38);
+  letter-spacing:.2px;
+  transition:transform .1s,box-shadow .1s,border-bottom-width .1s;
+}
+.btn-primary:hover{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--btn-orange) 140%,#fff) 0%,color-mix(in srgb,var(--btn-orange) 115%,#fff) 45%,var(--btn-orange) 100%);
+  transform:translateY(-2px);
+  box-shadow:0 7px 0 rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn-primary:active{transform:translateY(3px);border-bottom-width:1px;box-shadow:0 1px 0 rgba(0,0,0,.22);}
+.btn-primary:disabled{background:rgba(255,255,255,.25);border-bottom-color:rgba(0,0,0,.15);box-shadow:none;text-shadow:none;transform:none;}
+
+/* ---- Header nav buttons: glass on blue ---- */
+.hbtn{
+  background:rgba(255,255,255,.18);
+  border:1.5px solid rgba(255,255,255,.45);
+  color:#fff;
+  text-shadow:0 1px 2px rgba(0,0,0,.25);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.hbtn:hover{background:rgba(255,255,255,.3);border-color:rgba(255,255,255,.7);color:#fff;}
+.hbtn.dash{background:var(--accent-glow);border-color:var(--accent-l);color:#fff;}
+
+/* ---- Send button: green (go!) ---- */
+.send-btn{
+  background:linear-gradient(180deg,var(--btn-green-l),var(--btn-green));
+  border-bottom:3px solid color-mix(in srgb,var(--btn-green) 60%,#000);
+  box-shadow:0 3px 0 rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.3);
+}
+.send-btn:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--btn-green-l) 115%,#fff),var(--btn-green-l));transform:scale(1.06);}
+
+/* ---- Next day button: green game button ---- */
+.next-day-btn{
+  background:linear-gradient(180deg,var(--btn-green-l),var(--btn-green));
+  border:none;
+  border-bottom:4px solid color-mix(in srgb,var(--btn-green) 60%,#000);
+  border-radius:14px;
+  color:#fff;
+  font-weight:800;
+  text-shadow:0 1px 2px rgba(0,0,0,.3);
+  box-shadow:0 4px 0 rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .1s,box-shadow .1s;
+}
+.next-day-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.35);}
+.next-day-btn:active{transform:translateY(3px);border-bottom-width:1px;box-shadow:0 1px 0 rgba(0,0,0,.2);}
+
+/* ---- Modal / shop cards: blue game panels ---- */
+.dash-modal,.shop-inner,.gem-store-inner,.games-panel,.ais-panel,.profile-card-wrap{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--card) 110%,#fff) 0%,var(--card) 60%,color-mix(in srgb,var(--card) 88%,#000) 100%);
+  border:3px solid rgba(255,255,255,.45);
+  box-shadow:0 20px 60px var(--shadow),inset 0 2px 0 rgba(255,255,255,.38);
+}
+.dash-header,.shop-header,.dash-tabs,.shop-tabs{
+  background:color-mix(in srgb,var(--card) 80%,#000);
+  border-color:rgba(255,255,255,.2);
+}
+/* ---- Dashboard cards: inner blue cards ---- */
+.dash-card,.insight-section,.profile-box{
+  background:rgba(0,0,0,.18);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+/* ---- Shop items: game-card style ---- */
+.shop-item,.pet-type-card{
+  background:rgba(0,0,0,.18);
+  border:2px solid rgba(255,255,255,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+}
+.shop-item:hover,.pet-type-card:hover{
+  border-color:rgba(255,255,255,.55);
+  background:rgba(255,255,255,.12);
+  box-shadow:0 4px 16px var(--shadow),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.shop-item.owned{border-color:var(--btn-green);}
+.shop-item.equipped{border-color:var(--accent);background:var(--accent-glow);}
+
+/* ---- Buy/equip buttons in shop ---- */
+.si-buy-btn.buy-coin{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--yellow) 130%,#fff),var(--yellow));
+  border:none;border-bottom:3px solid color-mix(in srgb,var(--yellow) 60%,#000);
+  color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);
+  box-shadow:0 3px 0 rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.si-buy-btn.buy-gem{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--purple) 130%,#fff),var(--purple));
+  border:none;border-bottom:3px solid color-mix(in srgb,var(--purple) 60%,#000);
+  color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);
+  box-shadow:0 3px 0 rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.si-buy-btn.equip-btn{
+  background:linear-gradient(180deg,var(--accent-l),var(--accent));
+  border:none;border-bottom:3px solid color-mix(in srgb,var(--accent) 60%,#000);
+  color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3);
+  box-shadow:0 3px 0 rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.3);
+}
+.si-buy-btn.buy-coin:hover,.si-buy-btn.buy-gem:hover,.si-buy-btn.equip-btn:hover{filter:brightness(1.12);}
+
+/* ---- Progress/need bars: bold colorful ---- */
+.need-track{border-radius:8px;box-shadow:inset 0 2px 4px rgba(0,0,0,.3),inset 0 -1px 0 rgba(255,255,255,.1);}
+.need-fill{box-shadow:0 1px 0 rgba(255,255,255,.3);}
+.need-fill.high{background:linear-gradient(90deg,var(--btn-green),color-mix(in srgb,var(--btn-green) 80%,#fff));}
+.need-fill.mid{background:linear-gradient(90deg,var(--yellow),color-mix(in srgb,var(--yellow) 80%,#fff));}
+.need-fill.low{background:linear-gradient(90deg,var(--red),color-mix(in srgb,var(--red) 80%,#fff));}
+.stat-bar .bt,.role-info .rb,.pcs-need-bar,.wk-growth-row .wgr-bar{
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.3);
+}
+
+/* ---- Pet mini-needs bars ---- */
+.pet-mini-track{border-radius:3px;box-shadow:inset 0 1px 3px rgba(0,0,0,.3);}
+
+/* ---- Games hub: game cards ---- */
+.games-panel h2{font-size:24px;}
+.game-card{
+  background:rgba(0,0,0,.18);
+  border:2px solid rgba(255,255,255,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+}
+.game-card:hover{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.6);
+  box-shadow:0 6px 20px var(--shadow),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.games-close-btn{
+  background:linear-gradient(180deg,var(--accent-l),var(--accent));
+  border:none;border-bottom:3px solid color-mix(in srgb,var(--accent) 60%,#000);
+  box-shadow:0 3px 0 rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+/* ---- Setup card ---- */
+.setup-card{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--card) 108%,#fff) 0%,var(--card) 100%);
+  border:2px solid rgba(255,255,255,.42);
+  box-shadow:0 8px 32px var(--shadow),inset 0 2px 0 rgba(255,255,255,.3);
+}
+.setup-card h2{color:#fff;}
+
+/* ---- Form inputs: game-y ---- */
+.form-group input,.chat-ta,.ais-input{
+  background:rgba(0,0,0,.22);
+  border-color:rgba(255,255,255,.3);
+  color:#fff;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.25);
+}
+.form-group input:focus,.chat-ta:focus,.ais-input:focus{
+  border-color:rgba(255,255,255,.7);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.2),0 0 0 3px rgba(255,255,255,.12);
+}
+.chat-ta::placeholder{color:rgba(255,255,255,.38);}
+
+/* ---- Avatar builder options ---- */
+.av-preset,.av-pill{
+  background:rgba(0,0,0,.18);
+  border-color:rgba(255,255,255,.28);
+  color:#fff;
+}
+.av-preset:hover,.av-pill:hover{border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.12);}
+.av-preset.sel,.av-pill.sel{background:var(--accent-glow);border-color:var(--accent-l);}
+.av-section-label{color:rgba(255,255,255,.65);}
+.age-opt,.bg-opt{border-color:rgba(255,255,255,.28);color:#fff;}
+.age-opt:hover,.age-opt.sel,.bg-opt:hover,.bg-opt.sel{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.15);}
+.age-opt .n{color:#fff;}
+.age-opt .l{color:rgba(255,255,255,.6);}
+
+/* ---- Resume card ---- */
+.resume-card{background:rgba(0,0,0,.22);border-color:var(--accent-l);box-shadow:0 4px 18px var(--shadow);}
+.resume-btn{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);color:#fff;}
+.resume-btn:hover{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.22);}
+.resume-btn.primary{background:var(--accent);border-color:var(--accent-l);}
+
+/* ---- Wallet HUD: game currency ---- */
+.coin-disp{
+  background:linear-gradient(135deg,rgba(245,194,24,.22),rgba(245,194,24,.1));
+  border-color:rgba(245,194,24,.5);
+  color:var(--yellow);
+  box-shadow:0 2px 6px rgba(245,194,24,.2);
+}
+.gem-disp{
+  background:linear-gradient(135deg,rgba(156,75,204,.22),rgba(156,75,204,.1));
+  border-color:rgba(156,75,204,.5);
+  color:#c080f0;
+  box-shadow:0 2px 6px rgba(156,75,204,.2);
+}
+
+/* ---- Alert chips ---- */
+.alert-chip{background:rgba(243,92,154,.12);border-color:var(--accent-l);}
+.alert-chip.critical{background:rgba(255,59,48,.12);border-color:var(--red);}
+
+/* ---- Mobile tab bar: game panel ---- */
+#mobile-tabs{
+  background:linear-gradient(180deg,var(--card),color-mix(in srgb,var(--card) 88%,#000));
+  border-top:2px solid rgba(255,255,255,.25);
+  box-shadow:0 -4px 16px var(--shadow);
+}
+.mob-tab{color:rgba(255,255,255,.55);}
+.mob-tab.active{color:#fff;}
+
+/* ---- Milestone / life-ending overlays ---- */
+.milestone-card{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--card) 115%,#fff),var(--card));
+  border:3px solid rgba(255,255,255,.5);
+  box-shadow:0 20px 60px var(--shadow),inset 0 2px 0 rgba(255,255,255,.35);
+}
+.milestone-close{
+  background:linear-gradient(180deg,var(--btn-green-l),var(--btn-green));
+  border-bottom:3px solid color-mix(in srgb,var(--btn-green) 60%,#000);
+  box-shadow:0 3px 0 rgba(0,0,0,.2);
+}
+
+/* ---- Pet care bottom sheet ---- */
+.pet-care-sheet{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--card) 110%,#fff),var(--card));
+  border-top:3px solid rgba(255,255,255,.4);
+}
+.pcs-action{
+  background:rgba(0,0,0,.18);
+  border-color:rgba(255,255,255,.28);
+}
+.pcs-action:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.6);}
+.pcs-close{background:rgba(0,0,0,.25);color:#fff;}
+
+/* ---- Crossroads / Need Rush game overlays ---- */
+#cr-overlay,#nr-overlay{background:var(--bg);}
+.cr-header,.nr-header{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--card) 115%,#fff),var(--card));
+  border-color:rgba(255,255,255,.25);
+  box-shadow:0 3px 12px var(--shadow);
+}
+.cr-choice{
+  background:rgba(0,0,0,.18);
+  border-color:rgba(255,255,255,.28);
+}
+.cr-choice:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.55);}
+.cr-situation{background:rgba(0,0,0,.2);border-left-color:var(--accent);}
+.nr-result-panel,.cr-result-panel{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--card) 112%,#fff),var(--card));
+  border:3px solid rgba(255,255,255,.4);
+}
+.nr-action-btn,.cr-action-btn{
+  background:linear-gradient(180deg,var(--btn-orange-l),var(--btn-orange));
+  border-bottom:3px solid color-mix(in srgb,var(--btn-orange) 60%,#000);
+  box-shadow:0 3px 0 rgba(0,0,0,.2);
+}
+.nr-care-btn{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.3);}
+.nr-care-btn:active{border-color:rgba(255,255,255,.6);}
+
+/* ---- Save/load buttons ---- */
+.save-btn{background:rgba(0,0,0,.18);border-color:rgba(255,255,255,.28);color:#fff;}
+.save-btn:hover:not(:disabled){border-color:rgba(255,255,255,.7);color:#fff;}
+
+/* ---- Wrapup hint ---- */
+.wrapup-btn{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.5);}
+.wrapup-btn:hover{border-color:rgba(255,255,255,.55);color:#fff;background:rgba(255,255,255,.08);}
+
+/* ---- Ending buttons ---- */
+.ending-btn{border-color:var(--accent-l);color:#fff;}
+.ending-btn.primary{background:var(--accent);}
+
+/* ---- Profile card modal ---- */
+#pc-download-btn{background:linear-gradient(135deg,var(--btn-green),color-mix(in srgb,var(--btn-green) 80%,#000));}
+#pc-close-btn{background:rgba(255,255,255,.2);color:#fff;}
+
+/* ---- AI status chip ---- */
+#ai-chip{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7);}
+#ai-chip.groq{border-color:var(--btn-green);color:var(--btn-green);}
+#ai-chip.wllm{border-color:var(--yellow);color:var(--yellow);}
+
+/* ---- Light theme day-mode adjustments ---- */
+[data-theme="light"] .panel-left,[data-theme="light"] .panel-right{
+  background:linear-gradient(175deg,color-mix(in srgb,var(--card) 110%,#fff),var(--card));
+}
+[data-theme="light"] .game-header{background:linear-gradient(180deg,color-mix(in srgb,var(--card) 108%,#fff),var(--card));}
+[data-theme="light"] .panel-center{background:linear-gradient(180deg,#c8e8ff,#b0d8f8);}
+[data-theme="light"] .form-group input,[data-theme="light"] .chat-ta{color:var(--text);background:rgba(255,255,255,.55);}
+[data-theme="light"] .chat-ta::placeholder{color:var(--soft);}
+[data-theme="light"] .av-preset,[data-theme="light"] .av-pill{color:var(--text);}
+[data-theme="light"] .age-opt,[data-theme="light"] .bg-opt{color:var(--text);}
+[data-theme="light"] .age-opt .n{color:var(--text);}
 
 </style>
 </head>
@@ -1496,10 +1829,34 @@ function _avMouth(cx,cy,r,mood,asleep,build){
   return`<path d="M${cx-r*.22},${my+r*.08} Q${cx},${my-r*.06} ${cx+r*.22},${my+r*.08}" stroke="#c07070" stroke-width="2" fill="none" stroke-linecap="round"/>`;
 }
 function _avAccessory(acc,cx,hCy,r,hairCol){
-  if(acc==='glasses'){const gy=hCy-r*.05;return`<rect x="${cx-r*.55}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/><rect x="${cx+r*.1}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/><line x1="${cx-r*.1}" y1="${gy}" x2="${cx+r*.1}" y2="${gy}" stroke="#555" stroke-width="2"/>`;}
-  if(acc==='hat')return`<rect x="${cx-r*.75}" y="${hCy-r*.9}" width="${r*1.5}" height="${r*.8}" rx="4" fill="${hairCol}"/><rect x="${cx-r*.92}" y="${hCy-r*.15}" width="${r*1.84}" height="${r*.18}" rx="3" fill="${hairCol}"/>`;
-  if(acc==='bow')return`<polygon points="${cx-r*.35},${hCy-r-8} ${cx-r*.05},${hCy-r} ${cx-r*.35},${hCy-r+8}" fill="#ff6b9d"/><polygon points="${cx+r*.35},${hCy-r-8} ${cx+r*.05},${hCy-r} ${cx+r*.35},${hCy-r+8}" fill="#ff6b9d"/><circle cx="${cx}" cy="${hCy-r}" r="5" fill="#ff6b9d"/>`;
-  if(acc==='headband')return`<path d="M${cx-r},${hCy-r*.5} Q${cx},${hCy-r*1.2} ${cx+r},${hCy-r*.5}" stroke="${hairCol}" stroke-width="8" fill="none" stroke-linecap="round"/>`;
+  if(acc==='glasses'){
+    // Glasses sit at the eye line (~10% above head center)
+    const gy=hCy-r*.1;
+    return`<rect x="${cx-r*.55}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/>` +
+           `<rect x="${cx+r*.1}" y="${gy-r*.13}" width="${r*.45}" height="${r*.26}" rx="6" fill="none" stroke="#555" stroke-width="2"/>` +
+           `<line x1="${cx-r*.1}" y1="${gy}" x2="${cx+r*.1}" y2="${gy}" stroke="#555" stroke-width="2"/>`;
+  }
+  if(acc==='hat'){
+    // Brim sits at the very top of the head; crown extends upward above it
+    const brimY=hCy-r*.82;
+    const brimH=r*.17;
+    const crownH=r*.68;
+    const crownW=r*1.08;
+    return`<rect x="${cx-crownW/2}" y="${brimY-crownH}" width="${crownW}" height="${crownH}" rx="4" fill="${hairCol}"/>` +
+           `<rect x="${cx-r*.84}" y="${brimY}" width="${r*1.68}" height="${brimH}" rx="3" fill="${hairCol}"/>`;
+  }
+  if(acc==='bow'){
+    // Bow sits at the top of the head
+    const by=hCy-r*1.05;
+    return`<polygon points="${cx-r*.35},${by-8} ${cx-r*.05},${by} ${cx-r*.35},${by+8}" fill="#ff6b9d"/>` +
+           `<polygon points="${cx+r*.35},${by-8} ${cx+r*.05},${by} ${cx+r*.35},${by+8}" fill="#ff6b9d"/>` +
+           `<circle cx="${cx}" cy="${by}" r="5" fill="#ff6b9d"/>`;
+  }
+  if(acc==='headband'){
+    // Arc across the forehead (~70% up the head)
+    const hby=hCy-r*.55;
+    return`<path d="M${cx-r*.9},${hby} Q${cx},${hCy-r*1.1} ${cx+r*.9},${hby}" stroke="${hairCol}" stroke-width="8" fill="none" stroke-linecap="round"/>`;
+  }
   return'';
 }
 function _avBody(cx,p,outCol,skinCol,outfit){
@@ -1725,7 +2082,9 @@ function _highlightSwatch(containerId,key){
   document.querySelectorAll(`#${containerId} .av-swatch`).forEach((el,i)=>el.classList.toggle('sel',_selAvatar[key]===i));
 }
 function _highlightPill(containerId,key){
-  document.querySelectorAll(`#${containerId} .av-pill`).forEach(el=>el.classList.toggle('sel',el.textContent===AV_HAIR_STYLES.concat(AV_EYE_SHAPES,AV_OUTFIT_STYLES,AV_ACCESSORY_DEFS).find(d=>d.id===_selAvatar[key])?.label));
+  const allDefs=AV_HAIR_STYLES.concat(AV_EYE_SHAPES,AV_OUTFIT_STYLES,AV_ACCESSORY_DEFS,AV_BUILDS);
+  const label=allDefs.find(d=>d.id===_selAvatar[key])?.label;
+  document.querySelectorAll(`#${containerId} .av-pill`).forEach(el=>el.classList.toggle('sel',el.textContent===label));
 }
 
 function setAvatarProp(key,val){
@@ -1740,6 +2099,7 @@ function setAvatarProp(key,val){
   else if(key==='eyeShape')_highlightPill('av-eye-pills','eyeShape');
   else if(key==='outfit')_highlightPill('av-outfit-pills','outfit');
   else if(key==='accessory')_highlightPill('av-acc-pills','accessory');
+  else if(key==='build')_highlightPill('av-build-pills','build');
   _updateAvatarLivePreview();
 }
 

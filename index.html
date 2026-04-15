@@ -2168,12 +2168,12 @@ let G={
   skills:{academic:20,social:20,emotional:15,physical:30,creative:20,practical:10},
   playerRoles:{teacher:5,parent:5,doctor:5,lawyer:5,therapist:5,friend:5,champion:5},
   needs:{
-    hunger:{v:80,icon:'🍎',label:'Hunger',rate:.35,color:'#e19c34'},
-    energy:{v:90,icon:'⚡',label:'Energy',rate:.22,color:'#a168b0'},
-    hygiene:{v:85,icon:'🧼',label:'Hygiene',rate:.14,color:'#5ca06e'},
-    social:{v:70,icon:'💬',label:'Social',rate:.28,color:'#f35c9a'},
-    fun:{v:75,icon:'🎮',label:'Fun',rate:.18,color:'#74419c'},
-    health:{v:80,icon:'❤️',label:'Health',rate:.08,color:'#cd2e3c'}
+    hunger:{v:80,icon:'<i class="lnis lnis-knife-fork-1"></i>',label:'Hunger',rate:.35,color:'#e19c34'},
+    energy:{v:90,icon:'<i class="lnis lnis-bolt-2"></i>',label:'Energy',rate:.22,color:'#a168b0'},
+    hygiene:{v:85,icon:'<i class="lnis lnis-flower-2"></i>',label:'Hygiene',rate:.14,color:'#5ca06e'},
+    social:{v:70,icon:'<i class="lnis lnis-chat-bubble-2"></i>',label:'Social',rate:.28,color:'#f35c9a'},
+    fun:{v:75,icon:'<i class="lnis lnis-game-pad-modern-1"></i>',label:'Fun',rate:.18,color:'#74419c'},
+    health:{v:80,icon:'<i class="lnis lnis-heart"></i>',label:'Health',rate:.08,color:'#cd2e3c'}
   },
   wallet:{coins:150,gems:0},
   cosmetics:{outfit:'classic',accessory:'none'},
@@ -4067,11 +4067,11 @@ function toggleTheme(){
   const isLight=root.getAttribute('data-theme')==='light';
   const next=isLight?'dark':'light';
   root.setAttribute('data-theme',next);
-  const icon=next==='light'?'☀️':'🌙';
+  const icon=next==='light'?'<i class="lnis lnis-sun-1"></i>':'<i class="lnis lnis-moon-half-right-5"></i>';
   const b1=document.getElementById('theme-btn');
   const b2=document.getElementById('setup-theme-btn');
-  if(b1)b1.textContent=icon;
-  if(b2)b2.textContent=icon;
+  if(b1)b1.innerHTML=icon;
+  if(b2)b2.innerHTML=icon;
   localStorage.setItem('wemakoshi-theme',next);
   /* redraw canvas charts so colors update immediately */
   setTimeout(()=>{drawSkillsChart();drawEmotionsChart();renderPlayerTab();},50);
@@ -4080,12 +4080,12 @@ function toggleTheme(){
 (function(){
   const saved=localStorage.getItem('wemakoshi-theme')||'dark';
   document.documentElement.setAttribute('data-theme',saved);
-  const icon=saved==='light'?'☀️':'🌙';
+  const icon=saved==='light'?'<i class="lnis lnis-sun-1"></i>':'<i class="lnis lnis-moon-half-right-5"></i>';
   window.addEventListener('DOMContentLoaded',()=>{
     const b1=document.getElementById('theme-btn');
     const b2=document.getElementById('setup-theme-btn');
-    if(b1)b1.textContent=icon;
-    if(b2)b2.textContent=icon;
+    if(b1)b1.innerHTML=icon;
+    if(b2)b2.innerHTML=icon;
   });
 })();
 function closeDash(){document.getElementById('dashboard').classList.remove('open');}

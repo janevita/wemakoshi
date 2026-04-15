@@ -11,6 +11,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="stylesheet" href="fonts/lni.css">
 <title>Wemakoshi — Grow a Life</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;700&display=swap');
@@ -20,7 +21,7 @@
   --bg:#1a4a8a;              /* deep game-world blue */
   --card:#3aa0dc;            /* bright panel blue */
   --text:#ffffff;            /* white — primary text on panels */
-  --soft:rgba(255,255,255,.65); /* secondary text on panels */
+  --soft:rgba(255,255,255,.82); /* secondary text on panels */
   --accent:#f35c9a;          /* brand pink — stays for character/pet elements */
   --accent-l:#f78bb8;
   --accent-glow:rgba(243,92,154,.22);
@@ -104,7 +105,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .resume-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
 .resume-btn.primary:hover{background:var(--accent-l);border-color:var(--accent-l);}
 /* Life ending overlay */
-#life-ending{position:fixed;inset:0;background:rgba(10,3,8,.92);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
+#life-ending{position:fixed;inset:0;background:rgba(8,24,70,.95);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;}
 #life-ending.open{display:flex;}
 .ending-title{font-family:'Caveat',cursive;font-size:52px;font-weight:700;color:var(--accent);margin-bottom:12px;}
 .ending-sub{font-size:16px;color:var(--soft);margin-bottom:28px;}
@@ -116,7 +117,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .ending-btn.primary{background:var(--accent);color:#fff;}
 .ending-btn:hover{transform:translateY(-2px);}
 /* Milestone overlay */
-#milestone-overlay{position:fixed;inset:0;background:rgba(10,3,8,.85);z-index:190;display:none;align-items:center;justify-content:center;}
+#milestone-overlay{position:fixed;inset:0;background:rgba(8,24,70,.88);z-index:190;display:none;align-items:center;justify-content:center;}
 #milestone-overlay.show{display:flex;}
 .milestone-card{background:var(--card);border:2px solid var(--accent);border-radius:20px;padding:32px;max-width:380px;width:90%;text-align:center;animation:popIn .3s cubic-bezier(.16,1,.3,1) both;}
 @keyframes popIn{from{opacity:0;transform:scale(.88) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
@@ -377,7 +378,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .mic-btn.listening{border-color:#e05050;color:#e05050;animation:micPulse 1s ease-in-out infinite;}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,80,80,.4);}50%{box-shadow:0 0 0 7px rgba(224,80,80,0);}}
 .voice-hbtn.off{opacity:.45;}
-.chat-hint{font-size:11px;color:#6a3a50;margin-top:4px;text-align:center;}
+.chat-hint{font-size:11px;color:var(--soft);margin-top:4px;text-align:center;}
 .next-day-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:11px;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:var(--accent);cursor:pointer;transition:all .2s;margin-top:3px;}
 .next-day-btn:hover{border-color:var(--accent);background:var(--accent-glow);}
 .typing-dots{display:flex;gap:4px;padding:10px 15px;max-width:65px;background:var(--card);border-radius:14px 14px 14px 3px;border:1px solid var(--border);}
@@ -644,7 +645,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .premium-upsell{margin-top:10px;font-size:11px;color:var(--soft);text-align:center;}
 .premium-upsell a{color:#8868a8;font-weight:700;cursor:pointer;text-decoration:none;}
 /* Profile card modal */
-#profile-card-modal{position:fixed;inset:0;background:rgba(45,42,38,.75);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;}
+#profile-card-modal{position:fixed;inset:0;background:var(--modal-overlay);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;}
 #profile-card-modal.open{display:flex;}
 .profile-card-wrap{background:var(--bg);border-radius:18px;padding:24px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;gap:16px;}
 .profile-card-wrap h3{font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:var(--accent);align-self:flex-start;}
@@ -691,9 +692,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 #ak-cancel-btn{background:var(--border);color:var(--text);}
 
 /* ===== GAMES HUB ===== */
-#games-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:900;}
+#games-modal{position:fixed;inset:0;background:var(--modal-overlay);display:none;align-items:center;justify-content:center;z-index:900;}
 #games-modal.open{display:flex;}
-.games-panel{background:var(--card);border-radius:22px;padding:28px 24px;width:min(700px,94vw);max-height:90vh;overflow-y:auto;border:1px solid var(--border);box-shadow:0 24px 64px rgba(10,3,8,.5);}
+.games-panel{background:var(--card);border-radius:22px;padding:28px 24px;width:min(700px,94vw);max-height:90vh;overflow-y:auto;border:1px solid var(--border);box-shadow:0 24px 64px rgba(8,24,70,.5);}
 .games-panel h2{text-align:center;margin-bottom:4px;font-size:22px;font-family:'Caveat',cursive;color:var(--accent);}
 .games-subtitle{text-align:center;font-size:13px;color:var(--soft);margin-bottom:22px;}
 .games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
@@ -713,7 +714,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .nr-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border-bottom:2px solid var(--accent-l);gap:8px;}
 .nr-stat{font-size:14px;font-weight:800;}
 .nr-field{flex:1;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%,var(--card) 100%);}
-.nr-char-face{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);font-size:52px;user-select:none;pointer-events:none;}
+.nr-char-face{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);font-size:52px;user-select:none;pointer-events:none;line-height:1;}
 .nr-item{position:absolute;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;border:3px solid rgba(255,255,255,.35);box-shadow:0 4px 14px rgba(0,0,0,.18);transition:transform .08s,opacity .15s;user-select:none;}
 .nr-item.caught{transform:scale(1.5)!important;opacity:0!important;}
 .nr-item.missed{transform:scale(.4)!important;opacity:0!important;}
@@ -1066,13 +1067,184 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 [data-theme="light"] .age-opt,[data-theme="light"] .bg-opt{color:var(--text);}
 [data-theme="light"] .age-opt .n{color:var(--text);}
 
+/* ================================================================
+   CONTRAST & READABILITY — solid colours, legible text, opaque modals
+   ================================================================ */
+
+/* ---- Modal panels: fully opaque, rich blue ---- */
+/* Replace the lingering var(--bg) backgrounds so modals stand apart */
+.dash-modal,
+.shop-inner,
+.gem-store-inner{
+  /* Already overridden by game theme block above — reinforce here */
+  background:linear-gradient(160deg,
+    color-mix(in srgb,var(--card) 118%,#fff) 0%,
+    var(--card) 55%,
+    color-mix(in srgb,var(--card) 82%,#000) 100%) !important;
+}
+
+/* ---- Inner cards inside modals: opaque recessed panels ---- */
+/* Replace rgba(0,0,0,.18) with an actual tinted solid that reads clearly */
+.dash-card,
+.insight-section,
+.profile-box,
+.archetype-card,
+.weekly-card .wk-stat,
+.gem-pkg{
+  background:color-mix(in srgb,var(--card) 70%,#000) !important;
+  border-color:rgba(255,255,255,.22) !important;
+}
+.archetype-card{border-color:rgba(255,255,255,.28) !important;}
+
+/* Shop items and game cards — solid recessed panels */
+.shop-item,
+.pet-type-card,
+.game-card{
+  background:color-mix(in srgb,var(--card) 72%,#000) !important;
+  border-color:rgba(255,255,255,.26) !important;
+}
+
+/* Form inputs, chat area — solid dark-blue with white text */
+.form-group input,
+.chat-ta,
+.ais-input{
+  background:color-mix(in srgb,var(--bg) 80%,#000) !important;
+  border-color:rgba(255,255,255,.32) !important;
+}
+
+/* ---- Badge / chip contrast: solid colour, white text ---- */
+/* Eval role chips */
+.eval-role.strong{background:color-mix(in srgb,var(--green) 40%,var(--card));color:#fff;border:1px solid rgba(255,255,255,.2);}
+.eval-role.moderate{background:color-mix(in srgb,var(--blue) 40%,var(--card));color:#fff;border:1px solid rgba(255,255,255,.2);}
+.eval-role.light{background:color-mix(in srgb,var(--yellow) 40%,var(--card));color:#fff;border:1px solid rgba(255,255,255,.2);}
+
+/* Eval delta chips */
+.eval-chg.pos{background:color-mix(in srgb,var(--green) 45%,var(--card));color:#fff;}
+.eval-chg.neg{background:color-mix(in srgb,var(--red) 45%,var(--card));color:#fff;}
+
+/* Journal score chips */
+.je-score.great{background:var(--green);color:#fff;}
+.je-score.good{background:var(--blue);color:#fff;}
+.je-score.okay{background:var(--yellow);color:color-mix(in srgb,var(--bg) 80%,#000);}
+.je-score.poor{background:var(--red);color:#fff;}
+
+/* Season/year score badges */
+.sc-score-badge.great,.yr-sgrade.great{background:var(--green);}
+.sc-score-badge.good,.yr-sgrade.good{background:var(--blue);}
+.sc-score-badge.okay,.yr-sgrade.okay{background:var(--yellow);color:color-mix(in srgb,var(--bg) 80%,#000);}
+.sc-score-badge.poor,.yr-sgrade.poor{background:var(--red);}
+
+/* Eval score circle */
+.eval-score.great{background:var(--green);}
+.eval-score.good{background:var(--blue);}
+.eval-score.okay{background:var(--yellow);}
+.eval-score.poor{background:var(--red);}
+
+/* Archetype tags */
+.archetype-tag.strength{background:color-mix(in srgb,var(--green) 35%,var(--card));color:#fff;border-color:rgba(255,255,255,.2);}
+.archetype-tag.grow{background:color-mix(in srgb,var(--yellow) 35%,var(--card));color:#fff;border-color:rgba(255,255,255,.2);}
+
+/* Alert chips — solid enough to read */
+.alert-chip{background:color-mix(in srgb,var(--accent) 30%,var(--card));border-color:var(--accent-l);}
+.alert-chip.critical{background:color-mix(in srgb,var(--red) 35%,var(--card));border-color:var(--red);}
+
+/* ---- Crossroads choices: clearly distinct states ---- */
+.cr-choice{
+  background:color-mix(in srgb,var(--card) 72%,#000);
+  border-color:rgba(255,255,255,.28);
+  color:#fff;
+}
+.cr-choice:hover{background:color-mix(in srgb,var(--card) 85%,#fff);border-color:rgba(255,255,255,.6);}
+.cr-choice.rv-good{background:color-mix(in srgb,var(--green) 35%,var(--card));border-color:var(--green);}
+.cr-choice.rv-ok{background:color-mix(in srgb,var(--yellow) 32%,var(--card));border-color:var(--yellow);}
+.cr-choice.rv-bad{background:color-mix(in srgb,var(--red) 32%,var(--card));border-color:var(--red);}
+
+/* ---- Avatar builder options — opaque ---- */
+.av-preset,.av-pill,.age-opt,.bg-opt{
+  background:color-mix(in srgb,var(--card) 72%,#000) !important;
+  border-color:rgba(255,255,255,.26) !important;
+}
+.av-preset:hover,.av-pill:hover,.age-opt:hover,.bg-opt:hover{
+  background:color-mix(in srgb,var(--card) 90%,#fff) !important;
+  border-color:rgba(255,255,255,.6) !important;
+}
+.av-preset.sel,.av-pill.sel,.age-opt.sel,.bg-opt.sel{
+  background:color-mix(in srgb,var(--accent) 35%,var(--card)) !important;
+  border-color:var(--accent-l) !important;
+}
+
+/* ---- Save/resume buttons ---- */
+.save-btn,
+.resume-btn{
+  background:color-mix(in srgb,var(--card) 72%,#000) !important;
+  border-color:rgba(255,255,255,.28) !important;
+}
+.save-btn:hover:not(:disabled),
+.resume-btn:hover{
+  background:color-mix(in srgb,var(--card) 88%,#fff) !important;
+  border-color:rgba(255,255,255,.65) !important;
+}
+
+/* ---- Pet care sheet inner actions ---- */
+.pcs-action{
+  background:color-mix(in srgb,var(--card) 70%,#000) !important;
+  border-color:rgba(255,255,255,.26) !important;
+}
+.pcs-action:hover{
+  background:color-mix(in srgb,var(--card) 90%,#fff) !important;
+  border-color:rgba(255,255,255,.6) !important;
+}
+
+/* ---- Wrapup hint ---- */
+.wrapup-btn{color:rgba(255,255,255,.65);border-color:rgba(255,255,255,.28);}
+
+/* ---- Tab labels: active tab full white, inactive lifted ---- */
+.dash-tab,.shop-tab{color:rgba(255,255,255,.6);}
+.dash-tab.active,.shop-tab.active{color:#fff;}
+
+/* ---- Profile tags ---- */
+.profile-tag{background:color-mix(in srgb,var(--card) 70%,#000);border-color:rgba(255,255,255,.22);color:#fff;}
+.profile-tag.strength{border-color:var(--green);}
+.profile-tag.grow{border-color:var(--yellow);}
+
+/* ---- Narrator & char-bubble text ---- */
+.narrator,.char-bubble,.char-thought,.sys-msg{color:#fff;}
+.char-bubble .spk{color:var(--accent-l);}
+.char-thought{color:rgba(255,255,255,.88);opacity:1;}
+
+/* ---- Mic button: readable on blue ---- */
+.mic-btn{background:color-mix(in srgb,var(--card) 72%,#000);border-color:rgba(255,255,255,.28);color:rgba(255,255,255,.75);}
+.mic-btn:hover{border-color:rgba(255,255,255,.6);color:#fff;}
+
+/* ---- Light theme: restore readability on lighter panels ---- */
+[data-theme="light"] .dash-card,
+[data-theme="light"] .insight-section,
+[data-theme="light"] .profile-box,
+[data-theme="light"] .shop-item,
+[data-theme="light"] .game-card,
+[data-theme="light"] .av-preset,
+[data-theme="light"] .av-pill,
+[data-theme="light"] .age-opt,
+[data-theme="light"] .bg-opt,
+[data-theme="light"] .save-btn,
+[data-theme="light"] .resume-btn,
+[data-theme="light"] .pcs-action{
+  background:rgba(255,255,255,.45) !important;
+  border-color:rgba(255,255,255,.65) !important;
+  color:var(--text) !important;
+}
+[data-theme="light"] .narrator,
+[data-theme="light"] .char-bubble,
+[data-theme="light"] .sys-msg{color:var(--text);}
+[data-theme="light"] .char-bubble .spk{color:var(--accent);}
+
 </style>
 </head>
 <body>
 
 <!-- SETUP SCREEN -->
 <div id="setup-screen" class="screen active">
-  <button id="setup-theme-btn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+  <button id="setup-theme-btn" onclick="toggleTheme()" title="Toggle light/dark mode"><i class="lnis lnis-moon-half-right-5"></i></button>
   <img src="logo.png" alt="Wemakoshi" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
   <div class="logo">Wemakoshi</div>
   <div class="subtitle">Grow a life. Learn to care.</div>
@@ -1154,7 +1326,7 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
       <label>Background</label>
       <div class="bg-opts" id="bg-opts"></div>
     </div>
-    <button class="btn-primary" id="start-btn" disabled onclick="startGame()">Begin Their Story ✨</button>
+    <button class="btn-primary" id="start-btn" disabled onclick="startGame()">Begin Their Story</button>
   </div>
 </div>
 
@@ -1163,20 +1335,20 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
   <div class="game-header">
     <img src="logo.png" alt="Wemakoshi" class="logo-img-hdr" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="game-title" style="display:none">Wemakoshi</div>
     <div class="header-center">
-      <span id="hdr-season">🌸 Spring</span><span>|</span>
+      <span id="hdr-season"><i class="lnis lnis-flower-2"></i> Spring</span><span>|</span>
       <span id="hdr-age">Age 5</span><span>|</span>
       <span id="hdr-stage">Childhood</span>
     </div>
     <div class="header-right">
       <div class="wallet-hud">
-        <span class="coin-disp">🪙 <span id="hdr-coins">150</span></span>
-        <span class="gem-disp">💎 <span id="hdr-gems">0</span></span>
+        <span class="coin-disp"><i class="lnis lnis-dollar-circle"></i> <span id="hdr-coins">150</span></span>
+        <span class="gem-disp"><i class="lnis lnis-diamonds-1"></i> <span id="hdr-gems">0</span></span>
       </div>
-      <button class="hbtn" onclick="openShop()">🛍️<span class="btn-lbl"> Shop</span></button>
-      <button class="hbtn" onclick="openGames()">🎮<span class="btn-lbl"> Games</span></button>
-      <button class="hbtn dash" onclick="openDash()">📊<span class="btn-lbl"> Dashboard</span></button>
-      <button class="hbtn voice-hbtn" id="voice-btn" onclick="toggleVoice()" title="Character voice on/off">🔊</button>
-      <button class="hbtn" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark">🌙</button>
+      <button class="hbtn" onclick="openShop()"><i class="lnis lnis-basket-shopping-3"></i><span class="btn-lbl"> Shop</span></button>
+      <button class="hbtn" onclick="openGames()"><i class="lnis lnis-game-pad-modern-1"></i><span class="btn-lbl"> Games</span></button>
+      <button class="hbtn dash" onclick="openDash()"><i class="lnis lnis-bar-chart-4"></i><span class="btn-lbl"> Dashboard</span></button>
+      <button class="hbtn voice-hbtn" id="voice-btn" onclick="toggleVoice()" title="Character voice on/off"><i class="lnis lnis-volume-high"></i></button>
+      <button class="hbtn" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark"><i class="lnis lnis-moon-half-right-5"></i></button>
       <div id="ai-chip" onclick="openAISettings()" title="AI settings">⚪ Scripted</div>
       <button class="hbtn" onclick="nextSeason()" id="skip-btn" style="display:none">⏭ Next Season</button>
     </div>
@@ -1187,13 +1359,13 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
     <div class="panel-left">
       <div class="char-scene" id="char-scene">
         <div class="scene-bg bedroom" id="scene-bg"></div>
-        <div class="scene-prop" id="scene-prop">🌱</div>
+        <div class="scene-prop" id="scene-prop"><i class="lnis lnis-leaf-1"></i></div>
         <div class="char-svg-wrap state-idle" id="char-svg-wrap"><!-- SVG injected here --></div>
         <div id="pet-companion"></div>
         <div class="zzz-wrap" id="zzz-wrap">
           <span class="zzz-item">z</span><span class="zzz-item">Z</span><span class="zzz-item">Z</span>
         </div>
-        <div class="activity-badge" id="activity-badge">😌 Relaxing</div>
+        <div class="activity-badge" id="activity-badge"><i class="lnis lnis-emoji-smile"></i> Relaxing</div>
       </div>
       <div class="needs-section"><h3>Daily Needs</h3><div id="needs-list"></div></div>
       <div class="alerts-section" id="alerts-section"></div>
@@ -1207,7 +1379,7 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
         <div class="chat-row">
           <textarea class="chat-ta" id="chat-ta" placeholder="Respond to your character..." rows="1"
             onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
-          <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak your response">🎤</button>
+          <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak your response"><i class="lnis lnis-microphone-1"></i></button>
           <button class="send-btn" id="send-btn" onclick="sendMsg()">&#x27A4;</button>
         </div>
         <div class="chat-hint">Respond naturally — your words shape how they grow</div>
@@ -1228,16 +1400,16 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
   <!-- MOBILE TAB BAR -->
   <div id="mobile-tabs">
     <button class="mob-tab active" data-tab="char" onclick="switchMobTab('char')">
-      <span class="tab-icon">🐾</span>
+      <span class="tab-icon"><i class="lnis lnis-heart"></i></span>
       <span>Character</span>
       <span class="mob-tab-badge" id="char-tab-badge"></span>
     </button>
     <button class="mob-tab" data-tab="story" onclick="switchMobTab('story')">
-      <span class="tab-icon">💬</span>
+      <span class="tab-icon"><i class="lnis lnis-chat-bubble-2"></i></span>
       <span>Story</span>
     </button>
     <button class="mob-tab" data-tab="stats" onclick="switchMobTab('stats')">
-      <span class="tab-icon">📊</span>
+      <span class="tab-icon"><i class="lnis lnis-bar-chart-4"></i></span>
       <span>Stats</span>
     </button>
   </div>
@@ -1246,7 +1418,7 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <!-- AI SETTINGS MODAL -->
 <div id="ai-settings-modal" onclick="if(event.target===this)closeAISettings()">
   <div class="ais-panel">
-    <h3>🤖 AI Companion Settings</h3>
+    <h3><i class="lnis lnis-gear-1"></i> AI Settings</h3>
     <div class="ais-tiers">
       <div class="ais-tier"><span class="dot dot-off" id="dot-groq"></span><span id="lbl-groq">Groq AI — not configured</span></div>
       <div class="ais-tier"><span class="dot dot-off" id="dot-wllm"></span><span id="lbl-wllm">Local AI (WebLLM) — standby</span></div>
@@ -1274,11 +1446,11 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <!-- PROFILE CARD MODAL -->
 <div id="profile-card-modal">
   <div class="profile-card-wrap">
-    <h3>✨ Your Caregiver Profile</h3>
+    <h3><i class="lnis lnis-star-fat"></i> Your Caregiver Profile</h3>
     <div id="profile-card-svg-wrap" style="width:100%;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.15);"></div>
     <div class="profile-card-actions">
       <button id="pc-close-btn" onclick="closeProfileCard()">Close</button>
-      <button id="pc-download-btn" onclick="downloadProfileCard()">⬇ Download Card</button>
+      <button id="pc-download-btn" onclick="downloadProfileCard()"><i class="lnis lnis-cloud-upload"></i> Download Card</button>
     </div>
   </div>
 </div>
@@ -1287,20 +1459,20 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <div id="shop-modal">
   <div class="shop-inner">
     <div class="shop-header">
-      <h2>🛍️ Shop</h2>
+      <h2><i class="lnis lnis-basket-shopping-3"></i> Shop</h2>
       <div class="shop-wallet-display">
-        <div class="sw-coins">🪙 <span id="shop-coins">0</span></div>
-        <div class="sw-gems">💎 <span id="shop-gems">0</span></div>
+        <div class="sw-coins"><i class="lnis lnis-dollar-circle"></i> <span id="shop-coins">0</span></div>
+        <div class="sw-gems"><i class="lnis lnis-diamonds-1"></i> <span id="shop-gems">0</span></div>
         <button class="get-gems-btn" onclick="openGemStore()">+ Get Gems</button>
       </div>
-      <button class="shop-close" onclick="closeShop()">✕</button>
+      <button class="shop-close" onclick="closeShop()"><i class="lnis lnis-xmark"></i></button>
     </div>
     <div class="shop-tabs">
-      <div class="shop-tab active" onclick="shopTab('customize')">✨ Customize</div>
-      <div class="shop-tab" onclick="shopTab('pet')">🐾 Pet</div>
-      <div class="shop-tab" onclick="shopTab('outfits')">👗 Outfits</div>
-      <div class="shop-tab" onclick="shopTab('accessories')">🎩 Accessories</div>
-      <div class="shop-tab" onclick="shopTab('packs')">📖 Story Packs</div>
+      <div class="shop-tab active" onclick="shopTab('customize')">Customize</div>
+      <div class="shop-tab" onclick="shopTab('pet')">Pet</div>
+      <div class="shop-tab" onclick="shopTab('outfits')"><i class="lnis lnis-shirt-1"></i> Outfits</div>
+      <div class="shop-tab" onclick="shopTab('accessories')"><i class="lnis lnis-crown-3"></i> Accessories</div>
+      <div class="shop-tab" onclick="shopTab('packs')"><i class="lnis lnis-book-1"></i> Story Packs</div>
     </div>
     <div class="shop-body" id="shop-body"></div>
   </div>
@@ -1310,27 +1482,27 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <div id="gem-store-modal">
   <div class="gem-store-inner">
     <div class="gem-store-header">
-      <h2>💎 Get Gems</h2>
-      <button class="gem-store-close" onclick="closeGemStore()">✕</button>
+      <h2><i class="lnis lnis-diamonds-1"></i> Get Gems</h2>
+      <button class="gem-store-close" onclick="closeGemStore()"><i class="lnis lnis-xmark"></i></button>
     </div>
     <div class="gem-packages">
       <div class="gem-pkg" onclick="buyGems(50,'$0.99')">
-        <div class="gp-gems">💎 50</div>
+        <div class="gp-gems"><i class="lnis lnis-diamonds-1"></i> 50</div>
         <div class="gp-info"><div class="gp-name">Starter Pack</div><div class="gp-bonus">Perfect to try a premium animal</div></div>
         <div class="gp-price">$0.99</div>
       </div>
       <div class="gem-pkg popular" onclick="buyGems(200,'$2.99')">
-        <div class="gp-gems">💎 200</div>
-        <div class="gp-info"><div class="gp-name">Value Pack</div><div class="gp-bonus">Unlock multiple items &amp; outfits</div><div><span class="gp-popular">⭐ Most popular</span></div></div>
+        <div class="gp-gems"><i class="lnis lnis-diamonds-1"></i> 200</div>
+        <div class="gp-info"><div class="gp-name">Value Pack</div><div class="gp-bonus">Unlock multiple items &amp; outfits</div><div><span class="gp-popular"><i class="lnis lnis-star-fat"></i> Most popular</span></div></div>
         <div class="gp-price">$2.99</div>
       </div>
       <div class="gem-pkg" onclick="buyGems(500,'$5.99')">
-        <div class="gp-gems">💎 500</div>
+        <div class="gp-gems"><i class="lnis lnis-diamonds-1"></i> 500</div>
         <div class="gp-info"><div class="gp-name">Mega Pack</div><div class="gp-bonus">Unlock everything you want</div></div>
         <div class="gp-price">$5.99</div>
       </div>
     </div>
-    <div class="gem-note">💡 This is a prototype — gems are simulated. In production, purchases will be processed securely through app stores.</div>
+    <div class="gem-note"><i class="lnis lnis-bulb-2"></i> This is a prototype — gems are simulated. In production, purchases will be processed securely through app stores.</div>
   </div>
 </div>
 
@@ -1343,27 +1515,27 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
         <div class="pcs-name" id="pcs-pet-name"></div>
         <div class="pcs-mood" id="pcs-pet-mood"></div>
       </div>
-      <button class="pcs-close" onclick="closePetCare()">✕</button>
+      <button class="pcs-close" onclick="closePetCare()"><i class="lnis lnis-xmark"></i></button>
     </div>
     <div class="pcs-needs" id="pcs-needs"></div>
     <div class="pcs-actions">
       <button class="pcs-action" onclick="petCareAction('feed')">
-        <span class="pcs-action-icon">🍖</span>
+        <span class="pcs-action-icon"><i class="lnis lnis-knife-fork-1"></i></span>
         <span class="pcs-action-label">Feed</span>
         <span class="pcs-action-desc">Fills hunger</span>
       </button>
       <button class="pcs-action" onclick="petCareAction('play')">
-        <span class="pcs-action-icon">🎾</span>
+        <span class="pcs-action-icon"><i class="lnis lnis-game-pad-modern-1"></i></span>
         <span class="pcs-action-label">Play</span>
         <span class="pcs-action-desc">Boosts happiness</span>
       </button>
       <button class="pcs-action" onclick="petCareAction('groom')">
-        <span class="pcs-action-icon">🛁</span>
+        <span class="pcs-action-icon"><i class="lnis lnis-flower-2"></i></span>
         <span class="pcs-action-label">Groom</span>
         <span class="pcs-action-desc">Keeps them clean</span>
       </button>
       <button class="pcs-action" onclick="petCareAction('cuddle')">
-        <span class="pcs-action-icon">🤗</span>
+        <span class="pcs-action-icon"><i class="lnis lnis-heart"></i></span>
         <span class="pcs-action-label">Cuddle</span>
         <span class="pcs-action-desc">Calms both of you</span>
       </button>
@@ -1374,26 +1546,26 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <!-- GAMES HUB -->
 <div id="games-modal" onclick="if(event.target===this)closeGames()">
   <div class="games-panel">
-    <h2>🎮 Game Modes</h2>
+    <h2><i class="lnis lnis-game-pad-modern-1"></i> Game Modes</h2>
     <p class="games-subtitle">Play with <span id="games-char-name">your character</span> · earn gems</p>
     <div class="games-grid">
       <div class="game-card" onclick="closeGames();startNeedRush()">
-        <div class="game-card-icon">⚡</div>
+        <div class="game-card-icon"><i class="lnis lnis-bolt-2"></i></div>
         <div class="game-card-title">Need Rush</div>
         <div class="game-card-desc">Care items fall from the sky. Match each one before it hits the ground. Your character's mood sets the pace.</div>
-        <div class="game-card-reward">💎 Up to 15 gems</div>
+        <div class="game-card-reward"><i class="lnis lnis-diamonds-1"></i> Up to 15 gems</div>
       </div>
       <div class="game-card" onclick="closeGames();startCrossroads()">
-        <div class="game-card-icon">🌿</div>
+        <div class="game-card-icon"><i class="lnis lnis-leaf-1"></i></div>
         <div class="game-card-title">Crossroads</div>
         <div class="game-card-desc">A situation unfolds. You choose a path without seeing where it leads. Think ahead — consequences compound.</div>
-        <div class="game-card-reward">💎 Up to 20 gems</div>
+        <div class="game-card-reward"><i class="lnis lnis-diamonds-1"></i> Up to 20 gems</div>
       </div>
       <div class="game-card" id="pet-game-card" onclick="onPetGameClick()">
-        <div class="game-card-icon">🐾</div>
+        <div class="game-card-icon"><i class="lnis lnis-heart"></i></div>
         <div class="game-card-title">Pet Time</div>
         <div class="game-card-desc" id="pet-game-desc">Check in on your companion. Feed, play, groom, and cuddle — a happy pet lifts your character's spirits too.</div>
-        <div class="game-card-reward" id="pet-game-reward">🤗 Boosts both moods</div>
+        <div class="game-card-reward" id="pet-game-reward"><i class="lnis lnis-heart"></i> Boosts both moods</div>
       </div>
     </div>
     <button class="games-close-btn" onclick="closeGames()">Close</button>
@@ -1403,13 +1575,13 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <!-- NEED RUSH -->
 <div id="nr-overlay">
   <div class="nr-header">
-    <button class="hbtn" onclick="endNeedRush(true)" style="font-size:12px;padding:5px 10px">✕ Quit</button>
+    <button class="hbtn" onclick="endNeedRush(true)" style="font-size:12px;padding:5px 10px"><i class="lnis lnis-xmark"></i> Quit</button>
     <div class="nr-stat">Score: <span id="nr-score-hdr">0</span></div>
     <div class="nr-stat">⏱ <span id="nr-timer-hdr">60</span>s</div>
-    <div class="nr-stat">💎 <span id="nr-gems-hdr">0</span></div>
+    <div class="nr-stat"><i class="lnis lnis-diamonds-1"></i> <span id="nr-gems-hdr">0</span></div>
   </div>
   <div class="nr-field" id="nr-field">
-    <div class="nr-char-face" id="nr-char-face">😊</div>
+    <div class="nr-char-face" id="nr-char-face"><i class="lnis lnis-emoji-smile"></i></div>
     <div class="nr-flash" id="nr-miss-flash" style="background:rgba(205,46,60,.14)"></div>
     <div class="nr-flash" id="nr-catch-flash" style="background:rgba(92,160,110,.14)"></div>
   </div>
@@ -1419,8 +1591,8 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <!-- CROSSROADS -->
 <div id="cr-overlay">
   <div class="cr-header">
-    <button class="hbtn" onclick="endCrossroads(true)" style="font-size:12px;padding:5px 10px">✕ Quit</button>
-    <div style="font-weight:800;font-size:14px">🌿 Crossroads</div>
+    <button class="hbtn" onclick="endCrossroads(true)" style="font-size:12px;padding:5px 10px"><i class="lnis lnis-xmark"></i> Quit</button>
+    <div style="font-weight:800;font-size:14px"><i class="lnis lnis-leaf-1"></i> Crossroads</div>
     <div class="cr-depth-bar" id="cr-depth-bar"></div>
   </div>
   <div class="cr-body" id="cr-body"></div>
@@ -1430,15 +1602,15 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 <div id="dashboard">
   <div class="dash-modal">
     <div class="dash-header">
-      <h2>📊 Dashboard</h2>
-      <button class="dash-close" onclick="closeDash()">✕</button>
+      <h2><i class="lnis lnis-bar-chart-4"></i> Dashboard</h2>
+      <button class="dash-close" onclick="closeDash()"><i class="lnis lnis-xmark"></i></button>
     </div>
     <div class="dash-tabs">
-      <div class="dash-tab active" onclick="switchTab('growth')">🌱 Character Growth</div>
-      <div class="dash-tab" onclick="switchTab('player')">🎯 Your Performance</div>
-      <div class="dash-tab" onclick="switchTab('journal')">📖 Life Journal</div>
-      <div class="dash-tab" onclick="switchTab('premium')">✨ Premium Insights</div>
-      <div class="dash-tab" onclick="switchTab('save')">💾 Save &amp; Share</div>
+      <div class="dash-tab active" onclick="switchTab('growth')">Character Growth</div>
+      <div class="dash-tab" onclick="switchTab('player')"><i class="lnis lnis-target-user"></i> Your Performance</div>
+      <div class="dash-tab" onclick="switchTab('journal')"><i class="lnis lnis-book-1"></i> Life Journal</div>
+      <div class="dash-tab" onclick="switchTab('premium')">Premium Insights</div>
+      <div class="dash-tab" onclick="switchTab('save')"><i class="lnis lnis-floppy-disk-1"></i> Save &amp; Share</div>
     </div>
     <div class="dash-body">
       <div class="dash-pane active" id="tab-growth">
@@ -1470,10 +1642,10 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
       </div>
       <div class="dash-pane" id="tab-save">
         <div class="dash-card" style="margin-bottom:14px">
-          <h4>💾 Save Progress</h4>
+          <h4><i class="lnis lnis-floppy-disk-1"></i> Save Progress</h4>
           <p style="font-size:13px;color:var(--soft);margin-bottom:14px">Your game saves automatically each day. Use these options to back up or restore across devices.</p>
           <div style="display:flex;flex-direction:column;gap:10px">
-            <button class="save-btn" onclick="copySaveCode()">📋 Copy Save Code</button>
+            <button class="save-btn" onclick="copySaveCode()"><i class="lnis lnis-check-circle-1"></i> Copy Save Code</button>
             <div style="display:flex;gap:8px;align-items:center">
               <input id="save-code-input" placeholder="Paste save code here…" style="flex:1;padding:9px 12px;border:2px solid var(--border);border-radius:9px;font-family:inherit;font-size:13px;background:var(--card);color:var(--text)" oninput="document.getElementById('load-code-btn').disabled=!this.value.trim()">
               <button id="load-code-btn" class="save-btn" disabled onclick="loadFromInput()">Load</button>
@@ -1481,11 +1653,11 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
           </div>
         </div>
         <div class="dash-card">
-          <h4>🔗 Share</h4>
+          <h4><i class="lnis lnis-share-1"></i> Share</h4>
           <p style="font-size:13px;color:var(--soft);margin-bottom:14px">Share your character's story or invite someone to watch their journey.</p>
           <div style="display:flex;flex-direction:column;gap:10px">
-            <button class="save-btn accent" onclick="shareSaveURL()">🌐 Share Link (includes save)</button>
-            <button class="save-btn" onclick="shareStoryCard()">🪪 Share Story Card</button>
+            <button class="save-btn accent" onclick="shareSaveURL()"><i class="lnis lnis-share-1"></i> Share Link (includes save)</button>
+            <button class="save-btn" onclick="shareStoryCard()"><i class="lnis lnis-flag-1"></i> Share Story Card</button>
           </div>
         </div>
       </div>
@@ -1626,13 +1798,13 @@ function buildPetSVG(type,mood,collar){
 </svg>`;
 }
 function getPetMood(){if(!G.pet)return 50;return(G.pet.hunger+G.pet.energy+G.pet.happiness+G.pet.hygiene)/4;}
-function getPetMoodLabel(mood){if(mood>70)return'Happy 😊';if(mood>45)return'Content 😌';if(mood>25)return'Sad 😟';return'Neglected 😢';}
+function getPetMoodLabel(mood){if(mood>70)return'Happy <i class="lnis lnis-emoji-smile"></i>';if(mood>45)return'Content <i class="lnis lnis-emoji-smile"></i>';if(mood>25)return'Sad <i class="lnis lnis-emoji-sad"></i>';return'Neglected <i class="lnis lnis-emoji-sad"></i>';}
 function getPetNeedyMsg(){
   if(!G.pet)return null;
   if(G.pet.hunger<30)return'Hungry! 🍖';
   if(G.pet.hygiene<28)return'Need a bath... 🛁';
-  if(G.pet.energy<28)return'Sleepy 😴';
-  if(G.pet.happiness<30)return'Feeling lonely 💔';
+  if(G.pet.energy<28)return'Sleepy <i class="lnis lnis-moon-half-right-5"></i>';
+  if(G.pet.happiness<30)return'Feeling lonely <i class="lnis lnis-heart"></i>';
   return null;
 }
 function updatePetUI(){
@@ -1650,7 +1822,7 @@ function updatePetStatusUI(){
     return;
   }
   const mood=getPetMood();
-  const needs=[{icon:'🍖',v:G.pet.hunger},{icon:'⚡',v:G.pet.energy},{icon:'🛁',v:G.pet.hygiene},{icon:'💕',v:G.pet.happiness}];
+  const needs=[{icon:'<i class="lnis lnis-knife-fork-1"></i>',v:G.pet.hunger},{icon:'<i class="lnis lnis-bolt-2"></i>',v:G.pet.energy},{icon:'<i class="lnis lnis-flower-2"></i>',v:G.pet.hygiene},{icon:'<i class="lnis lnis-heart"></i>',v:G.pet.happiness}];
   sec.innerHTML=`
     <div class="pet-section-hdr">
       <span class="pet-section-title">🐾 ${G.pet.name}</span>
@@ -1687,12 +1859,12 @@ function _renderPetCareSheet(){
   const needsEl=document.getElementById('pcs-needs');
   if(svgEl)svgEl.innerHTML=buildPetSVG(p.type,mood,p.collar);
   if(nameEl)nameEl.textContent=p.name;
-  if(moodEl)moodEl.textContent=`${PET_TYPES[p.type]?.name||'Pet'} · ${getPetMoodLabel(mood)}`;
+  if(moodEl)moodEl.innerHTML=`${PET_TYPES[p.type]?.name||'Pet'} · ${getPetMoodLabel(mood)}`;
   if(needsEl)needsEl.innerHTML=[
-    {icon:'🍖',label:'Hunger',v:p.hunger},
-    {icon:'⚡',label:'Energy',v:p.energy},
-    {icon:'🛁',label:'Hygiene',v:p.hygiene},
-    {icon:'💕',label:'Happy',v:p.happiness}
+    {icon:'<i class="lnis lnis-knife-fork-1"></i>',label:'Hunger',v:p.hunger},
+    {icon:'<i class="lnis lnis-bolt-2"></i>',label:'Energy',v:p.energy},
+    {icon:'<i class="lnis lnis-flower-2"></i>',label:'Hygiene',v:p.hygiene},
+    {icon:'<i class="lnis lnis-heart"></i>',label:'Happy',v:p.happiness}
   ].map(n=>{
     const col=n.v>60?'var(--green)':n.v>30?'var(--yellow)':'var(--red)';
     return`<div class="pcs-need"><div class="pcs-need-icon">${n.icon}</div><div class="pcs-need-bar"><div class="pcs-need-fill" style="width:${n.v}%;background:${col}"></div></div><div class="pcs-need-val">${Math.round(n.v)}</div></div>`;
@@ -1921,13 +2093,13 @@ function buildHumanPreviewSVG(preset){
 
 // ---- ROLES ----
 const ROLES={
-  teacher:{icon:'📚',label:'Teacher',color:'#a168b0'},
-  parent:{icon:'🏠',label:'Parent',color:'#5ca06e'},
-  doctor:{icon:'🩺',label:'Doctor',color:'#cd2e3c'},
-  lawyer:{icon:'⚖️',label:'Lawyer',color:'#4d3461'},
-  therapist:{icon:'💜',label:'Therapist',color:'#e19c34'},
-  friend:{icon:'🤝',label:'Friend',color:'#f35c9a'},
-  champion:{icon:'🎉',label:'Champion',color:'#f0952a'}
+  teacher:{icon:'<i class="lnis lnis-books-2"></i>',label:'Teacher',color:'#a168b0'},
+  parent:{icon:'<i class="lnis lnis-home-2"></i>',label:'Parent',color:'#5ca06e'},
+  doctor:{icon:'<i class="lnis lnis-stethoscope-1"></i>',label:'Doctor',color:'#cd2e3c'},
+  lawyer:{icon:'<i class="lnis lnis-certificate-badge-1"></i>',label:'Lawyer',color:'#4d3461'},
+  therapist:{icon:'<i class="lnis lnis-heart"></i>',label:'Therapist',color:'#e19c34'},
+  friend:{icon:'<i class="lnis lnis-hand-shake"></i>',label:'Friend',color:'#f35c9a'},
+  champion:{icon:'<i class="lnis lnis-trophy-1"></i>',label:'Champion',color:'#f0952a'}
 };
 const STAGES={
   child:{label:'Childhood',min:5,max:12},
@@ -1942,21 +2114,21 @@ const BACKGROUNDS={
   30:['Successful career but feeling empty inside','Single parent balancing work and a young child','Just went through a major breakup, starting over','Moved abroad for work, building a life from scratch']
 };
 const ACTIVITIES=[
-  {id:'eating',   label:'Eating',      icon:'🍽️',scene:'kitchen', needKey:'hunger', restore:2.5,prop:'🥣'},
-  {id:'sleeping', label:'Sleeping',    icon:'😴',scene:'bedroom', needKey:'energy', restore:2.0,prop:'🛏️'},
-  {id:'bathing',  label:'Bathing',     icon:'🚿',scene:'bathroom',needKey:'hygiene',restore:2.5,prop:'🛁'},
-  {id:'playing',  label:'Playing',     icon:'🎮',scene:'outside', needKey:'fun',    restore:2.0,prop:'⚽'},
-  {id:'chatting', label:'Being social',icon:'💬',scene:'living',  needKey:'social', restore:2.0,prop:'📱'},
-  {id:'studying', label:'Studying',    icon:'📚',scene:'study',   needKey:null,     restore:0,  prop:'📖'},
-  {id:'idle',     label:'Relaxing',    icon:'😌',scene:'bedroom', needKey:null,     restore:0,  prop:'🌱'}
+  {id:'eating',   label:'Eating',      icon:'<i class="lnis lnis-knife-fork-1"></i>',scene:'kitchen', needKey:'hunger', restore:2.5,prop:'🥣'},
+  {id:'sleeping', label:'Sleeping',    icon:'<i class="lnis lnis-moon-half-right-5"></i>',scene:'bedroom', needKey:'energy', restore:2.0,prop:'🛏️'},
+  {id:'bathing',  label:'Bathing',     icon:'<i class="lnis lnis-flower-2"></i>',scene:'bathroom',needKey:'hygiene',restore:2.5,prop:'🛁'},
+  {id:'playing',  label:'Playing',     icon:'<i class="lnis lnis-game-pad-modern-1"></i>',scene:'outside', needKey:'fun',    restore:2.0,prop:'⚽'},
+  {id:'chatting', label:'Being social',icon:'<i class="lnis lnis-chat-bubble-2"></i>',scene:'living',  needKey:'social', restore:2.0,prop:'📱'},
+  {id:'studying', label:'Studying',    icon:'<i class="lnis lnis-books-2"></i>',scene:'study',   needKey:null,     restore:0,  prop:'📖'},
+  {id:'idle',     label:'Relaxing',    icon:'<i class="lnis lnis-emoji-smile"></i>',scene:'bedroom', needKey:null,     restore:0,  prop:'🌱'}
 ];
 const NEED_INTERACTIONS={
-  hunger:{label:'Hunger',icon:'🍎',alertMsg:'Looks hungry — check in?',openings:["I forgot to eat again. Been too busy.","Not really hungry but I know I should eat...","I haven't had a real meal since... I don't even remember."],goodSignals:['eat','food','meal','hungry','lunch','breakfast','dinner','snack','cook','bite'],goodResp:"Yeah... you're right. I'll go eat something. Thanks for noticing.",weakResp:"I'm fine. Don't worry about it.",resolve:(g)=>{g.needs.hunger.v=clamp(g.needs.hunger.v+45,0,100);g.emotions.stress=clamp(g.emotions.stress-5,0,100);}},
-  energy:{label:'Energy',icon:'⚡',alertMsg:'Seems exhausted — say something?',openings:["I'm so tired. I just ran out of fuel.","Was going to sleep but couldn't stop scrolling. It's 2am.","Can barely keep my eyes open."],goodSignals:['sleep','rest','nap','tired','exhausted','bed','relax','break','take it easy','energy'],goodResp:"You're right. I need to just rest. Thanks for giving me permission.",weakResp:"I'll sleep when I'm done. Still stuff to do.",resolve:(g)=>{g.needs.energy.v=clamp(g.needs.energy.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+3,0,100);}},
-  hygiene:{label:'Hygiene',icon:'🧼',alertMsg:"Hasn't been taking care of themselves",openings:["I haven't showered in... a bit. Don't have the energy.","Self-care has not been happening. Everything feels like too much.","I look like a disaster. I can't seem to care right now."],goodSignals:['shower','bath','wash','clean','hygiene','freshen','self-care','routine'],goodResp:"Ha. Yeah. I'll go get cleaned up. Sometimes you just need someone to say it.",weakResp:"I'll deal with it later.",resolve:(g)=>{g.needs.hygiene.v=clamp(g.needs.hygiene.v+45,0,100);g.emotions.confidence=clamp(g.emotions.confidence+6,0,100);}},
-  social:{label:'Social',icon:'💬',alertMsg:'Seems lonely — reach out?',openings:["I've been alone a lot lately. Not dramatically, just... a lot.","Haven't really talked to anyone today. Or yesterday.","I'm fine! Just kind of disconnected."],goodSignals:['talk','listen','here','alone','lonely','connect','together','friend','hang'],goodResp:"Yeah. Just talking helps. Thanks for checking in.",weakResp:"I'm used to it. It's fine.",resolve:(g)=>{g.needs.social.v=clamp(g.needs.social.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+8,0,100);}},
-  fun:{label:'Fun',icon:'🎮',alertMsg:'Everything feels flat — offer some joy?',openings:["I don't remember the last time I had real fun.","Everything feels kind of gray. Not sad, just... flat.","I want to want to do things, but nothing sounds good."],goodSignals:['fun','play','game','laugh','enjoy','hobby','creative','draw','music','silly','break'],goodResp:"That sounds really nice. Maybe I'll try. I forgot I'm allowed to enjoy things.",weakResp:"Nothing sounds fun. Maybe later.",resolve:(g)=>{g.needs.fun.v=clamp(g.needs.fun.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+10,0,100);g.skills.creative=clamp(g.skills.creative+2,0,100);}},
-  health:{label:'Health',icon:'❤️',alertMsg:"Health declining — check in?",openings:["I haven't been feeling great. Just run-down.","My body feels neglected. Everything kind of aches.","I think I'm getting sick. Or just falling apart slowly."],goodSignals:['health','doctor','medicine','sick','rest','care','feel better','check up','body','physical'],goodResp:"You know what, I'll actually take care of myself this week. Thanks.",weakResp:"I'll get over it.",resolve:(g)=>{g.needs.health.v=clamp(g.needs.health.v+25,0,100);g.skills.physical=clamp(g.skills.physical+3,0,100);}}
+  hunger:{label:'Hunger',icon:'<i class="lnis lnis-knife-fork-1"></i>',alertMsg:'Looks hungry — check in?',openings:["I forgot to eat again. Been too busy.","Not really hungry but I know I should eat...","I haven't had a real meal since... I don't even remember."],goodSignals:['eat','food','meal','hungry','lunch','breakfast','dinner','snack','cook','bite'],goodResp:"Yeah... you're right. I'll go eat something. Thanks for noticing.",weakResp:"I'm fine. Don't worry about it.",resolve:(g)=>{g.needs.hunger.v=clamp(g.needs.hunger.v+45,0,100);g.emotions.stress=clamp(g.emotions.stress-5,0,100);}},
+  energy:{label:'Energy',icon:'<i class="lnis lnis-bolt-2"></i>',alertMsg:'Seems exhausted — say something?',openings:["I'm so tired. I just ran out of fuel.","Was going to sleep but couldn't stop scrolling. It's 2am.","Can barely keep my eyes open."],goodSignals:['sleep','rest','nap','tired','exhausted','bed','relax','break','take it easy','energy'],goodResp:"You're right. I need to just rest. Thanks for giving me permission.",weakResp:"I'll sleep when I'm done. Still stuff to do.",resolve:(g)=>{g.needs.energy.v=clamp(g.needs.energy.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+3,0,100);}},
+  hygiene:{label:'Hygiene',icon:'<i class="lnis lnis-flower-2"></i>',alertMsg:"Hasn't been taking care of themselves",openings:["I haven't showered in... a bit. Don't have the energy.","Self-care has not been happening. Everything feels like too much.","I look like a disaster. I can't seem to care right now."],goodSignals:['shower','bath','wash','clean','hygiene','freshen','self-care','routine'],goodResp:"Ha. Yeah. I'll go get cleaned up. Sometimes you just need someone to say it.",weakResp:"I'll deal with it later.",resolve:(g)=>{g.needs.hygiene.v=clamp(g.needs.hygiene.v+45,0,100);g.emotions.confidence=clamp(g.emotions.confidence+6,0,100);}},
+  social:{label:'Social',icon:'<i class="lnis lnis-chat-bubble-2"></i>',alertMsg:'Seems lonely — reach out?',openings:["I've been alone a lot lately. Not dramatically, just... a lot.","Haven't really talked to anyone today. Or yesterday.","I'm fine! Just kind of disconnected."],goodSignals:['talk','listen','here','alone','lonely','connect','together','friend','hang'],goodResp:"Yeah. Just talking helps. Thanks for checking in.",weakResp:"I'm used to it. It's fine.",resolve:(g)=>{g.needs.social.v=clamp(g.needs.social.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+8,0,100);}},
+  fun:{label:'Fun',icon:'<i class="lnis lnis-game-pad-modern-1"></i>',alertMsg:'Everything feels flat — offer some joy?',openings:["I don't remember the last time I had real fun.","Everything feels kind of gray. Not sad, just... flat.","I want to want to do things, but nothing sounds good."],goodSignals:['fun','play','game','laugh','enjoy','hobby','creative','draw','music','silly','break'],goodResp:"That sounds really nice. Maybe I'll try. I forgot I'm allowed to enjoy things.",weakResp:"Nothing sounds fun. Maybe later.",resolve:(g)=>{g.needs.fun.v=clamp(g.needs.fun.v+40,0,100);g.emotions.happiness=clamp(g.emotions.happiness+10,0,100);g.skills.creative=clamp(g.skills.creative+2,0,100);}},
+  health:{label:'Health',icon:'<i class="lnis lnis-heart"></i>',alertMsg:"Health declining — check in?",openings:["I haven't been feeling great. Just run-down.","My body feels neglected. Everything kind of aches.","I think I'm getting sick. Or just falling apart slowly."],goodSignals:['health','doctor','medicine','sick','rest','care','feel better','check up','body','physical'],goodResp:"You know what, I'll actually take care of myself this week. Thanks.",weakResp:"I'll get over it.",resolve:(g)=>{g.needs.health.v=clamp(g.needs.health.v+25,0,100);g.skills.physical=clamp(g.skills.physical+3,0,100);}}
 };
 
 // ---- ROLE SIGNALS ----
@@ -1975,10 +2147,10 @@ const NEG_Q={kw:["just get over","stop crying","man up","grow up","it's not a bi
 // ---- GAME STATE ----
 // ---- SEASON HELPERS ----
 const SEASONS=[
-  {name:'Spring',emoji:'🌸'},
-  {name:'Summer',emoji:'☀️'},
-  {name:'Autumn',emoji:'🍂'},
-  {name:'Winter',emoji:'❄️'}
+  {name:'Spring',emoji:'<i class="lnis lnis-flower-2"></i>'},
+  {name:'Summer',emoji:'<i class="lnis lnis-sun-1"></i>'},
+  {name:'Autumn',emoji:'<i class="lnis lnis-leaf-1"></i>'},
+  {name:'Winter',emoji:'<i class="lnis lnis-cloud-bolt-1"></i>'}
 ];
 function getSeasonIdxForDay(d){return(d-1)%4;}
 function getSeasonLabelForDay(d){const s=SEASONS[getSeasonIdxForDay(d)];return`${s.emoji} ${s.name}`;}
@@ -2201,7 +2373,7 @@ function updateCharSVG(){
   const act=ACTIVITIES.find(a=>a.id===G.currentActivity)||ACTIVITIES[6];
   document.getElementById('scene-bg').className=`scene-bg ${act.scene}`;
   document.getElementById('scene-prop').textContent=act.prop;
-  document.getElementById('activity-badge').textContent=`${act.icon} ${act.label}`;
+  document.getElementById('activity-badge').innerHTML=`${act.icon} ${act.label}`;
 }
 
 function startBlink(){
@@ -2297,7 +2469,7 @@ function updateAlertsUI(){
   if(alerts.length>0&&window.innerWidth<=767)showCharBadge();
 }
 function updateAllUI(){
-  document.getElementById('hdr-season').textContent=getSeasonLabel();
+  document.getElementById('hdr-season').innerHTML=getSeasonLabel();
   document.getElementById('hdr-age').textContent=`Age ${G.age}`;
   document.getElementById('hdr-stage').textContent=getStageName();
   const hc=document.getElementById('hdr-coins');if(hc)hc.textContent=G.wallet.coins;
@@ -2316,8 +2488,8 @@ const chatEl=document.getElementById('chat-scroll');
 function addChat(type,content){
   const d=document.createElement('div');d.className='chat-entry';
   if(type==='narrator')d.innerHTML=`<div class="narrator">${content}</div>`;
-  else if(type==='char'){d.innerHTML=`<div class="char-bubble"><div class="spk">💬 ${G.charName}</div>${content}</div>`;setTimeout(()=>speakCharLine(content),80);}
-  else if(type==='thought')d.innerHTML=`<div class="char-thought">💭 ${content}</div>`;
+  else if(type==='char'){d.innerHTML=`<div class="char-bubble"><div class="spk"><i class="lnis lnis-chat-bubble-2"></i> ${G.charName}</div>${content}</div>`;setTimeout(()=>speakCharLine(content),80);}
+  else if(type==='thought')d.innerHTML=`<div class="char-thought"><i class="lnis lnis-message-2"></i> ${content}</div>`;
   else if(type==='player')d.innerHTML=`<div class="player-bubble"><div class="spk">You</div>${content}</div>`;
   else if(type==='sys')d.innerHTML=`<div class="sys-msg">${content}</div>`;
   else if(type==='eval')d.innerHTML=content;
@@ -2336,7 +2508,7 @@ function restoreInput(){
     <div class="chat-row">
       <textarea class="chat-ta" id="chat-ta" placeholder="Respond to ${G.charName}..." rows="1"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
-      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak your response">🎤</button>
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak your response"><i class="lnis lnis-microphone-1"></i></button>
       <button class="send-btn" id="send-btn" onclick="sendMsg()">&#x27A4;</button>
     </div>
     <div class="chat-hint">Respond naturally — your words shape how they grow</div>`;
@@ -2383,10 +2555,10 @@ function computeEval(analysis){
   const score=clamp(Math.round(((analysis.quality+20)/45)*100),5,98);
   const activeRoles=Object.entries(analysis.roles).filter(([_,v])=>v>=3).sort((a,b)=>b[1]-a[1]).map(([role,strength])=>({role,strength:strength>=10?'strong':strength>=5?'moderate':'light'}));
   let grade,gCls,gEmoji;
-  if(score>=75){grade='Excellent';gCls='great';gEmoji='🌟';}
-  else if(score>=55){grade='Good';gCls='good';gEmoji='👍';}
-  else if(score>=35){grade='Okay';gCls='okay';gEmoji='🤔';}
-  else{grade='Needs Work';gCls='poor';gEmoji='💭';}
+  if(score>=75){grade='Excellent';gCls='great';gEmoji='<i class="lnis lnis-star-fat"></i>';}
+  else if(score>=55){grade='Good';gCls='good';gEmoji='<i class="lnis lnis-thumbs-up-3"></i>';}
+  else if(score>=35){grade='Okay';gCls='okay';gEmoji='<i class="lnis lnis-emoji-expressionless"></i>';}
+  else{grade='Needs Work';gCls='poor';gEmoji='<i class="lnis lnis-message-2"></i>';}
   const posMap={teacher:'Guiding through both challenges and discoveries helps them trust their own thinking.',parent:'Unconditional warmth — in hard times and joyful ones — builds a lasting foundation of safety.',doctor:'Caring for the whole person, body and spirit, shows up in struggle and in celebration.',lawyer:'Standing up for their worth — whether fighting injustice or claiming a victory — builds real self-belief.',therapist:'Making space for all feelings, including joy, develops deep emotional awareness and resilience.',friend:'Showing up with genuine energy — commiserating or celebrating — creates trust that lasts.',champion:'Amplifying someone\'s wins with full heart makes joy feel witnessed, earned, and real.'};
   const _evalCtx=_getScenarioCtx();
   let fb='';
@@ -2705,7 +2877,7 @@ function genCharResp(score,event){
 
 function showNeedEval(score,ni){
   const gCls=score>=75?'great':score>=55?'good':score>=35?'okay':'poor';
-  const gEmoji=score>=75?'🌟':score>=55?'👍':'🤔';
+  const gEmoji=score>=75?'<i class="lnis lnis-star-fat"></i>':score>=55?'<i class="lnis lnis-thumbs-up-3"></i>':'<i class="lnis lnis-emoji-expressionless"></i>';
   addChat('eval',`<div class="eval-card"><h4>Daily Care Check</h4><div class="eval-top"><div class="eval-score ${gCls}">${score}</div><div><div class="eval-grade">${gEmoji} ${score>=65?'Well noticed!':score>=45?'Good check-in':'Keep watching'}</div><div style="font-size:11px;color:var(--soft);margin-top:2px">${ni.label} addressed</div></div></div><div class="eval-fb">${score>=60?`Noticing and responding to ${ni.label.toLowerCase()} needs is an important part of daily care.`:`Try being more specific — name what you see and offer something concrete.`}</div></div>`);
   G.memories.push({age:G.age,summary:`Noticed ${ni.label.toLowerCase()} need and checked in`});
   G.history.interactions.push({day:G.day,score,roles:['doctor','parent'],title:`${ni.label} check-in`,grade:score>=75?'Excellent':score>=55?'Good':'Okay'});
@@ -2748,7 +2920,7 @@ function showYearReview(){
   const seasons=G.yearSeasons.slice(-4);
   if(!seasons.length)return;
   const avgScore=Math.round(seasons.reduce((s,ss)=>s+ss.score,0)/seasons.length);
-  const gEmoji=avgScore>=80?'🌟':avgScore>=65?'✨':avgScore>=50?'💛':avgScore>=35?'🌱':'🤍';
+  const gEmoji=avgScore>=80?'<i class="lnis lnis-star-fat"></i>':avgScore>=65?'<i class="lnis lnis-star-fat"></i>':avgScore>=50?'<i class="lnis lnis-heart"></i>':avgScore>=35?'<i class="lnis lnis-leaf-1"></i>':'<i class="lnis lnis-emoji-expressionless"></i>';
   const gTitle=avgScore>=80?'A wonderful year':avgScore>=65?'A strong year':avgScore>=50?'A steady year':avgScore>=35?'A challenging year':'A tough year';
   const seasonRows=seasons.map(s=>`<div class="yr-row"><span class="yr-sname">${s.season}</span><span class="yr-stitle">${s.title}</span><span class="yr-sgrade eval-chg ${s.score>=65?'pos':s.score<40?'neg':''}">${s.grade}</span></div>`).join('');
   addChat('eval',`<div class="year-review"><div class="yr-header">${gEmoji} Year in Review · Age ${G.age}</div><div class="yr-avg-row"><span class="yr-avg">${avgScore}</span><span class="yr-avg-lbl">avg · ${gTitle}</span></div><div class="yr-seasons">${seasonRows}</div></div>`);
@@ -3168,28 +3340,28 @@ const EVENTS={
 
 // ---- ARCHETYPES ----
 const ARCHETYPES={
-  confidant:{key:'confidant',emoji:'💛',title:'The Confidant',subtitle:'Empathy first, always',color:'#e19c34',bg:'#291a08',
+  confidant:{key:'confidant',emoji:'<i class="lnis lnis-heart"></i>',title:'The Confidant',subtitle:'Empathy first, always',color:'#e19c34',bg:'#291a08',
     desc:'You create space before offering solutions. People feel genuinely heard in your presence — not advised, not fixed, just seen. That\'s rarer than you think.',
     strength:'Creating safe emotional space',grow:'Try introducing gentle structure alongside support — sometimes people need both a witness and a direction.'},
-  mentor:{key:'mentor',emoji:'📚',title:'The Wise Mentor',subtitle:'Growth through understanding',color:'#a168b0',bg:'#1e0f28',
+  mentor:{key:'mentor',emoji:'<i class="lnis lnis-books-2"></i>',title:'The Wise Mentor',subtitle:'Growth through understanding',color:'#a168b0',bg:'#1e0f28',
     desc:'You believe in people enough to challenge them. You ask the right questions, offer frameworks, and trust that the other person can figure it out — with the right scaffolding.',
     strength:'Building independent thinking',grow:'Don\'t skip the emotional layer — understanding often needs to be felt before it can be learned.'},
-  protector:{key:'protector',emoji:'🏡',title:'The Steadfast Protector',subtitle:'Safety is a gift',color:'#5ca06e',bg:'#0a1e0f',
+  protector:{key:'protector',emoji:'<i class="lnis lnis-home-2"></i>',title:'The Steadfast Protector',subtitle:'Safety is a gift',color:'#5ca06e',bg:'#0a1e0f',
     desc:'You show up consistently, unconditionally. You\'re the person someone calls at 2am because they know you\'ll answer. Your warmth isn\'t performative — it\'s structural.',
     strength:'Providing reliable unconditional warmth',grow:'Try stepping back occasionally — empowerment sometimes means letting people stumble safely.'},
-  advocate:{key:'advocate',emoji:'⚖️',title:'The Fierce Advocate',subtitle:'Justice as care',color:'#74419c',bg:'#1e0f28',
+  advocate:{key:'advocate',emoji:'<i class="lnis lnis-certificate-badge-1"></i>',title:'The Fierce Advocate',subtitle:'Justice as care',color:'#74419c',bg:'#1e0f28',
     desc:'You notice when things are wrong and you say so. You remind people of their rights, their worth, their agency. You don\'t let unfairness slide — and neither should they.',
     strength:'Recognizing and naming injustice',grow:'Pair your advocacy with emotional validation — people need to feel heard before they can act.'},
-  healer:{key:'healer',emoji:'🩺',title:'The Gentle Healer',subtitle:'Wellbeing in all its forms',color:'#cd2e3c',bg:'#280a0c',
+  healer:{key:'healer',emoji:'<i class="lnis lnis-stethoscope-1"></i>',title:'The Gentle Healer',subtitle:'Wellbeing in all its forms',color:'#cd2e3c',bg:'#280a0c',
     desc:'You notice when someone\'s body and daily rhythms are speaking. Sleep, food, movement, rest — you treat these as acts of care, not afterthoughts.',
     strength:'Attending to physical and practical wellbeing',grow:'Don\'t neglect the inner world — emotional health and physical health always speak to each other.'},
-  balancer:{key:'balancer',emoji:'🌀',title:'The Renaissance Caregiver',subtitle:'Adaptive and whole',color:'#f35c9a',bg:'#280f1a',
+  balancer:{key:'balancer',emoji:'<i class="lnis lnis-refresh-circle-1-clockwise"></i>',title:'The Renaissance Caregiver',subtitle:'Adaptive and whole',color:'#f35c9a',bg:'#280f1a',
     desc:'You read each situation differently and respond accordingly. You\'re not locked into one way of helping — you flow between roles with awareness. This flexibility is a superpower.',
     strength:'Adaptive caregiving across all contexts',grow:'Consider deepening one area — versatility is powerful but depth in a specialty builds mastery.'},
-  specialist:{key:'specialist',emoji:'🎯',title:'The Specialist',subtitle:'Deep mastery, singular focus',color:'#4d3461',bg:'#1a0f20',
+  specialist:{key:'specialist',emoji:'<i class="lnis lnis-target-user"></i>',title:'The Specialist',subtitle:'Deep mastery, singular focus',color:'#4d3461',bg:'#1a0f20',
     desc:'You\'ve found where you\'re most effective and you go there reliably. Your consistency in one area means people know exactly what to expect — and they trust it.',
     strength:'Deep reliable expertise in your domain',grow:'Expand your range gradually — the people you care for have needs beyond your specialty.'},
-  novice:{key:'novice',emoji:'🌱',title:'The Emerging Caregiver',subtitle:'Your style is taking shape',color:'#f35c9a',bg:'#280f1a',
+  novice:{key:'novice',emoji:'<i class="lnis lnis-leaf-1"></i>',title:'The Emerging Caregiver',subtitle:'Your style is taking shape',color:'#f35c9a',bg:'#280f1a',
     desc:'You\'re still learning what kind of caregiver you are — and that\'s exactly right. Every interaction is teaching you something. Pay attention to what feels natural.',
     strength:'Openness and willingness to show up',grow:'Try a range of approaches — curiosity about different roles is how your style will crystallize.'}
 };
@@ -3263,7 +3435,7 @@ function renderPremiumTab(){
 
     <div class="dash-grid">
       <div class="insight-section">
-        <h4>📈 Your Caregiving Impact</h4>
+        <h4><i class="lnis lnis-bar-chart-4"></i> Your Caregiving Impact</h4>
         ${skillDeltas?Object.entries(skillDeltas).filter(([k,v])=>Math.abs(v)>0).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`
           <div class="impact-row">
             <span class="ir-label">${k[0].toUpperCase()+k.slice(1)}</span>
@@ -3272,7 +3444,7 @@ function renderPremiumTab(){
           </div>`).join(''):`<div style="font-size:12px;color:var(--soft);font-style:italic">Play more days to see impact data.</div>`}
       </div>
       <div class="insight-section">
-        <h4>🎭 Role Breakdown</h4>
+        <h4><i class="lnis lnis-target-user"></i> Role Breakdown</h4>
         ${Object.entries(ru).sort((a,b)=>b[1]-a[1]).map(([k,v])=>{const pct=Math.round((v/totalRU)*100);return`
           <div class="impact-row">
             <span class="ir-label">${ROLES[k].icon} ${ROLES[k].label}</span>
@@ -3307,7 +3479,7 @@ function renderPremiumTab(){
     </div>
 
     <div class="insight-section" style="border-color:#e19c34;background:linear-gradient(135deg,var(--weekly-grad-a),var(--weekly-grad-b))">
-      <h4>💌 From ${G.charName||'Your Character'}</h4>
+      <h4><i class="lnis lnis-message-2"></i> From ${G.charName||'Your Character'}</h4>
       <div style="font-size:13px;line-height:1.7;color:var(--text);font-style:italic">
         "${generateCharacterMessage(arch,avg)}"
       </div>
@@ -3469,7 +3641,7 @@ function generateWeeklyReport(){
   const wellbeing=getMoodScore();
   const arch=detectCaregiverArchetype();
   // Emojis for week number
-  const wkEmojis=['🌱','🌿','☀️','🌻','🍂','❄️','🌟','💫'];
+  const wkEmojis=['<i class="lnis lnis-leaf-1"></i>','<i class="lnis lnis-leaf-6"></i>','<i class="lnis lnis-sun-1"></i>','<i class="lnis lnis-sun-1"></i>','<i class="lnis lnis-leaf-1"></i>','<i class="lnis lnis-cloud-bolt-1"></i>','<i class="lnis lnis-star-fat"></i>','<i class="lnis lnis-star-fat"></i>'];
   const wkEmoji=wkEmojis[(weekNum-1)%wkEmojis.length];
   const gradeEmoji=weekAvg>=75?'🌟':weekAvg>=55?'👍':weekAvg>=35?'🤔':'💭';
   return`<div class="wk-header">
@@ -3678,13 +3850,13 @@ function beginSeason(){
     G.age++;
     addChat('sys',`<em>A new year begins... ${G.charName} is now ${G.age} years old.</em>`);
     saveToBrowser();
-    const milestones={13:{emoji:'🌿',title:'The Teen Years Begin',desc:`${G.charName} is now a teenager — navigating identity, pressure, and the start of who they'll become.`},
-      18:{emoji:'🎓',title:'Into Adulthood',desc:`${G.charName} turns 18. The world opens up, and so does responsibility.`},
-      25:{emoji:'🌟',title:'Finding Their Way',desc:`Quarter-century. ${G.charName} is building a life with their own hands.`},
-      30:{emoji:'🏡',title:'Roots and Reach',desc:`Thirty. ${G.charName} knows who they are a little better now.`},
-      40:{emoji:'⚖️',title:'The Midpoint',desc:`${G.charName} reaches the midpoint — a time for reflection and intentional choices.`},
-      50:{emoji:'🌅',title:'A New Horizon',desc:`Fifty years. ${G.charName} carries hard-won wisdom into the decades ahead.`},
-      65:{emoji:'🌸',title:'A Life Fully Lived',desc:`${G.charName} reaches 65 — a milestone worth celebrating before the final chapter closes.`}};
+    const milestones={13:{emoji:'<i class="lnis lnis-leaf-1"></i>',title:'The Teen Years Begin',desc:`${G.charName} is now a teenager — navigating identity, pressure, and the start of who they'll become.`},
+      18:{emoji:'<i class="lnis lnis-graduation-cap-1"></i>',title:'Into Adulthood',desc:`${G.charName} turns 18. The world opens up, and so does responsibility.`},
+      25:{emoji:'<i class="lnis lnis-star-fat"></i>',title:'Finding Their Way',desc:`Quarter-century. ${G.charName} is building a life with their own hands.`},
+      30:{emoji:'<i class="lnis lnis-home-2"></i>',title:'Roots and Reach',desc:`Thirty. ${G.charName} knows who they are a little better now.`},
+      40:{emoji:'<i class="lnis lnis-certificate-badge-1"></i>',title:'The Midpoint',desc:`${G.charName} reaches the midpoint — a time for reflection and intentional choices.`},
+      50:{emoji:'<i class="lnis lnis-sun-1"></i>',title:'A New Horizon',desc:`Fifty years. ${G.charName} carries hard-won wisdom into the decades ahead.`},
+      65:{emoji:'<i class="lnis lnis-flower-2"></i>',title:'A Life Fully Lived',desc:`${G.charName} reaches 65 — a milestone worth celebrating before the final chapter closes.`}};
     if(milestones[G.age]){
       const m=milestones[G.age];
       setTimeout(()=>showMilestone(m.emoji,m.title,m.desc,G.age===65),1200);
@@ -3842,7 +4014,7 @@ function checkURLLoad(){
 // ---- MILESTONES & LIFE ENDING ----
 function showMilestone(emoji,title,desc,isFinal){
   const ov=document.getElementById('milestone-overlay');
-  document.getElementById('milestone-emoji').textContent=emoji;
+  document.getElementById('milestone-emoji').innerHTML=emoji;
   document.getElementById('milestone-title').textContent=title;
   document.getElementById('milestone-desc').textContent=desc;
   if(isFinal){
@@ -3937,7 +4109,7 @@ function renderGrowthTab(){
     c.innerHTML=Object.entries(G.needs).map(([k,n])=>`<div class="dash-stat-row"><span class="dsn">${n.icon} ${n.label}</span><div class="dsb"><div class="dbf" style="width:${n.v}%;background:${cols[k]}"></div></div><span class="dsv" style="color:${cols[k]}">${Math.round(n.v)}</span></div>`).join('');}
   const wb=getMoodScore();
   document.getElementById('wellbeing-num').textContent=wb;
-  document.getElementById('wellbeing-lbl').textContent=wb>=80?'🌟 Thriving':wb>=65?'😊 Doing well':wb>=50?'🙂 Getting by':wb>=35?'😟 Struggling':'😢 In crisis';
+  document.getElementById('wellbeing-lbl').innerHTML=wb>=80?'<i class="lnis lnis-star-fat"></i> Thriving':wb>=65?'😊 Doing well':wb>=50?'🙂 Getting by':wb>=35?'😟 Struggling':'😢 In crisis';
   const pH={openness:'Open',conscientiousness:'Disciplined',extraversion:'Social',agreeableness:'Kind',neuroticism:'Sensitive'};
   const pL={openness:'Cautious',conscientiousness:'Flexible',extraversion:'Quiet',agreeableness:'Independent',neuroticism:'Steady'};
   document.getElementById('personality-dash').innerHTML=Object.entries(G.personality).map(([k,v])=>`<div class="dash-stat-row"><span class="dsn">${v>=55?pH[k]:v<=45?pL[k]:pH[k]}</span><div class="dsb"><div class="dbf" style="width:${v}%;background:var(--accent)"></div></div><span class="dsv" style="color:var(--accent)">${v}</span></div>`).join('');
@@ -4553,8 +4725,8 @@ function updateAIStatus(){
   // Header chip
   const chip=document.getElementById('ai-chip');
   if(chip){
-    if(hasGroq){chip.textContent='🟢 Groq';chip.className='hbtn';chip.style.color='var(--green)';chip.style.borderColor='var(--green)';}
-    else if(hasWllm){chip.textContent='🟡 Local AI';chip.className='hbtn';chip.style.color='';chip.style.borderColor='';}
+    if(hasGroq){chip.innerHTML='<span style="color:#28c840">●</span> Groq';chip.className='hbtn';chip.style.color='var(--green)';chip.style.borderColor='var(--green)';}
+    else if(hasWllm){chip.innerHTML='<span style="color:#f5c218">●</span> Local AI';chip.className='hbtn';chip.style.color='';chip.style.borderColor='';}
     else{chip.textContent='⚪ Scripted';chip.className='hbtn';chip.style.color='var(--soft)';chip.style.borderColor='';}
   }
   // Modal tier dots
@@ -4751,13 +4923,13 @@ function toggleVoice(){
   localStorage.setItem('wemakoshi-voice',_voiceEnabled?'on':'off');
   if(!_voiceEnabled)window.speechSynthesis?.cancel();
   _updateVoiceBtn();
-  showToast(_voiceEnabled?'🔊 Voice on':'🔇 Voice off');
+  showToast(_voiceEnabled?'Voice on':'Voice off');
 }
 
 function _updateVoiceBtn(){
   const btn=document.getElementById('voice-btn');
   if(!btn)return;
-  btn.textContent=_voiceEnabled?'🔊':'🔇';
+  btn.innerHTML=_voiceEnabled?'<i class="lnis lnis-volume-high"></i>':'<i class="lnis lnis-volume-mute"></i>';
   btn.title=_voiceEnabled?'Character voice on (click to mute)':'Character voice off (click to enable)';
   btn.classList.toggle('off',!_voiceEnabled);
 }
@@ -4884,12 +5056,12 @@ function closeGames(){document.getElementById('games-modal').classList.remove('o
 
 // ---- NEED RUSH ----
 const NR_DEFS=[
-  {key:'hunger', icon:'🍎', care:'🥗', careLabel:'Food',    color:'#e19c34'},
-  {key:'energy', icon:'⚡', care:'🛏️', careLabel:'Rest',    color:'#a168b0'},
-  {key:'hygiene',icon:'🧼', care:'🚿', careLabel:'Shower',  color:'#5ca06e'},
-  {key:'social', icon:'💬', care:'🤝', careLabel:'Talk',    color:'#f35c9a'},
-  {key:'fun',    icon:'🎮', care:'🎯', careLabel:'Play',    color:'#74419c'},
-  {key:'health', icon:'❤️', care:'💊', careLabel:'Care',    color:'#cd2e3c'}
+  {key:'hunger', icon:'<i class="lnis lnis-knife-fork-1"></i>', care:'<i class="lnis lnis-knife-fork-1"></i>', careLabel:'Food',    color:'#e19c34'},
+  {key:'energy', icon:'<i class="lnis lnis-bolt-2"></i>', care:'<i class="lnis lnis-moon-half-right-5"></i>', careLabel:'Rest',    color:'#a168b0'},
+  {key:'hygiene',icon:'<i class="lnis lnis-flower-2"></i>', care:'<i class="lnis lnis-flower-2"></i>', careLabel:'Shower',  color:'#5ca06e'},
+  {key:'social', icon:'<i class="lnis lnis-chat-bubble-2"></i>', care:'<i class="lnis lnis-hand-shake"></i>', careLabel:'Talk',    color:'#f35c9a'},
+  {key:'fun',    icon:'<i class="lnis lnis-game-pad-modern-1"></i>', care:'<i class="lnis lnis-game-pad-modern-1"></i>', careLabel:'Play',    color:'#74419c'},
+  {key:'health', icon:'<i class="lnis lnis-heart"></i>', care:'<i class="lnis lnis-briefcase-plus-1"></i>', careLabel:'Care',    color:'#cd2e3c'}
 ];
 
 let NR={active:false,score:0,gemsEarned:0,misses:0,items:[],rafId:null,timerId:null,spawnId:null,timeLeft:60,nextId:0,fallDuration:3800,spawnInterval:2200};
@@ -4903,8 +5075,8 @@ function startNeedRush(){
       timeLeft:60,nextId:0,
       fallDuration:Math.round(baseFall/speedMult),
       spawnInterval:Math.max(1000,2600-stress*10)};
-  const face=happiness>70?'😄':happiness>45?'😊':happiness>25?'😐':'😟';
-  document.getElementById('nr-char-face').textContent=face;
+  const face=happiness>70?'<i class="lnis lnis-emoji-grin"></i>':happiness>45?'<i class="lnis lnis-emoji-smile"></i>':happiness>25?'<i class="lnis lnis-emoji-expressionless"></i>':'<i class="lnis lnis-emoji-sad"></i>';
+  document.getElementById('nr-char-face').innerHTML=face;
   document.getElementById('nr-score-hdr').textContent='0';
   document.getElementById('nr-timer-hdr').textContent='60';
   document.getElementById('nr-gems-hdr').textContent='0';
@@ -5012,13 +5184,13 @@ function endNeedRush(quit){
   const field=document.getElementById('nr-field');
   const res=document.createElement('div');
   res.className='nr-result-overlay';
-  const grade=NR.score>=120?'🌟 Incredible!':NR.score>=80?'💪 Great run!':NR.score>=40?'👍 Good effort':'🌱 Keep going';
+  const grade=NR.score>=120?'<i class="lnis lnis-star-fat"></i> Incredible!':NR.score>=80?'<i class="lnis lnis-thumbs-up-3"></i> Great run!':NR.score>=40?'<i class="lnis lnis-check-circle-1"></i> Good effort':'<i class="lnis lnis-flag-1"></i> Keep going';
   res.innerHTML=`<div class="nr-result-panel">
-    <div style="font-size:22px;font-weight:900;margin-bottom:4px">⚡ Need Rush</div>
+    <div style="font-size:22px;font-weight:900;margin-bottom:4px"><i class="lnis lnis-bolt-2"></i> Need Rush</div>
     <div class="nr-score-big">${NR.score}</div>
     <div style="font-size:13px;color:var(--text-2);margin-bottom:8px">points · ${NR.misses} missed</div>
     <div style="font-size:18px;font-weight:800;margin-bottom:6px">${grade}</div>
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px">+💎 ${gems} gems</div>
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px">+<i class="lnis lnis-diamonds-1"></i> ${gems} gems</div>
     <button class="nr-action-btn" onclick="document.getElementById('nr-overlay').classList.remove('open');this.closest('.nr-result-overlay').remove()">Done</button>
   </div>`;
   field.appendChild(res);
@@ -5215,7 +5387,7 @@ function crShowResult(){
     :'The situations were complex. Play again and see what different choices reveal.';
   document.getElementById('cr-body').innerHTML=`
     <div class="cr-result-panel">
-      <div style="font-size:22px;font-weight:900;margin-bottom:6px">🌿 Crossroads</div>
+      <div style="font-size:22px;font-weight:900;margin-bottom:6px"><i class="lnis lnis-leaf-1"></i> Crossroads</div>
       <div class="cr-score-big">${CR.score}<span style="font-size:22px;font-weight:500"> / ${maxPts}</span></div>
       <div style="font-size:17px;font-weight:800;margin:8px 0">${grade}</div>
       <div class="cr-gems-earned">+💎 ${gems} gems</div>
@@ -5234,7 +5406,7 @@ function endCrossroads(quit){
 <!-- Milestone overlay -->
 <div id="milestone-overlay">
   <div class="milestone-card">
-    <div class="milestone-emoji" id="milestone-emoji">🎉</div>
+    <div class="milestone-emoji" id="milestone-emoji"><i class="lnis lnis-star-fat"></i></div>
     <div class="milestone-title" id="milestone-title">A New Chapter</div>
     <div class="milestone-desc" id="milestone-desc"></div>
     <button class="milestone-close" onclick="closeMilestone()">Continue →</button>

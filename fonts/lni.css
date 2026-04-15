@@ -1,0 +1,73 @@
+/* LineIcons 5.1 Free — Solid subset for Wemakoshi */
+@font-face {
+  font-family: "lni-solid";
+  src: url("lineicons-free-solid.woff2") format("woff2"),
+       url("lineicons-free-solid.woff") format("woff");
+  font-display: block;
+}
+.lnis {
+  font-family: lni-solid !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  vertical-align: -0.1em;
+}
+.lnis-moon-half-right-5::before { content: "\e0dc"; }
+.lnis-sun-1::before { content: "\e133"; }
+.lnis-leaf-1::before { content: "\e0bf"; }
+.lnis-flower-2::before { content: "\e094"; }
+.lnis-cloud-bolt-1::before { content: "\e057"; }
+.lnis-basket-shopping-3::before { content: "\e01c"; }
+.lnis-game-pad-modern-1::before { content: "\e098"; }
+.lnis-bar-chart-4::before { content: "\e01a"; }
+.lnis-volume-high::before { content: "\e155"; }
+.lnis-volume-mute::before { content: "\e157"; }
+.lnis-volume-off::before { content: "\e158"; }
+.lnis-volume-low::before { content: "\e156"; }
+.lnis-microphone-1::before { content: "\e0d5"; }
+.lnis-dollar-circle::before { content: "\e073"; }
+.lnis-diamonds-1::before { content: "\e06e"; }
+.lnis-heart::before { content: "\e0aa"; }
+.lnis-chat-bubble-2::before { content: "\e04b"; }
+.lnis-message-2::before { content: "\e0d2"; }
+.lnis-shirt-1::before { content: "\e11e"; }
+.lnis-crown-3::before { content: "\e06b"; }
+.lnis-book-1::before { content: "\e025"; }
+.lnis-books-2::before { content: "\e028"; }
+.lnis-target-user::before { content: "\e136"; }
+.lnis-floppy-disk-1::before { content: "\e093"; }
+.lnis-stethoscope-1::before { content: "\e12f"; }
+.lnis-certificate-badge-1::before { content: "\e04a"; }
+.lnis-briefcase-plus-1::before { content: "\e030"; }
+.lnis-hand-shake::before { content: "\e0a3"; }
+.lnis-trophy-1::before { content: "\e148"; }
+.lnis-knife-fork-1::before { content: "\e0b8"; }
+.lnis-bolt-2::before { content: "\e023"; }
+.lnis-thumbs-up-3::before { content: "\e13d"; }
+.lnis-thumbs-down-3::before { content: "\e13c"; }
+.lnis-home-2::before { content: "\e0b0"; }
+.lnis-user-4::before { content: "\e150"; }
+.lnis-emoji-smile::before { content: "\e07c"; }
+.lnis-emoji-grin::before { content: "\e07a"; }
+.lnis-emoji-sad::before { content: "\e07b"; }
+.lnis-emoji-expressionless::before { content: "\e078"; }
+.lnis-star-fat::before { content: "\e12c"; }
+.lnis-graduation-cap-1::before { content: "\e09f"; }
+.lnis-share-1::before { content: "\e115"; }
+.lnis-cloud-upload::before { content: "\e05f"; }
+.lnis-check-circle-1::before { content: "\e04d"; }
+.lnis-xmark::before { content: "\e161"; }
+.lnis-xmark-circle::before { content: "\e162"; }
+.lnis-gear-1::before { content: "\e09a"; }
+.lnis-bell-1::before { content: "\e01e"; }
+.lnis-bulb-2::before { content: "\e035"; }
+.lnis-pen-to-square::before { content: "\e0ed"; }
+.lnis-flag-1::before { content: "\e091"; }
+.lnis-plus::before { content: "\e0f7"; }
+.lnis-minus::before { content: "\e0d7"; }
+.lnis-refresh-circle-1-clockwise::before { content: "\e0fe"; }

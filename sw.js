@@ -1,5 +1,5 @@
 /* Wemakoshi Service Worker — cache-first shell, network-first fonts */
-const CACHE = 'wemakoshi-v21';
+const CACHE = 'wemakoshi-v22';
 const SHELL = ['./', './logo.png', './icon.png', './icon.svg',
   './fonts/lni.css', './fonts/lineicons-free-solid.woff2', './fonts/lineicons-free-solid.woff'];
 const FONT_HOST = 'fonts.googleapis.com';

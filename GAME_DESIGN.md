@@ -1,6 +1,6 @@
 # Wemakoshi — Game Design Document
 
-**Version:** 2.0  
+**Version:** 2.1  
 **Last Updated:** April 2026
 
 ---
@@ -10,6 +10,8 @@
 **Wemakoshi** is an AI-powered life companion game where players care for a human character who faces real-world challenges across their lifespan. The character has a personality, makes autonomous decisions, remembers past experiences, and evolves in response to the quality of care they receive.
 
 The player's goal is not to "win" but to **grow as a caregiver** — developing skills as a teacher, parent, doctor, lawyer, therapist, friend, and champion — while watching the character navigate life with increasing resilience, wisdom, and emotional depth.
+
+Every life has an ending. The character's story closes at age 65. How well you cared for them determines the legacy they leave — and a trace of that legacy carries forward into the next life you begin.
 
 ---
 
@@ -22,6 +24,7 @@ The player's goal is not to "win" but to **grow as a caregiver** — developing 
 5. **Consequences compound.** Early experiences shape later reactions. A child who was taught resilience handles teenage setbacks differently than one who was sheltered.
 6. **The player grows too.** Players develop intuition about when to push, when to listen, when to advise, and when to step back.
 7. **A life has an arc.** Every character ages from childhood to 65+, passes through milestone moments, and leaves a legacy that shapes the next character.
+8. **The interface should feel like a game.** The visual design is warm, confident, and candy-bright — not clinical. Players are in a game world, not a form.
 
 ---
 
@@ -132,14 +135,14 @@ Every character can adopt a **pet companion** — a small animal that lives in t
 
 ### Pet Types (6, all free to adopt)
 
-| Pet | Icon | Personality |
-|-----|------|-------------|
-| Cat | 🐱 | Curious and independent |
-| Dog | 🐶 | Loyal and endlessly playful |
-| Bunny | 🐰 | Gentle and a little shy |
-| Hamster | 🐹 | Tiny but full of energy |
-| Frog | 🐸 | Calm and wonderfully strange |
-| Fox | 🦊 | Clever and full of spirit |
+| Pet | Personality |
+|-----|-------------|
+| Cat | Curious and independent |
+| Dog | Loyal and endlessly playful |
+| Bunny | Gentle and a little shy |
+| Hamster | Tiny but full of energy |
+| Frog | Calm and wonderfully strange |
+| Fox | Clever and full of spirit |
 
 Pets are rendered as mood-reactive SVG illustrations. Each pet type has unique ears, tails, and body details. Mood (happy/neutral/sad) affects eye shape, mouth curve, and cheek blush.
 
@@ -163,28 +166,17 @@ Happiness decays faster when the character is stressed (stress > 65 accelerates 
 - **Cuddling** the pet reduces the character's stress by 4 points — it's mutual comfort
 - A speech bubble appears in the scene when any pet need drops below threshold
 
-### Pet Care (accessible from)
-1. **Character scene** — the pet SVG sits in the bottom-right of the scene; clicking opens the care sheet
-2. **Left panel** — a compact status section shows all four need bars and a "Care ›" button
-3. **Games hub** — the Pet Time card opens the care sheet directly
-
 ### Pet Care Actions
 
 | Action | Effect |
 |--------|--------|
-| 🍖 Feed | Hunger +38, Energy +5 |
-| 🎾 Play | Happiness +32, Energy −8, Hunger −5 |
-| 🛁 Groom | Hygiene +38, Happiness +8 |
-| 🤗 Cuddle | Happiness +22, Energy +5, character Stress −4, character Happiness +3 |
+| Feed | Hunger +38, Energy +5 |
+| Play | Happiness +32, Energy −8, Hunger −5 |
+| Groom | Hygiene +38, Happiness +8 |
+| Cuddle | Happiness +22, Energy +5, character Stress −4, character Happiness +3 |
 
 ### Pet Accessories
 Players can equip a **collar** in 7 colour options (none, red, blue, green, purple, gold, pink) — free to change at any time via the Shop Pet tab.
-
-### Adoption & Management
-- First adoption is free
-- Players can rename their pet at any time
-- Switching to a different pet type replaces the current one
-- Adoption triggers an in-chat narrator message introducing the new companion
 
 ---
 
@@ -194,45 +186,33 @@ Cosmetics are purely visual — they do not affect gameplay stats. Managed throu
 
 ### Avatar Customisation (Free, always available)
 
-All avatar customisation is free and accessible from the **Shop → Customize** tab at any time after character creation. Changes apply live with instant visual feedback.
+All avatar customisation is free and accessible from the **Shop → Customize** tab at any time after character creation.
 
-- Skin tone (6 options)
-- Hair style (6 options)
-- Hair colour (8 options)
-- Eye shape (3 options)
-- Outfit style (6 options)
-- Outfit colour (6 options)
-- Accessory (5 options including none)
-- Build — Soft or Strong
-
-### Outfits (8 total — character outfit shop)
+### Outfits (8 total)
 
 | Outfit | Cost | Notes |
 |--------|------|-------|
-| Classic Denim | Free | Blue denim palette — default |
-| Forest Green | 80 🪙 | Earthy, nature-inspired |
-| Royal Red | 80 🪙 | Bold and proud |
-| Pastel Rose | 100 🪙 | Sweet and soft |
-| Ocean Blue | 100 🪙 | Deep and cool |
-| Sunset Orange | 120 🪙 | Warm and bright |
-| Galaxy | 10 💎 | Deep purple starfield |
-| Vintage Gold | 8 💎 | Classic warm golds |
+| Classic Denim | Free | Default |
+| Forest Green | 80 coins | Earthy, nature-inspired |
+| Royal Red | 80 coins | Bold and proud |
+| Pastel Rose | 100 coins | Sweet and soft |
+| Ocean Blue | 100 coins | Deep and cool |
+| Sunset Orange | 120 coins | Warm and bright |
+| Galaxy | 10 gems | Deep purple starfield |
+| Vintage Gold | 8 gems | Classic warm golds |
 
-### Accessories (9 total — character accessory shop)
+### Accessories (8 total)
 
 | Accessory | Cost |
 |-----------|------|
 | None | Free |
-| Top Hat | 120 🪙 |
-| Flower Crown | 100 🪙 |
-| Sunglasses | 80 🪙 |
-| Bow Tie | 80 🪙 |
-| Backpack | 100 🪙 |
-| Wizard Hat | 12 💎 |
-| Star Glasses | 10 💎 |
-
-### Pet Accessories (free)
-- **Collar** — 7 colour options, equippable at any time from the Shop Pet tab
+| Glasses | Free |
+| Top Hat | 120 coins |
+| Flower Crown | 100 coins |
+| Sunglasses | 80 coins |
+| Bow | 80 coins |
+| Wizard Hat | 12 gems |
+| Star Glasses | 10 gems |
 
 ---
 
@@ -240,32 +220,33 @@ All avatar customisation is free and accessible from the **Shop → Customize** 
 
 ### Dual Currency
 
-**Coins 🪙** — earned through gameplay. Spent on standard outfit and accessory cosmetics.
+**Coins** — earned through gameplay. Spent on standard outfit and accessory cosmetics.
 
-**Gems 💎** — purchased with real money (simulated in the current prototype). Spent on premium cosmetics and story packs.
+**Gems** — purchased with real money (simulated in prototype). Spent on premium cosmetics and story packs. Also earnable in Game Modes.
 
 ### Gem Store (3 Tiers)
 
-| Pack | Gems | Approx. Price |
-|------|------|---------------|
-| Starter | 50 💎 | $0.99 |
-| Value | 200 💎 | $2.99 |
-| Mega | 500 💎 | $5.99 |
+| Pack | Gems | Price |
+|------|------|-------|
+| Starter | 50 | $0.99 |
+| Value | 200 | $2.99 |
+| Mega | 500 | $5.99 |
 
 ### Earning Coins
-- Completing a daily interaction: 10–25 🪙 (based on score)
-- Completing a week (7 in-game days): 50 🪙 bonus
-- Reaching a new life stage: 100 🪙 milestone bonus
-- Completing a story pack event: 15–30 🪙 per event, plus a pack completion bonus
-- Game modes: Need Rush up to 15 💎, Crossroads up to 20 💎
+- Daily interaction score: 10–25 coins
+- Completing a week: 50 coin bonus
+- Reaching a new life stage: 100 coin milestone bonus
+- Story pack event: 15–30 coins per event + completion bonus
+
+### Earning Gems (in-game)
+- Need Rush: up to 15 gems per run
+- Crossroads: up to 20 gems per run
 
 ---
 
 ## Life Events System
 
 ### Full Life Arc — 28 Built-in Events (7 per stage)
-
-Events fire based on the character's age, personality, skills, day count, and weighted randomness. Every stage has 7 events so the character's story never feels thin, regardless of starting age.
 
 **Childhood (5–12)**
 
@@ -317,33 +298,25 @@ Events fire based on the character's age, personality, skills, day count, and we
 
 ### Positive Events
 
-Not all events are struggles. A significant portion of the event pool represents celebrations, wins, and joyful moments the character wants to share. These require the player to **celebrate rather than counsel** — a different caregiving skill entirely.
+Not all events are struggles. A significant portion of the event pool represents celebrations, wins, and joyful moments. These require the player to **celebrate rather than counsel** — a different caregiving skill entirely.
 
-Examples: gold stars, bike riding triumphs, first kisses, promotions, academic achievements, milestones reached.
-
-Positive events are weighted differently in the evaluation system — the Champion role is elevated, and joy-dismissal signals (e.g., "calm down," "it's not that special") are penalised.
+Positive events elevate the Champion role and penalise joy-dismissal signals ("calm down," "it's not that special").
 
 ### Event Structure
 Each event has trigger conditions, a narrative scene, an age/personality-aware opening line, an internal thought (visible at high therapist skill), a free-text player response phase (up to 3 exchanges), outcome scoring, and long-term memory effects.
-
-### Crisis Events
-Occasionally, major crises occur that test everything — severe bullying, family crisis, health emergency, legal trouble, betrayal, loss. These require careful, multi-step intervention. Wrong approaches can make things worse. The character's accumulated resilience determines baseline coping.
-
-### Idle / Check-in Days
-On days when no event fires, the character approaches the player with a low-stakes emotional check-in.
 
 ---
 
 ## Story Packs (Seasonal Arcs)
 
-Story packs are curated seasonal narrative arcs — paid content with richer writing and unique emotional textures. Pack events mix into regular gameplay at a 40% chance when eligible.
+Curated seasonal narrative arcs — paid content with richer writing and unique emotional textures. Pack events mix into regular gameplay at 40% chance when eligible.
 
 | Pack | Cost | Reward | Stages |
 |------|------|--------|--------|
-| 🌸 Spring Blooms | 20 💎 | 60 🪙 | All |
-| ☀️ Summer Adventures | 20 💎 | 60 🪙 | Teen + Young Adult |
-| 🍂 Autumn Reflections | 20 💎 | 60 🪙 | Adult + Midlife |
-| ❄️ Winter Warmth | 20 💎 | 80 🪙 | All (5 deeply written events) |
+| Spring Blooms | 20 gems | 60 coins | All |
+| Summer Adventures | 20 gems | 60 coins | Teen + Young Adult |
+| Autumn Reflections | 20 gems | 60 coins | Adult + Midlife |
+| Winter Warmth | 20 gems | 80 coins | All (5 deeply written events) |
 
 ---
 
@@ -351,19 +324,19 @@ Story packs are curated seasonal narrative arcs — paid content with richer wri
 
 | Age | Milestone |
 |-----|-----------|
-| 13 | 🌿 Teen Years Begin |
-| 18 | 🎓 Into Adulthood |
-| 25 | 🌟 Finding Their Way |
-| 30 | 🏡 Roots and Reach |
-| 40 | ⚖️ The Midpoint |
-| 50 | 🌅 A New Horizon |
-| 65 | 🌸 A Life Fully Lived |
+| 13 | Teen Years Begin |
+| 18 | Into Adulthood |
+| 25 | Finding Their Way |
+| 30 | Roots and Reach |
+| 40 | The Midpoint |
+| 50 | A New Horizon |
+| 65 | A Life Fully Lived |
 
 ---
 
 ## Life Ending & Legacy System
 
-When the character reaches age 65, the game enters its ending sequence showing care score and a Legacy Tier message.
+When the character reaches age 65, the game enters its ending sequence.
 
 | Score Range | Legacy Tier |
 |-------------|-------------|
@@ -372,34 +345,31 @@ When the character reaches age 65, the game enters its ending sequence showing c
 | 40–59 | Honest |
 | 0–39 | Complicated |
 
-**Begin Legacy** — the player can start a new character, who inherits a 30% personality nudge from their predecessor, creating an intergenerational thread.
+**Begin Legacy** — starting a new character inherits a 30% personality nudge from their predecessor, creating an intergenerational thread.
 
 ---
 
 ## Game Modes
 
-Accessible from the **🎮 Games** button in the game header. Three modes are available once a character has been created.
+Accessible from the Games button in the header.
 
-### ⚡ Need Rush
-A fast-paced falling-object game. Care items (food, rest, shower, play, talk, medicine) fall from the top of the screen. The player taps the correct care button before each item hits the ground. Wrong choices are penalised. Speed is influenced by the character's current stress level and age.
+### Need Rush
+A fast-paced falling-object game. Care items fall from the top of the screen; the player taps the correct care button before each hits the ground. Speed is set by the character's stress level and age.
 
 - **Duration:** 60 seconds
-- **Scoring:** Correct catches accumulate; misses deduct
-- **Reward:** Up to 15 💎
+- **Reward:** Up to 15 gems
 
-### 🌿 Crossroads
-A strategic narrative branching puzzle. A scenario unfolds and the player makes two sequential choices without seeing where each path leads. Consequences compound — good first choices compound into better outcomes; poor choices foreclose options. Four scenarios rotate based on the character's current life stage.
+### Crossroads
+A strategic narrative branching puzzle. A scenario unfolds and the player makes two sequential choices without seeing where each path leads. Consequences compound.
 
 - **Depth:** 2 choices deep (3 options each)
-- **Scoring:** 3 pts (good) / 1 pt (ok) / 0 pts (bad) — max 6 pts
-- **Reward:** Up to 20 💎, scaled proportionally
+- **Reward:** Up to 20 gems, scaled by score
 
-### 🐾 Pet Time
-The Tamagotchi game mode. The player opens the pet care sheet and attends to the pet's needs: feeding, playing, grooming, and cuddling. A happy pet boosts the character's mood; a neglected pet quietly drains it.
+### Pet Time
+The Tamagotchi mode. The player opens the pet care sheet and tends to four needs. A happy pet boosts the character's mood; a neglected one quietly drains it.
 
 - **No time limit** — care at your own pace
-- **Reward:** Mood boost for both character and pet; character stress reduction on cuddle
-- **Access:** Also from the character scene (click the pet) or the left panel "Care ›" chip
+- **Reward:** Mood boost for character and pet
 
 ---
 
@@ -409,9 +379,23 @@ The Tamagotchi game mode. The player opens the pet care sheet and attends to the
 Saves automatically to `localStorage` on every birthday and every 3 in-game days.
 
 ### Save Codes
-Players generate a compact base64-encoded JSON snapshot. Can be copied, pasted, or shared as a URL (`?save=<code>`).
+Players generate a compact base64-encoded JSON snapshot — copyable, pasteable, or shareable as a URL (`?save=<code>`).
 
-**Serialised state includes:** character identity, avatar, all Big Five traits, emotional state, skills, player roles, need values, pet state (type, name, needs, collar), wallet, cosmetics, owned items, pack progress, event history, character memories, day count, role usage history.
+**Serialised state includes:** character identity, avatar, Big Five traits, emotional state, skills, player roles, need values, pet state, wallet, cosmetics, owned items, pack progress, event history, memories, day count, role usage history.
+
+---
+
+## Onboarding
+
+New players see a **full-screen intro splash** before character creation. It explains:
+
+1. **The caregiver relationship** — who the character is and what the player's role is
+2. **How to play** — talk, guide, and react in free text; your words shape who they become
+3. **Needs and growth** — the six needs, how care shows up in their development
+4. **Economy** — coins (earned by playing → cosmetics), gems (won in Game Modes → premium unlocks)
+5. **The ending** — the story closes at 65; legacy is measured and carried forward
+
+Returning players who have a save skip the intro and land directly on the resume screen.
 
 ---
 
@@ -424,65 +408,51 @@ The player responds naturally via free text or voice. The system analyzes the re
 
 | Role | Signals Detected | Best For |
 |------|-----------------|----------|
-| **Teacher** 📚 | Guidance, strategies, learning framing, analytical questions | Academic struggles, growth mindset |
-| **Parent** 🏠 | Warmth, unconditional support, safety, reassurance | Family conflicts, life transitions |
-| **Doctor** 🩺 | Health awareness, physical care, breathing, sleep/nutrition | Stress, burnout, health crises |
-| **Lawyer** ⚖️ | Rights, fairness, boundaries, advocacy | Bullying, workplace issues, ethical dilemmas |
-| **Therapist** 💜 | Feeling words, validation, open questions, reflective listening | Emotional crises, trauma, relationship patterns |
-| **Friend** 🤝 | Relatability, humor, casual support, shared experience | Loneliness, everyday moments |
-| **Champion** 🎉 | Celebration, pride, encouragement, recognising achievement | Positive events, wins, milestones |
-
-The Champion role was added specifically to handle positive scenarios — "I'm so proud of you!" and "that's huge!" are high-value signals when a character shares a win, but would be off-key responses to a crisis.
+| Teacher | Guidance, strategies, learning framing, analytical questions | Academic struggles, growth mindset |
+| Parent | Warmth, unconditional support, safety, reassurance | Family conflicts, life transitions |
+| Doctor | Health awareness, physical care, breathing, sleep/nutrition | Stress, burnout, health crises |
+| Lawyer | Rights, fairness, boundaries, advocacy | Bullying, workplace issues, ethical dilemmas |
+| Therapist | Feeling words, validation, open questions, reflective listening | Emotional crises, trauma, relationship patterns |
+| Friend | Relatability, humor, casual support, shared experience | Loneliness, everyday moments |
+| Champion | Celebration, pride, encouragement, recognising achievement | Positive events, wins, milestones |
 
 ### Scenario-Aware Evaluation
 
-The evaluation system detects the **type of scenario** (positive / challenge / need-based) and adjusts role weights accordingly:
-
 | Context | Elevated Roles | Depressed Roles |
 |---------|----------------|-----------------|
-| **Positive** (celebrations, wins) | Champion, Friend, Parent | Doctor, Lawyer |
-| **Challenge** (conflicts, struggles) | Therapist, Lawyer, Doctor | Champion |
-| **Need** (hunger, sleep, hygiene) | Doctor, Parent, Therapist | Champion |
-
-This prevents a high Champion score from appearing on a crisis event just because the player used encouraging words — the weighting ensures contextual appropriateness matters.
-
-**Joy-dismissal signals** (e.g., "calm down," "it's not that special," "don't get too excited") are penalised specifically in positive scenarios, teaching players to celebrate genuinely.
-
-### Response Evaluation
-
-After each interaction:
-- **Score** (0–100)
-- **Detected roles** with strength (strong / moderate / light)
-- **Character impact** — emotional and skill changes
-- **Scenario-aware feedback** — rotating contextual messages, not static text
+| Positive (celebrations, wins) | Champion, Friend, Parent | Doctor, Lawyer |
+| Challenge (conflicts, struggles) | Therapist, Lawyer, Doctor | Champion |
+| Need (hunger, sleep, hygiene) | Doctor, Parent, Therapist | Champion |
 
 ---
 
 ## AI Dialogue System (Tiered)
 
 ### Tier 1 — Groq Cloud (Primary)
-Groq API key (free tier) → **Llama 3.1 8B Instant** → fast, high-quality responses (~150 tokens/sec).
+Free Groq API key → **Llama 3.1 8B Instant** → fast, high-quality responses (~150 tok/s). Works on all platforms including mobile.
 
 ### Tier 2 — WebLLM (Offline, Desktop Only)
 Desktop with WebGPU → **Llama 3.2 1B Instruct** in-browser, fully offline. ~800MB one-time model download.
 
 ### Tier 3 — Enriched Scripted Fallback
-Personality-driven response pools keyed by interaction type, Big Five values, emotional state, and interaction score tier.
+Personality-driven response pools keyed by interaction type, Big Five values, emotional state, and score tier. Always available.
 
-### AI System Prompt Design
-- **Human identity rule** — character is a person, no animal references
-- **Age voice injection** — behavioral voice profile matching exact age
-- **Big Five personality prose** — traits translated to natural-language personality descriptor
-- **Need state prose** — raw values converted to inner state descriptions
-- **Event anchoring** — CRITICAL rule block prevents off-topic drift during active events
-- **Build-aware appearance** — avatar visual properties inform self-description when relevant
+### AI Status
+An AI chip in the header shows current tier: Groq (green dot) / Local AI (yellow dot) / Scripted (grey).
+
+### System Prompt Design
+- Human identity rule — character is a person, no animal references
+- Age voice injection — behavioral voice profile matching exact age
+- Big Five personality prose
+- Need state prose — raw values converted to inner state descriptions
+- Event anchoring — prevents off-topic drift during active events
 
 ---
 
 ## Voice System
 
 ### Character Voice (TTS)
-Age-tuned pitch and rate via Web Speech API:
+Age-tuned pitch and rate via Web Speech API. Default: muted (opt-in).
 
 | Stage | Pitch | Rate |
 |-------|-------|------|
@@ -491,115 +461,85 @@ Age-tuned pitch and rate via Web Speech API:
 | Young Adult (18–25) | 1.00 | 1.00 |
 | Adult (26+) | 0.90 | 0.93 |
 
-**Default: muted.** Voice is opt-in — the player enables it via the 🔊 header button. Preference persisted to `localStorage`.
-
 ### Player Voice (STT)
-🎤 mic button activates SpeechRecognition. Live transcription into the text field. Available in Chrome, Edge, and Safari.
+Mic button activates SpeechRecognition. Live transcription into the text field. Available in Chrome, Edge, and Safari.
 
 ---
 
 ## Premium Insights Dashboard
 
-Unlocked once with 30 💎.
+Unlocked once with 30 gems.
 
 ### Caregiver Archetypes (8)
 
 | Archetype | Core Trait | Detected When |
 |-----------|-----------|----------------|
-| The Confidant 💛 | Empathy first | Therapist/Friend dominant |
-| The Mentor 📘 | Growth through wisdom | Teacher dominant |
-| The Protector 🛡️ | Safety above all | Parent dominant |
-| The Advocate ⚖️ | Voice for the voiceless | Lawyer dominant |
-| The Healer 🌿 | Body and mind in balance | Doctor dominant |
-| The Champion 🎉 | Celebrates every win | Champion dominant |
-| The Balancer 🌀 | All things in proportion | Uniform role distribution |
-| The Novice 🌱 | Still finding the way | Fewer than 3 interactions |
+| The Confidant | Empathy first | Therapist/Friend dominant |
+| The Mentor | Growth through wisdom | Teacher dominant |
+| The Protector | Safety above all | Parent dominant |
+| The Advocate | Voice for the voiceless | Lawyer dominant |
+| The Healer | Body and mind in balance | Doctor dominant |
+| The Champion | Celebrates every win | Champion dominant |
+| The Balancer | All things in proportion | Uniform role distribution |
+| The Novice | Still finding the way | Fewer than 3 interactions |
 
 ### Analytics
 - Radar chart of life skills with trends
 - Emotion history line chart
 - Interaction score history
-- Role breakdown
+- Role breakdown by frequency and strength
 
 ### Weekly Reports
 Every 7 in-game days, an in-chat Caregiver Report covers emotion shifts, skill growth, most-used role, most impactful interaction, and a coaching note.
 
 ---
 
-## Game Flow
-
-### Time System
-- Each in-game "day" represents roughly a week of the character's life
-- Every 10 days, the character ages by 1 year
-- Full life arc: starting age through 65+, spanning 600+ in-game days
-
-### Daily Loop
-1. **Morning Report** — Autonomous events, mood drift, needs decay
-2. **Character Approaches** — Life event fires, or idle check-in
-3. **Free Conversation** — Player types or speaks (up to 3 exchanges)
-4. **Character Reacts** — AI or scripted response, spoken aloud
-5. **Evaluation** — Score, roles, coaching feedback, stat changes
-6. **Day Summary** — Stats update, memory formed, time advances, coins awarded, auto-save
-7. **Weekly Report** (every 7 days)
-8. **Milestone Celebration** (at key ages)
-9. **Life Ending** (age 65) — Ending screen, legacy option
-
-### Needs System (runs continuously)
-Six physical/social needs decay in real-time every 8 seconds:
-
-| Need | Decay | Alert Threshold |
-|------|-------|-----------------|
-| Hunger 🍎 | 0.35/tick | < 30 |
-| Energy ⚡ | 0.22/tick | < 25 |
-| Hygiene 🧼 | 0.14/tick | — |
-| Social 💬 | 0.28/tick | < 25 |
-| Fun 🎮 | 0.18/tick | < 20 |
-| Health ❤️ | Derived | — |
-
-When needs drop critically, an **alert chip** appears in the left panel with a character opening line the player can respond to.
-
----
-
 ## Visual Design
 
+### Philosophy
+The UI is candy-bright and game-confident — deep blue panels, orange 3D action buttons, glossy card surfaces, and strong colour contrast. It should feel like opening a polished mobile game, not a form. Typography is Plus Jakarta Sans (sharp, distinctive) with Caveat (handwritten) for emotional moments.
+
 ### UI Layout
-- **Left panel** — Character SVG scene (with pet companion), activity badge, daily needs bars, pet status section (needs + care button), alert chips
-- **Center panel** — Story/dialogue: narrative scene, conversation bubbles, evaluation feedback, chat input with mic button
+- **Left panel** — Character SVG scene (with pet companion), activity badge, daily needs bars, alert chips, pet status section
+- **Center panel** — Story/dialogue: narrative, conversation bubbles, evaluation feedback, chat input with mic
 - **Right panel** — Emotional state, life skills, caregiver roles, memory journal
-- **Header** — Logo, day/age/stage, wallet HUD, shop, dashboard, games, voice toggle, theme toggle, AI status chip
+- **Header** — Logo, season/age/stage, wallet, Shop, Games, Dashboard, voice toggle, theme toggle, AI chip
+
+### Icon System
+All UI icons use **LineIcons 5.1 Free** (solid variant) — a self-hosted vector icon font. No emoji in UI chrome. Icons render crisply at any size and in both light and dark modes.
 
 ### Character Representation
-Characters are procedural SVG illustrations rendered in real-time by `buildHumanSVG(avatar, age, mood, activity)`. The avatar object drives all visual properties. Mood affects eye expression, mouth curve, and blush. Activity affects posture animation class (float, bounce, sway, sleep). Build ('soft'/'strong') affects body width, jaw shape, eye weight, and blush threshold.
-
-### Pet Representation
-Pets are mood-reactive SVG illustrations rendered by `buildPetSVG(type, mood, collar)`. Eyes widen and smile when happy; droop when sad. Blush cheeks appear when content. Collar is an SVG ellipse at the neck. The pet lives in the character scene bottom-right corner, scaled to roughly 60×60px.
+Procedural SVG illustrations rendered in real-time by `buildHumanSVG(avatar, age, mood, activity)`. Mood affects eye expression, mouth curve, and blush. Activity affects posture animation class. Build ('soft'/'strong') affects body width, jaw shape, eye weight, and blush threshold.
 
 ### Scene System
-Each activity triggers a different scene background (bedroom, kitchen, bathroom, study, outside, living room) and a contextual scene prop emoji.
+Each activity triggers a different scene background (bedroom, kitchen, bathroom, study, outside, living room) and a contextual scene prop.
 
 ### Mobile Layout
-On screens ≤ 767px, panels collapse into a bottom tab bar (🐾 Character / 💬 Story / 📊 Stats). Badge indicator appears on the Character tab when new activity occurs.
+On screens ≤ 767px, panels collapse into a bottom tab bar (Character / Story / Stats). Badge indicator appears on the Character tab when new activity occurs.
+
+### Theming
+Full dark/light theme via CSS custom properties (`data-theme` attribute). All colours derived from `--bg`, `--card`, `--text`, `--accent`, `--btn-orange`, `--btn-green`. Switching is instant and persisted to `localStorage`.
 
 ---
 
 ## Platform & Distribution
 
 ### PWA
-Installable as a Progressive Web App. Service worker pre-caches game shell for fully offline play. Cache versioning ensures fresh builds on update (currently `wemakoshi-v15`).
+Installable as a Progressive Web App. Service worker pre-caches game shell (including icon font files) for fully offline play. Cache versioning ensures fresh builds on update (currently `wemakoshi-v20`).
 
-### App Stores
+### App Stores (planned)
 - **Google Play** and **Microsoft Store** — via PWABuilder
 - **Apple App Store** — via Capacitor
 
 ### Distribution
-Current live version: GitHub Pages (zero infrastructure, free, instant deploys via git push).
+Current live version: GitHub Pages — zero infrastructure, free, instant deploys via git push.
 
 ---
 
 ## Technical Implementation
 
-### Single-File Architecture
-Single HTML file with embedded CSS and JavaScript. No build system, no external libraries, no server.
+### Architecture
+Single HTML file with embedded CSS and JavaScript. No build system, no external libraries, no server. Self-hosted LineIcons font in `/fonts/`.
 
 ### State Object (G)
 
@@ -628,49 +568,56 @@ G = {
 
 | Function | Purpose |
 |----------|---------|
-| `buildHumanSVG(avatar, age, mood, activity)` | Renders full character SVG with build/age/mood-aware proportions |
-| `buildPetSVG(type, mood, collar)` | Renders pet SVG with mood-reactive expression and optional collar |
-| `_avProps(age)` | Returns age-appropriate head/body proportions |
+| `buildHumanSVG(avatar, age, mood, activity)` | Renders full character SVG |
+| `buildPetSVG(type, mood, collar)` | Renders mood-reactive pet SVG |
 | `analyzeText(text)` | NLP role detection + scenario-aware weighting |
 | `_getScenarioCtx()` | Detects positive / challenge / need context |
-| `computeEval(score, roles, ctx)` | Produces scenario-aware grade, feedback, and effects |
-| `buildSystemPrompt()` | Composes full AI context with Big Five prose, age voice, need prose |
-| `tickNeeds()` | Advances needs + pet needs decay every 8s; triggers alerts |
-| `updatePetUI()` | Renders pet in character scene |
-| `updatePetStatusUI()` | Renders compact pet status in left panel |
-
-### Evaluation Architecture
-
-`analyzeText()` scans player responses against keyword + regex signal lists for all 7 roles. Post-scoring, multipliers from `_getScenarioCtx()` are applied — so Champion × 1.6 on a positive event, Champion × 0.6 on a challenge. `computeEval()` then maps to grade/feedback using context-specific rotating message pools (no static strings).
+| `computeEval(score, roles, ctx)` | Produces grade, feedback, and stat effects |
+| `buildSystemPrompt()` | Composes full AI context |
+| `tickNeeds()` | Advances needs + pet needs every 8s |
+| `showSetup()` | Transitions from intro splash to character creation |
 
 ---
 
 ## Roadmap
 
-| Version | Status | Features |
-|---------|--------|---------|
-| v0.1 | ✅ | Core loop, basic events, personality system, SVG characters |
-| v0.2 | ✅ | Full life progression, memory system, caregiver roles, free-text NLP |
-| v0.3 | ✅ | Big Five personality from background, needs system, need interactions |
-| v0.4 | ✅ | Evaluated responses, coaching feedback, skill/emotion progression, cosmetics |
-| v0.5 | ✅ | Premium animals, dual currency, 4 seasonal story packs |
-| v0.6 | ✅ | 8 caregiver archetypes, impact dashboard, profile card, weekly reports |
-| v0.7 | ✅ | Dark/light theme |
-| v0.8 | ✅ | Mobile-first layout, bottom tab bar, swipe gestures, PWA, service worker |
-| v0.9 | ✅ | Tiered AI dialogue (Groq → WebLLM → enriched scripted) |
-| v1.0 | ✅ | Save codes, social sharing, 28-event life arc, milestones, life ending + legacy |
-| v1.1 | ✅ | Human identity model, age-stage voice profiles, AI prompt overhaul |
-| v1.2 | ✅ | Voice system — TTS with age-tuned pitch/rate, STT mic input |
-| v1.3 | ✅ | Positive events + Champion role, scenario-aware evaluation, sound default off |
-| v1.4 | ✅ | Human avatar system — skin, hair, eyes, outfit, build, aging proportions, 8 presets |
-| v1.5 | ✅ | Need Rush + Crossroads game modes |
-| v1.6 | ✅ | Pet companion system — 6 pet types, 4 needs, collar accessories, scene integration |
-| v1.7 | ✅ | Build system — Soft/Strong body types, masculine/feminine avatar range |
-| v1.8 | ✅ | Pet Time game mode, pet status in left panel, games hub restructure |
-| v2.0 | 🔜 | NPC relationship system (named friends, family, romantic interests) |
-| v2.1 | 🔜 | Character photo mode (download/share styled character card) |
-| v2.2 | 🔜 | App store release (Google Play via PWABuilder, Apple App Store via Capacitor) |
-| v3.0 | 🔜 | Multiplayer care — two players raising the same character |
+### Completed
+
+| Version | Features |
+|---------|---------|
+| v0.1 | Core loop, basic events, personality system, SVG characters |
+| v0.2 | Full life progression, memory system, caregiver roles, free-text NLP |
+| v0.3 | Big Five personality from background, needs system, need interactions |
+| v0.4 | Evaluated responses, coaching feedback, skill/emotion progression, cosmetics |
+| v0.5 | Premium animals, dual currency, 4 seasonal story packs, save codes, sharing |
+| v0.6 | 8 caregiver archetypes, impact dashboard, profile card, weekly reports |
+| v0.7 | Dark/light theme |
+| v0.8 | Mobile-first layout, bottom tab bar, PWA, service worker |
+| v0.9 | Tiered AI dialogue (Groq → WebLLM → enriched scripted) |
+| v1.0 | 28-event life arc, milestones, life ending + legacy system |
+| v1.1 | Human identity model, age-stage voice profiles, AI prompt overhaul |
+| v1.2 | Voice system — TTS with age-tuned pitch/rate, STT mic input |
+| v1.3 | Positive events + Champion role, scenario-aware evaluation |
+| v1.4 | Human avatar system — skin, hair, eyes, outfit, build, aging proportions, 8 presets |
+| v1.5 | Need Rush + Crossroads game modes |
+| v1.6 | Pet companion system — 6 pet types, 4 needs, collar accessories, scene integration |
+| v1.7 | Build system — Soft/Strong body types |
+| v1.8 | Pet Time game mode, pet status in left panel, games hub |
+| v1.9 | Game UI redesign — candy-bright palette, 3D buttons, Plus Jakarta Sans, impeccable.style principles |
+| v2.0 | LineIcons 5.1 integration — all emoji replaced with crisp self-hosted vector icons |
+| v2.1 | Onboarding intro splash — explains the game, roles, economy, and ending before character creation |
+
+### Upcoming
+
+| Version | Priority | Features |
+|---------|----------|---------|
+| v2.2 | High | **NPC relationship system** — named friends, family members, and romantic interests that persist across seasons; relationship quality affects events and emotional state |
+| v2.3 | High | **App store release** — Google Play via PWABuilder, Apple App Store via Capacitor |
+| v2.4 | Medium | **Character photo mode** — styled shareable card with character portrait, age, life stats, and caregiver archetype |
+| v2.5 | Medium | **Expanded event pool** — 14 more events across all stages (bringing total to 42), with branching based on personality and skill levels reached |
+| v2.6 | Medium | **Soundtrack & ambient audio** — per-scene background loops, interaction sound effects, milestone chimes |
+| v2.7 | Low | **Caregiver journal** — the player's own reflection space; optional prompts after hard interactions |
+| v3.0 | Future | **Multiplayer care** — two players raising the same character, seeing each other's messages, diverging in style |
 
 ---
 

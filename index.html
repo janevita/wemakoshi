@@ -128,6 +128,32 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;}
 
+
+/* ===== INTRO SPLASH ===== */
+#intro-screen{flex-direction:column;align-items:center;justify-content:flex-start;padding:32px 20px 40px;gap:0;background:linear-gradient(135deg,var(--setup-grad-a),var(--setup-grad-b));overflow-y:auto;position:relative;}
+#intro-theme-btn{position:absolute;top:16px;right:20px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--text);transition:all .2s;}
+#intro-theme-btn:hover{border-color:var(--accent);}
+.intro-logo{margin-bottom:4px;margin-top:8px;}
+.intro-tagline{font-size:15px;color:var(--soft);font-weight:500;margin-bottom:28px;}
+.intro-cards{display:flex;flex-direction:column;gap:14px;width:100%;max-width:520px;margin-bottom:28px;}
+.intro-card{background:linear-gradient(160deg,color-mix(in srgb,var(--card) 118%,#fff) 0%,var(--card) 55%,color-mix(in srgb,var(--card) 82%,#000) 100%);border:1.5px solid var(--border);border-radius:16px;padding:20px 22px;display:flex;gap:18px;align-items:flex-start;box-shadow:0 4px 16px var(--shadow);}
+.intro-card-icon{font-size:28px;flex-shrink:0;line-height:1;padding-top:2px;}
+.intro-card-body{}
+.intro-card-title{font-size:14px;font-weight:800;color:var(--accent);margin-bottom:5px;letter-spacing:.1px;}
+.intro-card-desc{font-size:13px;color:var(--soft);line-height:1.55;}
+.intro-divider{width:100%;max-width:520px;border:none;border-top:1.5px solid var(--border);margin:4px 0 20px;}
+.intro-earn-row{display:flex;gap:10px;width:100%;max-width:520px;margin-bottom:28px;}
+.intro-earn-chip{flex:1;background:color-mix(in srgb,var(--card) 72%,#000);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;text-align:center;}
+.intro-earn-chip .iec-icon{font-size:22px;display:block;margin-bottom:5px;}
+.intro-earn-chip .iec-label{font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px;}
+.intro-earn-chip .iec-desc{font-size:12px;color:var(--soft);line-height:1.4;}
+.intro-ending-note{width:100%;max-width:520px;background:color-mix(in srgb,var(--accent) 18%,var(--card));border:1.5px solid var(--accent);border-radius:14px;padding:16px 20px;margin-bottom:28px;display:flex;gap:14px;align-items:center;}
+.intro-ending-note .ien-icon{font-size:24px;flex-shrink:0;}
+.intro-ending-note p{font-size:13px;color:var(--text);line-height:1.55;}
+.intro-ending-note p strong{color:var(--accent);}
+.intro-start-btn{width:100%;max-width:520px;}
+@media(max-width:480px){.intro-earn-row{flex-direction:column;}.intro-earn-chip{flex:none;display:flex;gap:12px;align-items:center;text-align:left;}.intro-earn-chip .iec-icon{margin-bottom:0;font-size:20px;}}
+
 /* ===== SETUP ===== */
 #setup-screen{flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:22px;background:linear-gradient(135deg,var(--setup-grad-a),var(--setup-grad-b));position:relative;}
 #setup-theme-btn{position:absolute;top:16px;right:20px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--text);transition:all .2s;}
@@ -1242,8 +1268,74 @@ body{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 
 </head>
 <body>
 
+<!-- INTRO SPLASH SCREEN -->
+<div id="intro-screen" class="screen active">
+  <button id="intro-theme-btn" onclick="toggleTheme()" title="Toggle theme"><i class="lnis lnis-moon-half-right-5"></i></button>
+
+  <div class="intro-logo">
+    <img src="logo.png" alt="Wemakoshi" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div class="logo">Wemakoshi</div>
+  </div>
+  <div class="intro-tagline">Grow a life. Learn to care.</div>
+
+  <div class="intro-cards">
+
+    <div class="intro-card">
+      <div class="intro-card-icon"><i class="lnis lnis-user-4"></i></div>
+      <div class="intro-card-body">
+        <div class="intro-card-title">You are the caregiver</div>
+        <div class="intro-card-desc">A character is born into your care. They have their own personality, emotions, and needs — and they grow up whether you're ready or not. Your job is to guide them through life, respond when they struggle, and be there when it matters.</div>
+      </div>
+    </div>
+
+    <div class="intro-card">
+      <div class="intro-card-icon"><i class="lnis lnis-chat-bubble-2"></i></div>
+      <div class="intro-card-body">
+        <div class="intro-card-title">Talk. Guide. React.</div>
+        <div class="intro-card-desc">Your character shares what's on their mind. You respond in your own words — as a teacher, a parent, a friend, a doctor, or a therapist. Every response shapes who they become. There are no perfect answers, only honest ones.</div>
+      </div>
+    </div>
+
+    <div class="intro-card">
+      <div class="intro-card-icon"><i class="lnis lnis-heart"></i></div>
+      <div class="intro-card-body">
+        <div class="intro-card-title">Meet their needs. Watch them grow.</div>
+        <div class="intro-card-desc">Hunger, energy, hygiene, social connection — real needs that quietly change each day. Attend to them and your character thrives. Neglect them and you'll feel it in their words. Their life skills, emotions, and resilience all reflect the care you give.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="intro-divider">
+
+  <div class="intro-earn-row">
+    <div class="intro-earn-chip">
+      <span class="iec-icon"><i class="lnis lnis-dollar-circle"></i></span>
+      <span class="iec-label">Coins</span>
+      <span class="iec-desc">Earned by playing. Spend them on outfits, accessories, and cosmetics.</span>
+    </div>
+    <div class="intro-earn-chip">
+      <span class="iec-icon"><i class="lnis lnis-diamonds-1"></i></span>
+      <span class="iec-label">Gems</span>
+      <span class="iec-desc">Win them in Game Modes. Unlock premium animals, story packs, and rare items.</span>
+    </div>
+    <div class="intro-earn-chip">
+      <span class="iec-icon"><i class="lnis lnis-game-pad-modern-1"></i></span>
+      <span class="iec-label">Game Modes</span>
+      <span class="iec-desc">Need Rush, Crossroads, and Pet Time — earn gems and deepen the bond.</span>
+    </div>
+  </div>
+
+  <div class="intro-ending-note">
+    <div class="ien-icon"><i class="lnis lnis-flag-1"></i></div>
+    <p>Every life has an ending. Your character's story closes at age 65 — and how you cared for them determines the legacy they leave behind. <strong>Your caregiving style is remembered, measured, and carried forward.</strong></p>
+  </div>
+
+  <button class="btn-primary intro-start-btn" onclick="showSetup()">Start a New Life</button>
+</div>
+
 <!-- SETUP SCREEN -->
-<div id="setup-screen" class="screen active">
+<div id="setup-screen" class="screen">
   <button id="setup-theme-btn" onclick="toggleTheme()" title="Toggle light/dark mode"><i class="lnis lnis-moon-half-right-5"></i></button>
   <img src="logo.png" alt="Wemakoshi" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
   <div class="logo">Wemakoshi</div>
@@ -2297,6 +2389,10 @@ function selAge(el){
 function checkReady(){document.getElementById('start-btn').disabled=!(document.getElementById('char-name').value.trim()&&selAgeV&&selBgV);}
 document.getElementById('char-name').addEventListener('input',checkReady);
 
+function showSetup(){
+  document.getElementById('intro-screen').classList.remove('active');
+  document.getElementById('setup-screen').classList.add('active');
+}
 function startGame(){
   G.charName=document.getElementById('char-name').value.trim();
   G.avatar={..._selAvatar};G.age=selAgeV;G.startAge=selAgeV;G.background=selBgV;
@@ -4003,7 +4099,7 @@ function checkURLLoad(){
     const raw=JSON.parse(decodeURIComponent(atob(code)));
     if(raw&&raw.v===1&&raw.cn){
       _pendingResumeCode=code;
-      document.getElementById('resume-name').textContent=`🌱 ${raw.cn}`;
+      document.getElementById('resume-name').innerHTML=`<i class="lnis lnis-leaf-1"></i> ${raw.cn}`;
       document.getElementById('resume-meta').textContent=`Age ${raw.ag} · Day ${raw.day} — shared save`;
       document.getElementById('resume-banner').style.display='block';
       document.getElementById('setup-card').style.display='none';
@@ -4070,8 +4166,10 @@ function toggleTheme(){
   const icon=next==='light'?'<i class="lnis lnis-sun-1"></i>':'<i class="lnis lnis-moon-half-right-5"></i>';
   const b1=document.getElementById('theme-btn');
   const b2=document.getElementById('setup-theme-btn');
+  const b3=document.getElementById('intro-theme-btn');
   if(b1)b1.innerHTML=icon;
   if(b2)b2.innerHTML=icon;
+  if(b3)b3.innerHTML=icon;
   localStorage.setItem('wemakoshi-theme',next);
   /* redraw canvas charts so colors update immediately */
   setTimeout(()=>{drawSkillsChart();drawEmotionsChart();renderPlayerTab();},50);
@@ -4084,8 +4182,10 @@ function toggleTheme(){
   window.addEventListener('DOMContentLoaded',()=>{
     const b1=document.getElementById('theme-btn');
     const b2=document.getElementById('setup-theme-btn');
+    const b3=document.getElementById('intro-theme-btn');
     if(b1)b1.innerHTML=icon;
     if(b2)b2.innerHTML=icon;
+    if(b3)b3.innerHTML=icon;
   });
 })();
 function closeDash(){document.getElementById('dashboard').classList.remove('open');}
@@ -4877,7 +4977,7 @@ function _showResumeBanner(code){
     const raw=JSON.parse(decodeURIComponent(atob(code)));
     if(!raw||raw.v!==1||!raw.cn)return;
     _pendingResumeCode=code;
-    document.getElementById('resume-name').textContent=`🌱 ${raw.cn}`;
+    document.getElementById('resume-name').innerHTML=`<i class="lnis lnis-leaf-1"></i> ${raw.cn}`;
     document.getElementById('resume-meta').textContent=`Age ${raw.ag} · Day ${raw.day}`;
     document.getElementById('resume-banner').style.display='block';
     document.getElementById('setup-card').style.display='none';
@@ -4909,7 +5009,7 @@ checkURLLoad();
 // Show resume banner if a local save exists (and URL load didn't already start the game)
 if(!document.getElementById('game-screen').classList.contains('active')){
   const prev=localStorage.getItem('wemakoshi-save');
-  if(prev)_showResumeBanner(prev);
+  if(prev){showSetup();_showResumeBanner(prev);}  // returning player: skip intro
 }
 initAvatarBuilder();
 
